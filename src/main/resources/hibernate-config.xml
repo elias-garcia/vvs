@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+		<!-- IMPORTANT: for efficiency, in a real deployment the following
+		debug properties must be commented or removed. -->
+        <property name="hibernate.show_sql"> ${hibernate.show_sql} </property>
+        <property name="hibernate.format_sql"> ${hibernate.format_sql} </property>
+        <property name="hibernate.use_sql_comments"> ${hibernate.use_sql_comments} </property>
+		
+		<!-- List of persistent classes -->
+        <mapping class="es.udc.pa.pa015.practicapa.model.betinfo.BetInfo"/>
+        <mapping class="es.udc.pa.pa015.practicapa.model.bettype.BetType"/>
+        <mapping class="es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo"/>
+        <mapping class="es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo"/>
+        <mapping class="es.udc.pa.pa015.practicapa.model.typeoption.TypeOption"/>
+        <mapping class="es.udc.pa.pa015.practicapa.model.userprofile.UserProfile"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,16 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+    xmlns:p="tapestry:parameter"
+	t:type="Layout" t:title="title">
+	
+<t:if test="event">
+
+	<div class="container">
+	        
+	        <div class="row" t:type="Loop" t:source="event.betTypes" t:value="betType">
+	        	<h4 class="text-center"> ${betType.question} </h4>			    
+			</div>
+    </div>
+
+</t:if>
+
+</html>

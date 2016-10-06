@@ -1,0 +1,258 @@
+EXCEPTION STACK:
+
+
+        Exception: org.apache.tapestry5.runtime.ComponentEventException
+          Message: Exception assembling root component of page search/Events: Could not convert 'event.betTypes' into a component parameter binding: Exception generating conduit for expression 'event.betTypes': Class es.udc.pa.pa015.practicapa.web.pages.search.Events does not contain a property (or public field) named 'event'.
+          context: org.apache.tapestry5.internal.EmptyEventContext@4213855b
+        eventType: action
+         location: classpath:es/udc/pa/pa015/practicapa/web/pages/search/FindEvents.tml, line 4
+
+        Exception: org.apache.tapestry5.runtime.ComponentEventException
+          Message: Exception assembling root component of page search/Events: Could not convert 'event.betTypes' into a component parameter binding: Exception generating conduit for expression 'event.betTypes': Class es.udc.pa.pa015.practicapa.web.pages.search.Events does not contain a property (or public field) named 'event'.
+          context: org.apache.tapestry5.internal.EmptyEventContext@4213855b
+        eventType: success
+         location: classpath:es/udc/pa/pa015/practicapa/web/pages/search/FindEvents.tml, line 4
+
+        Exception: org.apache.tapestry5.ioc.internal.OperationException
+          Message: Exception assembling root component of page search/Events: Could not convert 'event.betTypes' into a component parameter binding: Exception generating conduit for expression 'event.betTypes': Class es.udc.pa.pa015.practicapa.web.pages.search.Events does not contain a property (or public field) named 'event'.
+            trace: Handling traditional 'action' component event request for search/FindEvents:findeventsform.
+                   Triggering event 'action' on search/FindEvents:findeventsform
+                   Triggering event 'success' on search/FindEvents:findeventsform
+                   Constructing instance of page class es.udc.pa.pa015.practicapa.web.pages.search.Events
+                   Assembling root component for page search/Events
+
+        Exception: java.lang.RuntimeException
+          Message: Exception assembling root component of page search/Events: Could not convert 'event.betTypes' into a component parameter binding: Exception generating conduit for expression 'event.betTypes': Class es.udc.pa.pa015.practicapa.web.pages.search.Events does not contain a property (or public field) named 'event'.
+
+        Exception: org.apache.tapestry5.ioc.internal.util.TapestryException
+          Message: Could not convert 'event.betTypes' into a component parameter binding: Exception generating conduit for expression 'event.betTypes': Class es.udc.pa.pa015.practicapa.web.pages.search.Events does not contain a property (or public field) named 'event'.
+         location: classpath:es/udc/pa/pa015/practicapa/web/pages/search/Events.tml, line 21
+
+        Exception: org.apache.tapestry5.internal.services.PropertyExpressionException
+          Message: Exception generating conduit for expression 'event.betTypes': Class es.udc.pa.pa015.practicapa.web.pages.search.Events does not contain a property (or public field) named 'event'.
+       expression: event.betTypes
+
+        Exception: org.apache.tapestry5.ioc.util.UnknownValueException
+          Message: Class es.udc.pa.pa015.practicapa.web.pages.search.Events does not contain a property (or public field) named 'event'.
+  availableValues: AvailableValues[Properties (and public fields): categoryId, class, componentResources, dateFormat, eventInfo, events, keywords, nextLinkContext, previousLinkContext, timeFormat, userSession]
+
+  Stack trace:
+
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl$PropertyConduitBuilder.findPropertyAdapter(PropertyConduitSourceImpl.java:1168)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl$PropertyConduitBuilder.buildPropertyAccessTerm(PropertyConduitSourceImpl.java:1136)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl$PropertyConduitBuilder.buildTerm(PropertyConduitSourceImpl.java:1125)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl$PropertyConduitBuilder.buildTerm(PropertyConduitSourceImpl.java:1044)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl$PropertyConduitBuilder.analyzeDerefNode(PropertyConduitSourceImpl.java:1037)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl$PropertyConduitBuilder.implementNavMethodAndAccessors(PropertyConduitSourceImpl.java:372)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl$PropertyConduitBuilder.transform(PropertyConduitSourceImpl.java:279)
+  - org.apache.tapestry5.plastic.PlasticManager.createProxy(PlasticManager.java:251)
+  - org.apache.tapestry5.plastic.PlasticManager.createProxy(PlasticManager.java:229)
+  - org.apache.tapestry5.ioc.internal.services.PlasticProxyFactoryImpl.createProxy(PlasticProxyFactoryImpl.java:74)
+  - $PlasticProxyFactory_9753f5689fc.createProxy(Unknown Source)
+  - $PlasticProxyFactory_9753f5689fb.createProxy(Unknown Source)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl.build(PropertyConduitSourceImpl.java:1461)
+  - org.apache.tapestry5.internal.services.PropertyConduitSourceImpl.create(PropertyConduitSourceImpl.java:1375)
+  - $PropertyConduitSource_9753f568a0f.create(Unknown Source)
+  - org.apache.tapestry5.internal.bindings.PropBindingFactory.newBinding(PropBindingFactory.java:47)
+  - $BindingFactory_9753f568a10.newBinding(Unknown Source)
+  - $BindingFactory_9753f568a07.newBinding(Unknown Source)
+  - org.apache.tapestry5.internal.services.BindingSourceImpl.newBinding(BindingSourceImpl.java:81)
+  - $BindingSource_9753f5689c9.newBinding(Unknown Source)
+  - org.apache.tapestry5.internal.services.PageElementFactoryImpl.newBinding(PageElementFactoryImpl.java:180)
+  - $PageElementFactory_9753f5689f2.newBinding(Unknown Source)
+  - org.apache.tapestry5.internal.pageload.PageLoaderImpl$10.execute(PageLoaderImpl.java:883)
+  - org.apache.tapestry5.internal.pageload.ComponentAssemblerImpl.runActions(ComponentAssemblerImpl.java:229)
+  - org.apache.tapestry5.internal.pageload.ComponentAssemblerImpl.performAssembleRootComponent(ComponentAssemblerImpl.java:105)
+  - org.apache.tapestry5.internal.pageload.ComponentAssemblerImpl.access$000(ComponentAssemblerImpl.java:37)
+  - org.apache.tapestry5.internal.pageload.ComponentAssemblerImpl$1.invoke(ComponentAssemblerImpl.java:81)
+  - org.apache.tapestry5.internal.pageload.ComponentAssemblerImpl$1.invoke(ComponentAssemblerImpl.java:78)
+  - org.apache.tapestry5.ioc.internal.OperationTrackerImpl.invoke(OperationTrackerImpl.java:82)
+  - org.apache.tapestry5.ioc.internal.PerThreadOperationTracker.invoke(PerThreadOperationTracker.java:72)
+  - org.apache.tapestry5.ioc.internal.RegistryImpl.invoke(RegistryImpl.java:1260)
+  - org.apache.tapestry5.internal.pageload.ComponentAssemblerImpl.assembleRootComponent(ComponentAssemblerImpl.java:76)
+  - org.apache.tapestry5.internal.pageload.PageLoaderImpl$3.invoke(PageLoaderImpl.java:197)
+  - org.apache.tapestry5.internal.pageload.PageLoaderImpl$3.invoke(PageLoaderImpl.java:190)
+  - org.apache.tapestry5.ioc.internal.OperationTrackerImpl.invoke(OperationTrackerImpl.java:82)
+  - org.apache.tapestry5.ioc.internal.PerThreadOperationTracker.invoke(PerThreadOperationTracker.java:72)
+  - org.apache.tapestry5.ioc.internal.RegistryImpl.invoke(RegistryImpl.java:1260)
+  - org.apache.tapestry5.internal.pageload.PageLoaderImpl.loadPage(PageLoaderImpl.java:189)
+  - $PageLoader_9753f5689dc.loadPage(Unknown Source)
+  - org.apache.tapestry5.internal.services.PageSourceImpl.getPage(PageSourceImpl.java:104)
+  - $PageSource_9753f5689db.getPage(Unknown Source)
+  - org.apache.tapestry5.internal.services.RequestPageCacheImpl.get(RequestPageCacheImpl.java:86)
+  - $RequestPageCache_9753f5689da.get(Unknown Source)
+  - $RequestPageCache_9753f5689d5.get(Unknown Source)
+  - org.apache.tapestry5.internal.services.ComponentSourceImpl.getPage(ComponentSourceImpl.java:83)
+  - $ComponentSource_9753f5689c8.getPage(Unknown Source)
+  - org.apache.tapestry5.internal.transform.InjectPageWorker$InjectedPageConduit$1.createObject(InjectPageWorker.java:44)
+  - org.apache.tapestry5.ioc.internal.services.PerthreadManagerImpl$DefaultObjectCreator.createObject(PerthreadManagerImpl.java:275)
+  - org.apache.tapestry5.internal.transform.InjectPageWorker$InjectedPageConduit.get(InjectPageWorker.java:58)
+  - es.udc.pa.pa015.practicapa.web.pages.search.FindEvents.conduit_get_events(FindEvents.java)
+  - es.udc.pa.pa015.practicapa.web.pages.search.FindEvents.onSuccess(FindEvents.java:57)
+  - es.udc.pa.pa015.practicapa.web.pages.search.FindEvents.dispatchComponentEvent(FindEvents.java)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.dispatchEvent(ComponentPageElementImpl.java:917)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.processEventTriggering(ComponentPageElementImpl.java:1102)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.access$3100(ComponentPageElementImpl.java:57)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl$5.invoke(ComponentPageElementImpl.java:1047)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl$5.invoke(ComponentPageElementImpl.java:1044)
+  - org.apache.tapestry5.ioc.internal.OperationTrackerImpl.invoke(OperationTrackerImpl.java:82)
+  - org.apache.tapestry5.ioc.internal.PerThreadOperationTracker.invoke(PerThreadOperationTracker.java:72)
+  - org.apache.tapestry5.ioc.internal.RegistryImpl.invoke(RegistryImpl.java:1260)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementResourcesImpl.invoke(ComponentPageElementResourcesImpl.java:154)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.triggerContextEvent(ComponentPageElementImpl.java:1043)
+  - org.apache.tapestry5.internal.structure.InternalComponentResourcesImpl.triggerContextEvent(InternalComponentResourcesImpl.java:288)
+  - org.apache.tapestry5.corelib.components.Form.onAction(Form.java:549)
+  - org.apache.tapestry5.corelib.components.Form.dispatchComponentEvent(Form.java)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.dispatchEvent(ComponentPageElementImpl.java:917)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.processEventTriggering(ComponentPageElementImpl.java:1102)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.access$3100(ComponentPageElementImpl.java:57)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl$5.invoke(ComponentPageElementImpl.java:1047)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl$5.invoke(ComponentPageElementImpl.java:1044)
+  - org.apache.tapestry5.ioc.internal.OperationTrackerImpl.invoke(OperationTrackerImpl.java:82)
+  - org.apache.tapestry5.ioc.internal.PerThreadOperationTracker.invoke(PerThreadOperationTracker.java:72)
+  - org.apache.tapestry5.ioc.internal.RegistryImpl.invoke(RegistryImpl.java:1260)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementResourcesImpl.invoke(ComponentPageElementResourcesImpl.java:154)
+  - org.apache.tapestry5.internal.structure.ComponentPageElementImpl.triggerContextEvent(ComponentPageElementImpl.java:1043)
+  - org.apache.tapestry5.internal.services.ComponentEventRequestHandlerImpl.handle(ComponentEventRequestHandlerImpl.java:73)
+  - org.apache.tapestry5.internal.services.AjaxFilter.handle(AjaxFilter.java:42)
+  - $ComponentEventRequestHandler_9753f568a67.handle(Unknown Source)
+  - org.apache.tapestry5.modules.TapestryModule$37.handle(TapestryModule.java:2216)
+  - $ComponentEventRequestHandler_9753f568a67.handle(Unknown Source)
+  - es.udc.pa.pa015.practicapa.web.services.ComponentEventAuthenticationFilter.handle(ComponentEventAuthenticationFilter.java:68)
+  - $ComponentEventRequestHandler_9753f568a67.handle(Unknown Source)
+  - $ComponentEventRequestHandler_9753f5689d2.handle(Unknown Source)
+  - org.apache.tapestry5.internal.services.ComponentRequestHandlerTerminator.handleComponentEvent(ComponentRequestHandlerTerminator.java:43)
+  - org.apache.tapestry5.internal.services.DeferredResponseRenderer.handleComponentEvent(DeferredResponseRenderer.java:45)
+  - $ComponentRequestHandler_9753f5689d4.handleComponentEvent(Unknown Source)
+  - org.apache.tapestry5.services.InitializeActivePageName.handleComponentEvent(InitializeActivePageName.java:39)
+  - $ComponentRequestHandler_9753f5689d4.handleComponentEvent(Unknown Source)
+  - org.apache.tapestry5.internal.services.RequestOperationTracker$1.perform(RequestOperationTracker.java:55)
+  - org.apache.tapestry5.internal.services.RequestOperationTracker$1.perform(RequestOperationTracker.java:52)
+  - org.apache.tapestry5.ioc.internal.OperationTrackerImpl.perform(OperationTrackerImpl.java:110)
+  - org.apache.tapestry5.ioc.internal.PerThreadOperationTracker.perform(PerThreadOperationTracker.java:84)
+  - org.apache.tapestry5.ioc.internal.RegistryImpl.perform(RegistryImpl.java:1266)
+  - org.apache.tapestry5.internal.services.RequestOperationTracker.handleComponentEvent(RequestOperationTracker.java:47)
+  - $ComponentRequestHandler_9753f5689d4.handleComponentEvent(Unknown Source)
+  - $ComponentRequestHandler_9753f5689ac.handleComponentEvent(Unknown Source)
+  - org.apache.tapestry5.internal.services.ComponentEventDispatcher.dispatch(ComponentEventDispatcher.java:48)
+  - $Dispatcher_9753f5689ae.dispatch(Unknown Source)
+  - $Dispatcher_9753f56899d.dispatch(Unknown Source)
+  - org.apache.tapestry5.modules.TapestryModule$RequestHandlerTerminator.service(TapestryModule.java:305)
+  - es.udc.pa.pa015.practicapa.web.services.SessionFilter.service(SessionFilter.java:69)
+  - $RequestHandler_9753f56899e.service(Unknown Source)
+  - org.apache.tapestry5.internal.services.RequestErrorFilter.service(RequestErrorFilter.java:26)
+  - $RequestHandler_9753f56899e.service(Unknown Source)
+  - org.apache.tapestry5.modules.TapestryModule$3.service(TapestryModule.java:846)
+  - $RequestHandler_9753f56899e.service(Unknown Source)
+  - org.apache.tapestry5.modules.TapestryModule$2.service(TapestryModule.java:836)
+  - $RequestHandler_9753f56899e.service(Unknown Source)
+  - org.apache.tapestry5.internal.services.StaticFilesFilter.service(StaticFilesFilter.java:89)
+  - $RequestHandler_9753f56899e.service(Unknown Source)
+  - org.apache.tapestry5.internal.services.CheckForUpdatesFilter$2.invoke(CheckForUpdatesFilter.java:105)
+  - org.apache.tapestry5.internal.services.CheckForUpdatesFilter$2.invoke(CheckForUpdatesFilter.java:95)
+  - org.apache.tapestry5.ioc.internal.util.ConcurrentBarrier.withRead(ConcurrentBarrier.java:83)
+  - org.apache.tapestry5.internal.services.CheckForUpdatesFilter.service(CheckForUpdatesFilter.java:119)
+  - $RequestHandler_9753f56899e.service(Unknown Source)
+  - $RequestHandler_9753f568991.service(Unknown Source)
+  - org.apache.tapestry5.modules.TapestryModule$HttpServletRequestHandlerTerminator.service(TapestryModule.java:256)
+  - org.apache.tapestry5.internal.gzip.GZipFilter.service(GZipFilter.java:59)
+  - $HttpServletRequestHandler_9753f568993.service(Unknown Source)
+  - org.apache.tapestry5.internal.services.IgnoredPathsFilter.service(IgnoredPathsFilter.java:62)
+  - $HttpServletRequestFilter_9753f56898e.service(Unknown Source)
+  - $HttpServletRequestHandler_9753f568993.service(Unknown Source)
+  - org.apache.tapestry5.modules.TapestryModule$1.service(TapestryModule.java:796)
+  - $HttpServletRequestHandler_9753f568993.service(Unknown Source)
+  - $HttpServletRequestHandler_9753f56898d.service(Unknown Source)
+  - org.apache.tapestry5.TapestryFilter.doFilter(TapestryFilter.java:166)
+  - org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1484)
+  - org.springframework.orm.hibernate4.support.OpenSessionInViewFilter.doFilterInternal(OpenSessionInViewFilter.java:152)
+  - org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+  - org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1476)
+  - org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:501)
+  - org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+  - org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:557)
+  - org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:231)
+  - org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1086)
+  - org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:429)
+  - org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:193)
+  - org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1020)
+  - org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+  - org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:255)
+  - org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:154)
+  - org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+  - org.eclipse.jetty.server.Server.handle(Server.java:370)
+  - org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:494)
+  - org.eclipse.jetty.server.AbstractHttpConnection.content(AbstractHttpConnection.java:982)
+  - org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.content(AbstractHttpConnection.java:1043)
+  - org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:865)
+  - org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:240)
+  - org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+  - org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:696)
+  - org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:53)
+  - org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+  - org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+  - java.lang.Thread.run(Thread.java:745)
+
+REQUEST:
+
+Basic Information:
+
+                contextPath: /betting-app
+                      flags: requestedSessionIdValid
+                     method: POST
+                       path: /search/findevents.findeventsform
+                     locale: es
+                 serverName: localhost
+                 remoteHost: 0:0:0:0:0:0:0:1
+
+Headers:
+
+                     Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+            Accept-Encoding: gzip, deflate
+            Accept-Language: es,en;q=0.8
+              Cache-Control: max-age=0
+                 Connection: keep-alive
+             Content-Length: 414
+               Content-Type: application/x-www-form-urlencoded
+                     Cookie: JSESSIONID=qiwwwxkfvvddjslu498enr42
+                       Host: localhost:9090
+                     Origin: http://localhost:9090
+                    Referer: http://localhost:9090/betting-app/search/findevents
+  Upgrade-Insecure-Requests: 1
+                 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.94 Safari/537.36
+
+Parameters:
+                 categoryId: -1
+                   keywords: 
+                 t:formdata: dIsJjb7L/0+ltTwv1l1XOCq7gn4=:H4sIAAAAAAAAAJWOMU4CQRRAPyQkBjoTG6Oh0Xa2kQYqCklIiDHZeIC/M99ldJkZ//+wbMNRPIHxEhR23sED2FpZiAWVBbF9yct7L5/Qqc/hVAjZzrOJD+56RUFl+EhNHdkJCMMgcmkwoZ2TUUwkys3A2MhU+cIUKGTGxQ6i1Ymnyl3kpMt0ebftfZy8fbehNYOejUE5Vje4IIXj2QOuMKswlFmu7EM5WieFo3308NL4v0u3HC2J5Mti4UV8DNtXd3X/9fzeBlinug9nf4MWlcrIjXcgT7ABUOju2dQddH6Vzg9yiy6zYgEAAA==
+
+SESSION:
+
+  sso:es.udc.pa.pa015.practicapa.web.util.UserSession: es.udc.pa.pa015.practicapa.web.util.UserSession@283f8507
+         sso:org.apache.tapestry5.alerts.AlertStorage: org.apache.tapestry5.alerts.AlertStorage@6409aabb
+
+SYSTEM INFORMATION:
+
+Memory:
+      612.286.216 bytes free
+      736.624.640 bytes total
+      954.728.448 bytes max
+
+17 Threads:
+                                              Reference Handler WAITING, daemon, priority 10
+                                                      Finalizer WAITING, daemon, priority 8
+                                              Signal Dispatcher RUNNABLE, daemon, priority 9
+                                                Attach Listener RUNNABLE, daemon
+                                                           main WAITING
+                            Abandoned connection cleanup thread TIMED_WAITING, daemon
+                            Abandoned connection cleanup thread TIMED_WAITING, daemon
+                                      qtp703644914-16 Selector0 RUNNABLE
+*                                               qtp703644914-17 RUNNABLE
+                                                qtp703644914-18 TIMED_WAITING
+                                                qtp703644914-19 TIMED_WAITING
+                                                qtp703644914-20 TIMED_WAITING
+                                                qtp703644914-21 TIMED_WAITING
+  qtp703644914-22 Acceptor0 SelectChannelConnector@0.0.0.0:9090 RUNNABLE
+                                                qtp703644914-23 TIMED_WAITING
+                                                Console scanner TIMED_WAITING, daemon
+                                         HashSessionScavenger-7 TIMED_WAITING, daemon

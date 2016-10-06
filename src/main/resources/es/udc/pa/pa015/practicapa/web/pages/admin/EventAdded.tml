@@ -1,0 +1,10 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	t:type="Layout" t:title="title" showTitleInBody="false">
+	
+	
+	<div class="alert alert-success text-center" role="alert">
+		<h4>${message:title}</h4>
+		<p>${message:eventId-label}: <code>${eventId}</code></p>
+	</div>
+
+</html>
