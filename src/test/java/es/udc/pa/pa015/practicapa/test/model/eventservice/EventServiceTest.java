@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
@@ -311,10 +312,10 @@ public class EventServiceTest {
 		eventService.addBetType(event.getEventId(), type, options);
 		
 		List<BetType> eventTypes = new ArrayList<BetType>(event.getBetTypes());
-		List <TypeOption> typeOptions = new ArrayList<TypeOption>(
-				eventTypes.get(0).getTypeOptions());
+		List <TypeOption> typeOptions =
+				new ArrayList<TypeOption>(eventTypes.get(0).getTypeOptions());
 		
-		assertEquals(options, typeOptions);
+		assertEquals(options.get(0), typeOptions.get(0));
 	}
 	
 	@Test(expected = InstanceNotFoundException.class)
@@ -338,4 +339,135 @@ public class EventServiceTest {
 		
 		eventService.addBetType(NON_EXISTENT_EVENT_ID, type, options);
 	}
+	
+	@Test
+	public void testPickWinnersNull() 
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException {
+		
+		Calendar betDateAfter = Calendar.getInstance();
+		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		
+		CategoryInfo category = new CategoryInfo("categoria1");
+		categoryInfoDao.save(category);
+		
+		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter,
+				category.getCategoryId());
+		
+		BetType type = new BetType("¿Quien ganará?", false, event);
+		
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(1.20, "Barça", type);
+		options.add(option1);
+		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
+		options.add(option2);
+		
+		eventService.addBetType(event.getEventId(), type, options);
+		
+		eventService.pickWinners(null, type.getTypeId());
+		
+		assertFalse(option1.getIsWinner());
+		assertFalse(option2.getIsWinner());
+		assertTrue(type.getPickedWinners());
+	}
+	
+	@Test
+	public void testPickWinner() 
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException {
+		
+		Calendar betDateAfter = Calendar.getInstance();
+		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		
+		CategoryInfo category = new CategoryInfo("categoria1");
+		categoryInfoDao.save(category);
+		
+		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter,
+				category.getCategoryId());
+		
+		BetType type = new BetType("¿Quien ganará?", true, event);
+		
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(1.20, "Barça", type);
+		options.add(option1);
+		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
+		options.add(option2);
+		
+		eventService.addBetType(event.getEventId(), type, options);
+		
+		List<Long> optionsIds = new ArrayList<Long>();
+		optionsIds.add(option1.getOptionId());
+		optionsIds.add(option2.getOptionId());
+		
+		eventService.pickWinners(optionsIds, type.getTypeId());
+		
+		assertTrue(option1.getIsWinner());
+		assertTrue(option2.getIsWinner());
+		assertTrue(type.getPickedWinners());
+	}
+	
+	@Test
+	public void testPickOneWinner() 
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException {
+		
+		Calendar betDateAfter = Calendar.getInstance();
+		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		
+		CategoryInfo category = new CategoryInfo("categoria1");
+		categoryInfoDao.save(category);
+		
+		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter,
+				category.getCategoryId());
+		
+		BetType type = new BetType("¿Quien ganará?", false, event);
+		
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(1.20, "Barça", type);
+		options.add(option1);
+		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
+		options.add(option2);
+		
+		eventService.addBetType(event.getEventId(), type, options);
+		
+		List<Long> optionsIds = new ArrayList<Long>();
+		optionsIds.add(option1.getOptionId());
+		
+		eventService.pickWinners(optionsIds, type.getTypeId());
+		
+		assertTrue(option1.getIsWinner());
+		assertFalse(option2.getIsWinner());
+		assertTrue(type.getPickedWinners());
+	}
+	
+	@Test(expected = TypeNotMultipleException.class)
+	public void testPickWinnerTypeNotMultiple() 
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException {
+		
+		Calendar betDateAfter = Calendar.getInstance();
+		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		
+		CategoryInfo category = new CategoryInfo("categoria1");
+		categoryInfoDao.save(category);
+		
+		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter,
+				category.getCategoryId());
+		
+		BetType type = new BetType("¿Quien ganará?", false, event);
+		
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(1.20, "Barça", type);
+		options.add(option1);
+		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
+		options.add(option2);
+		
+		eventService.addBetType(event.getEventId(), type, options);
+		
+		List<Long> optionsIds = new ArrayList<Long>();
+		optionsIds.add(option1.getOptionId());
+		optionsIds.add(option2.getOptionId());
+		
+		eventService.pickWinners(optionsIds, type.getTypeId());
+		
+		assertTrue(option1.getIsWinner());
+		assertTrue(option2.getIsWinner());
+	}
+
 }

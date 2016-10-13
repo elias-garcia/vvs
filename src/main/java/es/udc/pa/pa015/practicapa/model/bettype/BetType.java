@@ -2,6 +2,7 @@ package es.udc.pa.pa015.practicapa.model.bettype;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.annotation.concurrent.Immutable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.annotations.Type;
+
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
 
@@ -23,6 +26,7 @@ public class BetType {
 	private Long typeId;
 	private String question;
 	private Boolean isMultiple;
+	private boolean pickedWinners;
 	private EventInfo event;
 	private Set<TypeOption> typeOptions = new HashSet<TypeOption>();;
 	
@@ -30,7 +34,7 @@ public class BetType {
 		
 	}
 
-	public BetType(String question, Boolean multiple, EventInfo event) {
+	public BetType(String question, boolean multiple, EventInfo event) {
 
 		/**
 		 * NOTE: "typeId" *must* be left as "null" since its value is
@@ -38,6 +42,7 @@ public class BetType {
 		 */
 		this.question = question;
 		this.isMultiple = multiple;
+		this.pickedWinners = false;
 		this.event = event;
 	}
 	
@@ -64,12 +69,22 @@ public class BetType {
 		this.question = question;
 	}
 
+	@Type(type="org.hibernate.type.BooleanType")
 	public Boolean getIsMultiple() {
 		return isMultiple;
 	}
 
 	public void setIsMultiple(Boolean isMultiple) {
 		this.isMultiple = isMultiple;
+	}
+
+	@Type(type="org.hibernate.type.BooleanType")
+	public boolean getPickedWinners() {
+		return pickedWinners;
+	}
+
+	public void setPickedWinners(boolean pickedWinners) {
+		this.pickedWinners = pickedWinners;
 	}
 
 	@ManyToOne(optional = false, fetch=FetchType.LAZY)

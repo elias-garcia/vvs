@@ -3,7 +3,6 @@ package es.udc.pa.pa015.practicapa.test.model.betservice;
 import static es.udc.pa.pa015.practicapa.model.util.GlobalNames.SPRING_CONFIG_FILE;
 import static es.udc.pa.pa015.practicapa.test.util.GlobalNames.SPRING_CONFIG_TEST_FILE;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import es.udc.pa.pa015.practicapa.model.betinfo.BetInfo;
 import es.udc.pa.pa015.practicapa.model.betservice.BetInfoBlock;
 import es.udc.pa.pa015.practicapa.model.betservice.BetService;
-import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
@@ -155,94 +153,5 @@ public class BetServiceTest {
 
 		betService.findBetsByUserId(NON_EXISTENT_USER_ID, 0, 10);
 	}
-	
-	@Test
-	public void testPickWinner() 
-			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException {
-		
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
-		
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-		
-		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter,
-				category.getCategoryId());
-		
-		BetType type = new BetType("¿Quien ganará?", false, event);
-		
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Barça", type);
-		options.add(option1);
-		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
-		options.add(option2);
-		
-		eventService.addBetType(event.getEventId(), type, options);
-		
-		//betService.changeOptionStatus(option1.getOptionId(), true);
-		
-		assertTrue(option1.getIsWinner());
-	}
 
-	@Test(expected = InstanceNotFoundException.class)
-	public void testChangeNonExistentOptionStatus() 
-			throws InstanceNotFoundException, TypeNotMultipleException {
-		
-		//betService.changeOptionStatus(NON_EXISTENT_OPTION_ID, true);
-		
-	}
-
-	@Test
-	public void testChangeMultipleOptionStatus() 
-			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException {
-	
-		Calendar dateBefore = Calendar.getInstance();
-		dateBefore.add(Calendar.WEEK_OF_YEAR, -1);
-		
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-		
-		EventInfo event = new EventInfo("Barça-Madrid", dateBefore, category);
-		eventInfoDao.save(event);
-		
-		BetType type = new BetType("¿Quien ganará?", true, event);
-		
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Barça", type);
-		options.add(option1);
-		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
-		options.add(option2);
-		
-		eventService.addBetType(event.getEventId(), type, options);
-		
-		//betService.changeOptionStatus(option1.getOptionId(), true);
-		//betService.changeOptionStatus(option2.getOptionId(), true);
-	}
-	
-	@Test(expected = TypeNotMultipleException.class)
-	public void testChangeNotMultipleOptionStatus() 
-			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException {
-	
-		Calendar dateBefore = Calendar.getInstance();
-		dateBefore.add(Calendar.WEEK_OF_YEAR, -1);
-		
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-		
-		EventInfo event = new EventInfo("Barça-Madrid", dateBefore, category);
-		eventInfoDao.save(event);
-		
-		BetType type = new BetType("¿Quien ganará?", false, event);
-		
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Barça", type);
-		options.add(option1);
-		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
-		options.add(option2);
-		
-		eventService.addBetType(event.getEventId(), type, options);
-		
-		//betService.changeOptionStatus(option1.getOptionId(), true);
-		//betService.changeOptionStatus(option2.getOptionId(), true);
-	}
 }

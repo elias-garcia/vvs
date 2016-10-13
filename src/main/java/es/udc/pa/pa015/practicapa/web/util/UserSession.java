@@ -27,8 +27,8 @@ public class UserSession {
 		return admin;
 	}
 
-	public void setAdmin(boolean isAdmin) {
-		this.admin = isAdmin;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 }

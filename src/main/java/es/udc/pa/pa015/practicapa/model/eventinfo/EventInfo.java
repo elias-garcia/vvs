@@ -12,14 +12,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.BatchSize;
+
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
+
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Immutable
+@BatchSize(size = 10)
 public class EventInfo {
 
 	private Long eventId;

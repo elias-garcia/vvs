@@ -7,8 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.annotations.BatchSize;
+
 @Entity
 @Immutable
+@BatchSize(size = 5)
 public class CategoryInfo {
 
 	private Long categoryId;

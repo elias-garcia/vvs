@@ -2,7 +2,6 @@ package es.udc.pa.pa015.practicapa.model.betservice;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.udc.pa.pa015.practicapa.model.betinfo.BetInfo;
 import es.udc.pa.pa015.practicapa.model.betinfo.BetInfoDao;
-import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOptionDao;
@@ -73,23 +71,4 @@ public class BetServiceImpl implements BetService {
 		return new BetInfoBlock(bets, existMoreBets);
 	}
 
-	public void changeOptionStatus(List<Long> optionsIds)
-			throws InstanceNotFoundException, TypeNotMultipleException {
-		/*
-		TypeOption firstOption = typeOptionDao.find(optionsIds.get(0));
-		BetType type = betTypeDao.find(option.getType().getTypeId());
-		
-		/* If we want to pick more than one option as a winner or loser but
-		 * it type doesn't allow multiple options, throw an exception.
-		 */
-		/*if (!type.getIsMultiple() && optionsIds.size() > 1)
-			throw new TypeNotMultipleException(type.getTypeId());
-		
-		Set<TypeOption> typeOptions = type.getTypeOptions();
-		
-		/* If optionsIds is null or empty, then pick all options to false. */
-		
-		/*for (TypeOption option : typeOptions)
-	*/		
-	}
 }

@@ -1,0 +1,40 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+    xmlns:p="tapestry:parameter"
+	t:type="Layout" t:title="title">
+
+	<t:zone t:id="pickedWinnersZone" id="pickedWinnersZone">
+        <t:if test="showZone">
+			<div class="alert-dismissable alert alert-success text-center" role="alert">
+				<button data-dismiss="alert" class="close" type="button">×</button>
+				<h4>${message:success-title}</h4>
+				<p><a href="#" t:type="PageLink" t:page="search/EventDetails" t:context="eventId">
+					${message:return} </a>
+				</p>
+			</div>
+        </t:if>
+    </t:zone>
+    
+    <t:zone t:id="formZone" id="formZone">
+		<form t:type="Form" class="form-horizontal" t:id="pickWinnersForm" t:async="true">
+	
+			<t:errors/>
+			
+			<div class="form-group">
+				<t:label for="winnersChecklist" class="col-md-offset-3 col-md-2"/>
+				<div class="col-md-3">
+					<t:Checklist t:id="winnersChecklist" t:model="typeOptionsModel"
+						t:selected="pickedWinners" t:encoder="stringValueEncoder"/>
+				</div>
+			</div>
+			
+		    <div class="form-group">
+		    	<div class="col-md-offset-5 col-md-2">
+					<button type="submit" class="btn btn-block btn-primary">
+						<span class="glyphicon glyphicon-ok"></span> ${message:form-button}
+					</button>
+				</div>
+		    </div>
+		</form>
+	</t:zone>
+	
+</html>

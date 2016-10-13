@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Type;
+
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 
 @Entity
@@ -71,6 +73,7 @@ public class TypeOption {
 		this.result = result;
 	}
 
+	@Type(type="org.hibernate.type.BooleanType")
 	public Boolean getIsWinner() {
 		return isWinner;
 	}

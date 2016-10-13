@@ -60,6 +60,7 @@ CREATE TABLE BetType(
     typeId BIGINT NOT NULL AUTO_INCREMENT,
     question VARCHAR(80) NOT NULL,
     isMultiple BIT NOT NULL,
+    pickedWinners BIT NOT NULL,
     eventId BIGINT NOT NULL,
     CONSTRAINT BetType_PK PRIMARY KEY (typeId),
     CONSTRAINT BetType_FK FOREIGN KEY (eventId)

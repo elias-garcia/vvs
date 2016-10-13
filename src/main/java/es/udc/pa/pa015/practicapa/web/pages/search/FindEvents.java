@@ -10,7 +10,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
 import es.udc.pa.pa015.practicapa.model.eventService.EventService;
+import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicy;
+import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicyType;
 
+@AuthenticationPolicy(AuthenticationPolicyType.ALL_USERS)
 public class FindEvents {
 	
 	@Property

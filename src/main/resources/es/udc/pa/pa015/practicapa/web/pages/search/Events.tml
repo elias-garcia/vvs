@@ -12,8 +12,7 @@
 			<tr>
 			    <th>${message:eventName-label}</th>
 			    <th>${message:categoryName-label}</th>
-			    <th>${message:date-label}</th>
-			    <th>${message:time-label}</th>
+			    <th>${message:dateTime-label}</th>
 			</tr>
 		</thead>
 		
@@ -26,8 +25,9 @@
 			    	</a>
 			    </td>
 				<td>${eventinfo.category.categoryName}</td>
-				<td><t:output value="eventinfo.eventDate.time" format="dateFormat"/></td>
-			    <td><t:output value="eventinfo.eventDate.time" format="timeFormat"/></td>
+				<td><t:output value="eventinfo.eventDate.time" format="dateFormat"/> - 
+			    	<t:output value="eventinfo.eventDate.time" format="timeFormat"/>
+			    </td>
 			</tr>
 		</tbody>
 	

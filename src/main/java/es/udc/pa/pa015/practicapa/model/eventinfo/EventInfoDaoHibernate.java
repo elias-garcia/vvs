@@ -22,7 +22,7 @@ public class EventInfoDaoHibernate extends GenericDaoHibernate<EventInfo, Long> 
             queryString += " WHERE";
             for (int i = 0; i < words.length; i++) {
                 if (i > 0) {
-                    queryString += " OR";
+                    queryString += " AND";
                 }
                 queryString += " LOWER(e.eventName) LIKE :word" + i;
             }

@@ -51,6 +51,11 @@ public class SessionFilter implements RequestFilter {
 						userSession.setUserProfileId(userProfile
 								.getUserProfileId());
 						userSession.setFirstName(userProfile.getFirstName());
+						if (userProfile.getLoginName().equals("admin")) {
+				        	userSession.setAdmin(true);
+				        } else {
+				        	userSession.setAdmin(false);
+				        }
 						applicationStateManager.set(UserSession.class,
 								userSession);
 
