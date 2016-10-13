@@ -69,7 +69,7 @@
 
                 <!--  Data source properties -->
                 <dataSource.url>jdbc:mysql://localhost/</dataSource.url>
-                <testDataSource.url>${dataSource.url}test</testDataSource.url>
+                <testDataSource.url>${dataSource.url}</testDataSource.url>
                 <dataSource.createTablesScript>1-MySQLCreateTables.sql</dataSource.createTablesScript>
                 <dataSource.createDataScript>2-MySQLCreateData.sql</dataSource.createDataScript>
 
