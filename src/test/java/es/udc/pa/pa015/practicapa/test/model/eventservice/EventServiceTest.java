@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
-import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfoDao;
 import es.udc.pa.pa015.practicapa.model.eventService.EventDateException;
@@ -47,9 +46,6 @@ public class EventServiceTest {
 	
 	@Autowired
 	private CategoryInfoDao categoryInfoDao;
-	
-	@Autowired
-	private BetTypeDao betTypeDao;
 	
 	@Test
 	public void testCreateAndFindEvent()
@@ -291,7 +287,7 @@ public class EventServiceTest {
 		assertTrue(finded.getEvents().isEmpty());
 	}
 	
-	@Test
+/*	@Test
 	public void addBetType() throws InstanceNotFoundException, EventDateException {
 		
 		Calendar now = Calendar.getInstance();
@@ -316,7 +312,7 @@ public class EventServiceTest {
 				new ArrayList<TypeOption>(eventTypes.get(0).getTypeOptions());
 		
 		assertEquals(options.get(0), typeOptions.get(0));
-	}
+	}*/
 	
 	@Test(expected = InstanceNotFoundException.class)
 	public void addBetTypeToNonExistentEvent()
