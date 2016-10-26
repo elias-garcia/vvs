@@ -10,7 +10,7 @@ INSERT INTO CategoryInfo (categoryName)
             ('Boxeo'),
             ('Motor');
 
-INSERT INTO EventInfo (eventId, eventName, eventDate)
+/* INSERT INTO EventInfo (eventId, eventName, eventDate)
     VALUES (1, 'evento1', '2016-04-30 18:00:00'),
             (2, 'evento2', '2016-04-30 18:00:00'),
             (3, 'evento3', '2016-04-30 18:00:00');
@@ -20,3 +20,4 @@ INSERT INTO BetInfo (betId, betDate, amount, userId, optionId)
 
 INSERT INTO TypeOption (typeId, odd, result)
     VALUES (1, 100, 'Barça');
+*/

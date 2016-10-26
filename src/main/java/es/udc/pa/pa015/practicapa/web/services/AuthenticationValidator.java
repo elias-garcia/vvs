@@ -12,6 +12,8 @@ public class AuthenticationValidator {
 	private final static String LOGIN_PAGE = "user/Login";
 
 	private final static String INIT_PAGE = "Index";
+	
+	private final static String NOT_ALLOWED = "NotAllowed";
 
 	public static final String PAGE_AUTHENTICATION_TYPE = "page-authentication-type";
 	public static final String EVENT_HANDLER_AUTHENTICATION_TYPE = "event-handler-authentication-type";
@@ -102,7 +104,32 @@ public class AuthenticationValidator {
 			}
 			break;
 
+		case ADMIN_USER:
+			
+			if (!userAuthenticated) {
+				redirectPage = NOT_ALLOWED;
+			}
+			if (userAuthenticated) {
+				UserSession userSession = applicationStateManager.get(UserSession.class);
+				if (!userSession.getAdmin())
+					redirectPage = NOT_ALLOWED;
+			}
+			break;
+		
+		case NON_ADMIN_AUTHENTICATED_USERS:
+			
+			if (!userAuthenticated) {
+				redirectPage = NOT_ALLOWED;
+			}
+			if (userAuthenticated) {
+				UserSession userSession = applicationStateManager.get(UserSession.class);
+				if (userSession.getAdmin())
+					redirectPage = NOT_ALLOWED;
+			}
+			break;
+			
 		default:
+			
 			break;
 
 		}

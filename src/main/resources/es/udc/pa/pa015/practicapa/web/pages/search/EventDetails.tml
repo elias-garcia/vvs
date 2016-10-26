@@ -1,16 +1,163 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
     xmlns:p="tapestry:parameter"
-	t:type="Layout" t:title="title">
-	
-<t:if test="event">
+	t:type="Layout" t:title="title" t:showTitleInBody="false">
 
-	<div class="container">
-	        
-	        <div class="row" t:type="Loop" t:source="event.betTypes" t:value="betType">
-	        	<h4 class="text-center"> ${betType.question} </h4>			    
-			</div>
-    </div>
-
-</t:if>
+	<t:If t:test="event">
+		
+		<h3 class="text-center"> ${event.eventName} </h3>
+		<br/>
+					
+		<!-- If there are any user logged in -->
+		<t:If t:test="userSession">
+			<!-- If the user logged in is the admin -->
+			<t:If t:test="userSession.admin">
+			
+				<!-- If the event hasn't started yet -->
+				<t:If t:test="!eventHasStarted">
+					<div class="text-center">
+						<h4>
+							<a href="#" t:type="PageLink" t:page="admin/addBetType"
+					    		t:context="event.eventId"> ${message:link-addBetType}
+							</a>
+				    	</h4>
+					</div>
+					<br/>
+					<div class="container">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="panel panel-primary" t:type="Loop" t:source="event.betTypes" t:value="betType">
+						    	<div class="panel-heading text-center">${betType.question}</div>
+						    	<div class="panel-body">
+						    		<div class="btn-group-vertical btn-block">
+						    			<div t:type="Loop" t:source="betType.typeOptions" t:value="typeOption">
+					    					<a href="#" class="btn btn-block btn-default disabled">
+					    					<p class="text-left"> ${typeOption.result}
+							    					<span class="pull-right"> <b> ${typeOption.odd} </b> </span>
+							    				</p>
+								    		</a>
+						    			</div>
+						    		</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				<!-- If the event has already started -->
+				<p:else>
+				
+					<div class="container">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="panel panel-primary" t:type="Loop" t:source="event.betTypes" t:value="betType">
+						    	<div class="panel-heading text-center">${betType.question}</div>
+						    	<div class="panel-body">
+						    		<div class="btn-group-vertical btn-block">
+							    		<div t:type="Loop" t:source="betType.typeOptions" t:value="typeOption">
+						    				<t:If t:test="betType.pickedWinners">
+						    					<t:If t:test="typeOption.isWinner">
+						    						<a href="#" class="btn btn-block btn-default disabled">
+							    						<p class="text-left text-success"> ${typeOption.result}
+									    					<span class="pull-right text-success"> <b> ${typeOption.odd} </b> </span>
+									    				</p>
+										    		</a>
+						    					<p:else>
+						    						<a href="#" class="btn btn-block btn-default disabled">
+							    						<p class="text-left text-danger"> ${typeOption.result}
+									    					<span class="pull-right text-danger"> <b> ${typeOption.odd} </b> </span>
+									    				</p>
+										    		</a>
+						    					</p:else>
+						    					</t:If>
+						    				<p:else>
+						    					<a href="#" class="btn btn-block btn-default disabled">
+						    					<p class="text-left"> ${typeOption.result}
+								    					<span class="pull-right"> <b> ${typeOption.odd} </b> </span>
+								    				</p>
+									    		</a>
+						    				</p:else>
+						    				</t:If>
+							    		</div>
+							    	</div>
+							    	<t:If t:test="!betType.pickedWinners">
+									    <div class="text-center">
+									    	<br/>
+									    	<a href="#" t:type="PageLink" t:page="admin/pickWinners"
+									    		t:context="[eventId, betType.typeId]">
+									    			${message:link-pickWinners}
+											</a>
+										</div>
+									</t:If>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</p:else>	
+				</t:If>
+			    
+			<!-- If the user is logged in as a normal user -->	
+			<p:else>
+				<!-- If the event hasn't started yet -->
+				<t:If t:test="!eventHasStarted">
+					<div class="container">
+							<div class="col-md-8 col-md-offset-2">
+								<div class="panel panel-primary" t:type="Loop" t:source="event.betTypes" t:value="betType">
+							    	<div class="panel-heading text-center">${betType.question}</div>
+							    	<div class="panel-body">
+							    		<div t:type="Loop" t:source="betType.typeOptions" t:value="typeOption">
+						    				<a href="#" class="btn btn-block btn-default" t:type="PageLink" t:page="user/PlaceBet"
+						    					t:context="[eventId, typeOption.optionId]">
+									    		<p class="text-left"> ${typeOption.result}
+							    					<span class="pull-right"> <b> ${typeOption.odd} </b> </span>
+							    				</p>
+									    	</a>
+							    		</div>
+									</div>
+								</div>
+							</div>
+					</div>
+					
+				<!-- If the event has started -->
+				<p:else>
+					<h4 class="alert alert-danger text-center">${message:error-notAllowed}</h4>
+				</p:else>
+				</t:If>
+				
+			</p:else>
+			</t:If>
+			
+		<!-- If there aren't any user logged in -->
+		<p:else>
+			
+			<!-- If the event hasn't started yet -->
+			<t:If t:test="!eventHasStarted">
+				<div class="container">
+					<div class="col-md-8 col-md-offset-2">
+						<div class="panel panel-primary" t:type="Loop" t:source="event.betTypes" t:value="betType">
+					    	<div class="panel-heading text-center">${betType.question}</div>
+					    	<div class="panel-body">
+					    		<div class="btn-group-vertical btn-block">
+					    			<div t:type="Loop" t:source="betType.typeOptions" t:value="typeOption">
+					    				<a href="#" class="btn btn-block btn-default" t:type="PageLink" t:page="user/Login">
+								    		<p class="text-left"> ${typeOption.result}
+						    					<span class="pull-right"> <b> ${typeOption.odd} </b> </span>
+						    				</p>
+							    		</a>
+				    				</div>
+					    		</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<!-- If the event has started -->
+			<p:else>
+				<h4 class="alert alert-danger text-center">${message:error-notAllowed}</h4>
+			</p:else>
+			</t:If>
+		</p:else>
+		</t:If>
+		
+	<p:else>
+		<h4 class="alert alert-danger text-center">${message:error-eventNotFound}</h4>
+	</p:else>
+	</t:If>
 
 </html>

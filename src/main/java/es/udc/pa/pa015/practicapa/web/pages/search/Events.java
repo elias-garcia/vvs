@@ -11,8 +11,11 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import es.udc.pa.pa015.practicapa.model.eventService.EventInfoBlock;
 import es.udc.pa.pa015.practicapa.model.eventService.EventService;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;
+import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicy;
+import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicyType;
 import es.udc.pa.pa015.practicapa.web.util.UserSession;
 
+@AuthenticationPolicy(AuthenticationPolicyType.ALL_USERS)
 public class Events {
 	
 	private final static int EVENTS_PER_PAGE = 10;

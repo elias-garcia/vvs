@@ -69,7 +69,6 @@ public class Login {
     	userSession = new UserSession();
         userSession.setUserProfileId(userProfile.getUserProfileId());
         userSession.setFirstName(userProfile.getFirstName());
-
         if (userProfile.getLoginName().equals("admin")) {
         	userSession.setAdmin(true);
         } else {

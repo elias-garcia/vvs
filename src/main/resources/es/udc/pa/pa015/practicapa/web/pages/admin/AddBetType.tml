@@ -1,0 +1,69 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+    xmlns:p="tapestry:parameter"
+	t:type="Layout" t:title="title">
+	
+	<t:zone t:id="betTypeAddedZone" id="betTypeAddedZone">
+        <t:if test="showZone">
+			<div class="alert-dismissable alert alert-success text-center" role="alert">
+				<button data-dismiss="alert" class="close" type="button">×</button>
+				<h4>${message:success-title}</h4>
+				<p><a href="#" t:type="PageLink" t:page="search/EventDetails" t:context="eventId">
+					${message:return} </a>
+				</p>
+			</div>
+        </t:if>
+    </t:zone>
+    
+    <t:zone t:id="formZone" id="formZone">
+		<form t:type="Form" class="form-horizontal" t:id="addBetTypeForm" async="true">
+	
+			<t:errors/>
+		
+		    <div class="form-group">
+		    	<t:label for="betTypeQuestion" class="col-md-offset-3 col-md-2"/>
+		        <div class="col-md-3">
+		            <input t:type="TextField" t:id="betTypeQuestion" 
+		            	   t:validate="required" size="60" maxlength="60"/>
+		        </div>
+		    </div>
+		
+			<div class="form-group">
+				<t:label for="multipleType" class="col-md-offset-3 col-md-2"/>
+				<div class="col-md-3">
+					<input t:type="select" t:id="multipleType" model="yesNoSelectModel" validate="required"/>
+				</div>
+			</div>
+			<div class="form-group">
+					<tr>${message:textArea-placeholder}</tr>
+			</div>
+			
+			<div t:type='ajaxformloop' t:id="options" t:source='options' value='option' encoder='encoder'>
+ 				
+	            <div class="col-md-3">
+	               <t:label for="result" class="col-md-offset-3 col-md-2"/>
+                   <td><input t:type="TextField" t:id="result" t:value="option.result" t:validate="required, maxlength=10" size="10"/></td>
+                   <t:label for="odd" class="col-md-offset-3 col-md-2"/>
+                   <td><input t:type="TextField"  type ="number" t:id="odd"  t:translate="double" t:value="option.odd" t:validate="required,min=0" size="10"/></td>
+                   <tr><t:removerowlink>${message:removerow}</t:removerowlink>
+                   <span t:type='zone' t:id='zone' id='${uniqueZoneId}'>
+                 	${option.result}</span> > 
+            <br 	/></tr>
+                </div>
+                <p:addRow>
+                    <td colspan="6" style="text-align: right">
+                        <t:addrowlink>${message:addrow}</t:addrowlink>
+                    </td>
+                </p:addRow>
+ 
+         	</div>
+		    <div class="form-group">
+		    	<div class="col-md-offset-5 col-md-3">
+					<button type="submit" class="btn btn-block btn-primary">
+						<span class="glyphicon glyphicon-plus"></span> ${message:form-button}
+					</button>
+				</div>
+		    </div>
+		</form>
+	</t:zone>
+	
+</html>

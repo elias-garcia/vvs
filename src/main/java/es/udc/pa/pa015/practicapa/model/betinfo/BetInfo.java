@@ -11,12 +11,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.BatchSize;
+
 import java.util.Calendar;
 
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
 import es.udc.pa.pa015.practicapa.model.userprofile.UserProfile;
 
 @Entity
+@BatchSize(size = 10)
 public class BetInfo {
 
 	private Long betId;

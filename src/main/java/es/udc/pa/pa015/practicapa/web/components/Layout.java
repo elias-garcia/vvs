@@ -32,13 +32,11 @@ public class Layout {
     private Cookies cookies;
     
     public boolean getShowTitleInBody() {
-    	
     	if (showTitleInBody == null) {
     		return true;
     	} else {
     		return showTitleInBody;
     	}
-    	
     }
     
     @AuthenticationPolicy(AuthenticationPolicyType.AUTHENTICATED_USERS)

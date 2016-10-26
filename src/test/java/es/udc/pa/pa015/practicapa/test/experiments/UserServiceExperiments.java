@@ -24,25 +24,20 @@ public class UserServiceExperiments {
 
 		try {
 			// Register user.
-			UserProfile userProfile = userService.registerUser("serviceUser",
-					"userPassword", new UserProfileDetails("name", "lastName",
-							"user@udc.es"));
-			System.out.println("User with userId '"
-					+ userProfile.getUserProfileId() + "' has been created");
+			UserProfile userProfile = userService.registerUser("serviceUser", "userPassword",
+					new UserProfileDetails("name", "lastName", "user@udc.es"));
+			System.out.println("User with userId '" + userProfile.getUserProfileId() + "' has been created");
 			System.out.println(userProfile);
 
 			// Find user.
-			userProfile = userService.login("serviceUser", "userPassword",
-					false);
-			System.out.println("User with userId '"
-					+ userProfile.getUserProfileId() + "' has been retrieved");
+			userProfile = userService.login("serviceUser", "userPassword", false);
+			System.out.println("User with userId '" + userProfile.getUserProfileId() + "' has been retrieved");
 			System.out.println(userProfile);
 
 			// ... proceed in the same way for other entities / methods / use
 			// cases
 
-		} catch (IncorrectPasswordException | InstanceNotFoundException
-				| DuplicateInstanceException e) {
+		} catch (IncorrectPasswordException | InstanceNotFoundException | DuplicateInstanceException e) {
 			e.printStackTrace();
 		}
 

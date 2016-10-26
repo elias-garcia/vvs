@@ -2,11 +2,13 @@ package es.udc.pa.pa015.practicapa.model.eventService;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
@@ -50,6 +52,13 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Transactional(readOnly=true)
+	public EventInfo findEvent(Long eventId)
+			throws InstanceNotFoundException {
+		EventInfo event = eventInfoDao.find(eventId);
+		return event;
+	}
+	
+	@Transactional(readOnly=true)
 	public EventInfoBlock findEvents(String keywords, Long categoryId,
 			boolean eventsStarted, int startIndex, int count) {
 
@@ -88,10 +97,49 @@ public class EventServiceImpl implements EventService {
 		}
 	}
 	
-	public EventInfo findEvent(Long eventId)
-			throws InstanceNotFoundException {
-		EventInfo event = eventInfoDao.find(eventId);
-		return event;
+	public void pickWinners(List<Long> optionIds, Long betTypeId)
+			throws InstanceNotFoundException, TypeNotMultipleException {
+		
+		BetType type = betTypeDao.find(betTypeId);
+		
+		Set<TypeOption> typeOptions = type.getTypeOptions();
+		
+		/* First, if optionsIds is null or empty, pick all options to false and exit */
+		if (optionIds == null || optionIds.size() == 0)	{
+			for (TypeOption option : typeOptions) {
+				option.setIsWinner(false);
+				typeOptionDao.save(option);
+			}
+			
+			type.setPickedWinners(true);
+			betTypeDao.save(type);
+			
+			return;
+		}
+		
+		/* If not, we need to check that TypeOptions exists */
+		for (Long option : optionIds) {
+			typeOptionDao.find(option);
+		}
+		
+		/* If we want to pick more than one option as a winner but
+		 * it's type doesn't allow multiple options, throw an exception.
+		 */
+		if (!type.getIsMultiple() && optionIds.size() > 1)
+			throw new TypeNotMultipleException(type.getTypeId());
+		
+		/* Last, pick options as winners */
+		for (TypeOption option : typeOptions) {
+			if (optionIds.contains(option.getOptionId())) {
+				option.setIsWinner(true);
+			} else {
+				option.setIsWinner(false);
+			}
+			typeOptionDao.save(option);
+		}
+		
+		type.setPickedWinners(true);
+		betTypeDao.save(type);
 	}
 	
 	public List<CategoryInfo> findAllCategories() {

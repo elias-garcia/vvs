@@ -53,7 +53,7 @@
               			<a href="#" class="dropdown-toggle" data-toggle="dropdown">${userSession.firstName} <span class="caret"></span></a>
               				<ul class="dropdown-menu" role="menu">
               					<t:if test="!userSession.admin">
-              						<li><a href="#" t:type="PageLink" t:page="search/bethistory">${message:menu-betHistory}</a></li>
+              						<li><a href="#" t:type="PageLink" t:page="user/bethistory">${message:menu-betHistory}</a></li>
                 				</t:if>
                 				<li><a href="#" t:type="PageLink" t:page="user/updateprofile">${message:updateProfile}</a></li>
                 				<li><a href="#" t:type="PageLink" t:page="user/changepassword">${message:changePassword}</a></li>
