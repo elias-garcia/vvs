@@ -108,7 +108,6 @@ public class CategoryInfoDaoUnitTest {
 	@Test(expected = InstanceNotFoundException.class)
 	public void testRemoveAndSaveAndFindGenericDaoWithANonExistentCategoryId() throws InstanceNotFoundException {
 		/* Setup */
-		boolean exceptionCaptured = false;
 		CategoryInfo categoryInfo = newCategory();
 		/* Call */
 		categoryInfoDao.save(categoryInfo);
