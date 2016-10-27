@@ -1,0 +1,39 @@
+PR-UN-013
+
+	Unidad: UserProfileDao
+
+	Método: findByLoginName
+
+	Motivación: Probar que la función devuelve la excepción InstanceNotFoundException 
+	cuando se pasa un loginName que no coincide con ningún userProfile existente.
+
+	Valores de entrada:
+		- Username de un UserProfile no existente
+
+	Valores de salida:
+		- InstanceNotFoundException
+
+	Inicialización:
+		-  UserProfile
+
+-------------------------------------------------------------------------------------------------					
+
+PR-UN-014
+
+	Unidad: UserProfileDao
+
+	Método: findByLoginName
+
+	Motivación: Probar que la función devuelve el UserProfile correctamente en funcion
+	del loginName
+
+	Valores de entrada:
+		- loginName de un UserProfile existente
+
+	Valores de salida:
+		- UserProfile correpondiente al loginName correspondiente
+
+	Inicialización:
+		-  UserProfile con el loginName del que despues se busca
+
+	

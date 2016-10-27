@@ -1,0 +1,2 @@
+Este DAO no tiene metodos propios, solo los que hereda del padre GenericDao.
+Por falta de tiempo obviamos el testeo de los metodos del padre por lo tanto esta clase no tiene casos de prueba.

@@ -1,0 +1,155 @@
+﻿PR-UN-007
+
+	Unidad: EventInfoDao
+
+	Método: findEvents
+
+	Para no tener que probarlos todos ya que segun los posibles valores de los parametros
+	de entradas tendriamos demasiadas combinaciones por lo tanto demasiados casos de prueba
+	y por tiempo decidimos que vamos a probar cada parametro por separado y un caso de prueba
+	general que devuelva todas los eventos(sin filtro).
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento 
+	con los filtros(parametros) de tal manera que se obtienen todas los eventos. 
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: null
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 4
+
+	Valores de salida:
+		- Todos los EventInfo insertados hasta el momento ordenados
+		por la fecha ascendentemente.
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo
+
+-------------------------------------------------------------------------------------------------
+
+PR-UN-008
+
+	Unidad: EventInfoDao
+
+	Método: findEvents
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento 
+	filtrados por las keywords.
+
+	Valores de entrada:
+		- keywords: Cadena de caracteres coincidente/contenida con el nombre de dos eventos.
+		- categoryId: null
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 4
+
+	Valores de salida: 
+		- 2 EventInfo con el nombre coincidente/contenida de las keywords
+		ordenados por la fecha ascendentemente.
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo
+
+--------------------------------------------------------------
+
+PR-UN-009
+
+	Unidad: EventInfoDao
+
+	Método: findEvents
+
+	Motivación: Obtener la excepcion InstanceNotFoundException al pasarle un identificador
+	de una categoria no existente.
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: Identificador de una categoria no existente.
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 4
+
+	Valores de salida:
+		InstanceNotFoundException
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo
+
+--------------------------------------------------------------
+
+PR-UN-010
+
+	Unidad: EventInfoDao
+
+	Método: findEvents
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento 
+	filtrados por el identificador de una categoria existente.
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: Identificador de una categoria existente.
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 4
+
+	Valores de salida:
+		- EventInfo pertenecientes a esa categoria ordenados por la fecha ascendentemente.
+
+	Inicialización:
+		-  2 CategoryInfo
+		-  4 EventInfo, 2 EventInfo asignados a cada CategoryInfo por separado.
+
+--------------------------------------------------------------
+
+PR-UN-011
+
+	Unidad: EventInfoDao
+
+	Método: findEvents
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento 
+	filtrados por si son eventos activos(posteriores a la fecha actual).
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: null
+		- eventsStarted: false
+		- startIndex: 0 
+		- count: 4
+
+	Valores de salida:
+		- 2 EventInfo activos ordenados por la fecha ascendentemente.
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo, 2 EventInfo con la fecha posterior a la actual y otros
+		dos anterior a la actual.
+
+--------------------------------------------------------------
+
+PR-UN-012
+
+	Unidad: EventInfoDao
+
+	Método: findEvents
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento 
+	filtrados por startIndex y count.
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: null
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 2
+
+	Valores de salida:
+		- 2 EventInfo activos ordenados por la fecha ascendentemente.
+		
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo.

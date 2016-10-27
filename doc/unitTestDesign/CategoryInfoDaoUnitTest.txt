@@ -1,0 +1,158 @@
+
+--------------------------------------------------------------
+
+PR-UN-000
+
+	Unidad: CategoryInfoDao
+
+	Método: save y find
+
+	Motivación: Probar que el metodo save del GenericDao hace persistente
+	un objeto CategoryInfo. GenericDaosave(E entity) no devuelve el objeto después de
+	hacerlo persistente, por lo tanto la única manera de comprobar si el dato
+	es persistente es usar el método GenericDaosave.find(PK id). 
+	En conclusión, tambien estariamos probando que el metodo GenericDaosave.find(PK id) 
+	busca un objeto ya persistente correctamente.
+
+	Valores de entrada:
+		- save:
+			-CategoryInfo
+		-find:
+			-CategoryInfoId
+
+	Valores de salida:
+		- NA
+
+	Inicialización:
+		- CategoryInfo
+
+-------------------------------------------------------------------------------------------------			
+
+PR-UN-001
+
+	Unidad: CategoryInfoDao
+
+	Método: find
+
+	Motivación: Obtener la excepcion InstanceNotFoundException
+	al pasarle un identificador de categoria no existente.
+
+	Valores de entrada:
+		- Identificador de categoria no existente
+
+	Valores de salida:
+		- InstanceNotFoundException
+
+	Inicialización:
+		- CategoryInfo
+
+
+-------------------------------------------------------------------------------------------------				
+
+PR-UN-002
+
+	Unidad: CategoryInfoDao
+
+	Método: remove
+
+	Motivación: Comprobar que un objeto persistente es borrado correctamente.
+
+	Valores de entrada:
+		- save: 
+			CategoryInfo
+		- remove: 
+			CategoryInfoId
+		- find:
+			CategoryInfoId
+
+	Valores de salida:
+		- NA
+
+	Inicialización:
+		- CategoryInfo
+
+	
+-------------------------------------------------------------------------------------------------					
+
+PR-UN-003
+
+	Unidad: CategoryInfoDao
+
+	Método: remove
+
+	Motivación: Probar que al intentar eliminar un CategoryInfo con un identificador 
+	no existente se genera la excepcion InstanceNotFoundException.
+	
+	Valores de entrada:
+		- Identificador de categoria no existente
+
+	Valores de salida:
+		- InstanceNotFoundException
+
+	Inicialización:
+		- CategoryInfo
+
+	
+-------------------------------------------------------------------------------------------------	
+
+PR-UN-004
+
+	Unidad: CategoryInfoDao
+	
+	Método: save
+	
+	Motivación: Probar que el metodo save actualiza con los datos de tenga la entidad
+	en ese momento.
+		    	
+	Valores de entrada: 
+		- save: 
+			CategoryInfo
+		- find:
+			CategoryInfoId
+	
+	Valores de salida:
+		- Todas las categorias existentes hasta el momento.
+
+	Inicialización:
+		- CategoryInfo
+	
+-------------------------------------------------------------------------------------------------					
+
+PR-UN-005
+
+	Unidad: CategoryInfoDao
+
+	Método: findAllCategories
+	
+	Motivación: Probar que el metodo findAllCategories devuelve todas las categorias
+	persistentes hasta el momento.
+		    	
+	Valores de entrada: 
+		- NA
+	
+	Valores de salida:
+		- Todas las categorias persistentes hasta el momento. Es decir, el mismo
+		CategoryInfo que la inicializacion.
+
+	Inicialización:
+		- CategoryInfo
+
+-------------------------------------------------------------------------------------------------					
+
+PR-UN-006
+
+	Unidad: CategoryInfoDao
+
+	Método: findAllCategories
+	
+	Motivación: Probar que el metodo findAllCategories no devuelve nada si no hay objetos
+	persistentes en ese momento.
+		    	
+	Valores de entrada: 
+		- NA
+	
+	Valores de salida:
+		- NA
+
+	Inicialización:
+		- NA
