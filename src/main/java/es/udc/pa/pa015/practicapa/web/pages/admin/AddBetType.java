@@ -17,7 +17,9 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
+import es.udc.pa.pa015.practicapa.model.eventService.DuplicatedResultTypeOptionsException;
 import es.udc.pa.pa015.practicapa.model.eventService.EventService;
+import es.udc.pa.pa015.practicapa.model.eventService.NoAssignedTypeOptionsException;
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
 import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicy;
 import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicyType;
@@ -89,7 +91,7 @@ public class AddBetType {
 				+ messages.get("select-yes"));
 	}
 
-	void onValidateFromAddBetTypeForm() {
+	void onValidateFromAddBetTypeForm() throws NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
 		if (!addBetTypeForm.isValid()) {
 			return;
 		}

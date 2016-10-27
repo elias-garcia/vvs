@@ -1,5 +1,6 @@
 package es.udc.pa.pa015.practicapa.model.eventService;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -25,49 +26,58 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	private EventInfoDao eventInfoDao;
-	
+
 	@Autowired
 	private BetTypeDao betTypeDao;
-	
+
 	@Autowired
 	private TypeOptionDao typeOptionDao;
-	
+
 	@Autowired
 	private CategoryInfoDao categoryInfoDao;
-	
+
 	public EventInfo createEvent(String eventName, Calendar eventDate, Long categoryId)
-			throws InstanceNotFoundException, EventDateException {
-		
+			throws InstanceNotFoundException, EventDateException, NullEventNameException {
+
+		if (eventName == null)
+			throw new NullEventNameException();
+
 		CategoryInfo category = categoryInfoDao.find(categoryId);
 
-		/* If date is previous to the current date, then throw an exception*/
-		if (eventDate.before(Calendar.getInstance()))
+		/*
+		 * If date is previous to the current date or is null, then throw an
+		 * exception
+		 */
+		if (eventDate.before(Calendar.getInstance()) || eventDate == null)
 			throw new EventDateException(eventName);
-		
+
 		EventInfo newEvent = new EventInfo(eventName, eventDate, category);
-		
+
 		eventInfoDao.save(newEvent);
-		
+
 		return newEvent;
 	}
 
-	@Transactional(readOnly=true)
-	public EventInfo findEvent(Long eventId)
-			throws InstanceNotFoundException {
+	@Transactional(readOnly = true)
+	public EventInfo findEvent(Long eventId) throws InstanceNotFoundException {
 		EventInfo event = eventInfoDao.find(eventId);
 		return event;
 	}
-	
-	@Transactional(readOnly=true)
-	public EventInfoBlock findEvents(String keywords, Long categoryId,
-			boolean eventsStarted, int startIndex, int count) {
+
+	@Transactional(readOnly = true)
+	public EventInfoBlock findEvents(String keywords, Long categoryId, boolean eventsStarted, int startIndex, int count)
+			throws InstanceNotFoundException, StartIndexOrCountException {
+
+		if (startIndex < 0 || count < 0)
+			throw new StartIndexOrCountException();
+
+		categoryInfoDao.find(categoryId);
 
 		/*
-		 * Find count+1 events to determine if there exist more events above
-		 * the specified range.
+		 * Find count+1 events to determine if there exist more events above the
+		 * specified range.
 		 */
-		List<EventInfo> events = eventInfoDao.findEvents(keywords, categoryId,
-				eventsStarted, startIndex , count + 1);
+		List<EventInfo> events = eventInfoDao.findEvents(keywords, categoryId, eventsStarted, startIndex, count + 1);
 
 		boolean existMoreEvents = events.size() == (count + 1);
 
@@ -82,52 +92,72 @@ public class EventServiceImpl implements EventService {
 		/* Return EventInfoBlock. */
 		return new EventInfoBlock(events, existMoreEvents);
 	}
-	
+
 	public void addBetType(Long eventId, BetType type, List<TypeOption> options)
-			throws InstanceNotFoundException {
-		
+			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+
+		if (options.isEmpty() || options == null)
+			throw new NoAssignedTypeOptionsException();
+
 		EventInfo event = eventInfoDao.find(eventId);
-		
+
 		event.addBetType(type);
 		betTypeDao.save(type);
-		
+
+		List<String> results = new ArrayList<>();
+
 		for (TypeOption option : options) {
+			if (results.contains(option.getResult()))
+				throw new DuplicatedResultTypeOptionsException();
+			results.add(option.getResult());
 			type.addTypeOption(option);
 			typeOptionDao.save(option);
 		}
 	}
-	
+
+	// Pone a ganadoras las TypeOptions de una BetType
 	public void pickWinners(List<Long> optionIds, Long betTypeId)
 			throws InstanceNotFoundException, TypeNotMultipleException {
-		
+
+		// Puede lanzar exception = 1 CP
 		BetType type = betTypeDao.find(betTypeId);
-		
+
+		// Obitene las TypeOptions del BetType
 		Set<TypeOption> typeOptions = type.getTypeOptions();
-		
-		/* First, if optionsIds is null or empty, pick all options to false and exit */
-		if (optionIds == null || optionIds.size() == 0)	{
+
+		/*
+		 * First, if optionsIds is null or empty, pick all options to false and
+		 * exit
+		 */
+
+		// Si no se pasaron optionsId se ponen todas a false
+		if (optionIds == null || optionIds.size() == 0) {
 			for (TypeOption option : typeOptions) {
 				option.setIsWinner(false);
 				typeOptionDao.save(option);
 			}
-			
+
 			type.setPickedWinners(true);
 			betTypeDao.save(type);
-			
+
 			return;
 		}
-		
+
 		/* If not, we need to check that TypeOptions exists */
+		// Se comprueban que los ids de las options pasadas existen
+		// Puede devolver exception
 		for (Long option : optionIds) {
 			typeOptionDao.find(option);
 		}
-		
-		/* If we want to pick more than one option as a winner but
-		 * it's type doesn't allow multiple options, throw an exception.
+
+		/*
+		 * If we want to pick more than one option as a winner but it's type
+		 * doesn't allow multiple options, throw an exception.
 		 */
+
 		if (!type.getIsMultiple() && optionIds.size() > 1)
 			throw new TypeNotMultipleException(type.getTypeId());
-		
+
 		/* Last, pick options as winners */
 		for (TypeOption option : typeOptions) {
 			if (optionIds.contains(option.getOptionId())) {
@@ -137,13 +167,13 @@ public class EventServiceImpl implements EventService {
 			}
 			typeOptionDao.save(option);
 		}
-		
+
 		type.setPickedWinners(true);
 		betTypeDao.save(type);
 	}
-	
+
 	public List<CategoryInfo> findAllCategories() {
 		return categoryInfoDao.findAllCategories();
 	}
-	
+
 }

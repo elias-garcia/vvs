@@ -38,7 +38,7 @@ public class UserProfileDaoUnitTest {
 	}
 
 	/**
-	 * PR-UN-006
+	 * PR-UN-013
 	 * 
 	 * @throws InstanceNotFoundException
 	 */
@@ -53,7 +53,7 @@ public class UserProfileDaoUnitTest {
 	}
 
 	/**
-	 * PR-UN-007
+	 * PR-UN-014
 	 * 
 	 * @throws InstanceNotFoundException
 	 */

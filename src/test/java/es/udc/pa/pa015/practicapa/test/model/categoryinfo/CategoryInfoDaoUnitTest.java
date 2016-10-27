@@ -84,6 +84,7 @@ public class CategoryInfoDaoUnitTest {
 	 * 
 	 * @throws InstanceNotFoundException
 	 */
+	@Test
 	public void testRemoveAndSaveAndFindGenericDao() throws InstanceNotFoundException {
 		/* Setup */
 		boolean exceptionCaptured = false;
@@ -119,7 +120,28 @@ public class CategoryInfoDaoUnitTest {
 
 	/**
 	 * PR-UN-004
+	 * 
+	 * @throws InstanceNotFoundException
 	 */
+	@Test
+	public void testSaveUddateDataGenericDao() throws InstanceNotFoundException {
+		/* Setup */
+		CategoryInfo categoryInfo = newCategory();
+		CategoryInfo foundCategoryInfo;
+		long newId = 2;
+		/* Call */
+		categoryInfoDao.save(categoryInfo);
+		categoryInfo.setCategoryId(newId);
+		categoryInfoDao.save(categoryInfo);
+		foundCategoryInfo = categoryInfoDao.find(newId);
+		/* Assertion */
+		assertEquals(categoryInfo, foundCategoryInfo);
+	}
+
+	/**
+	 * PR-UN-005
+	 */
+	@Test
 	public void testFindAllCategoriesWithSavedCategorys() {
 		/* Setup */
 		initializeCategory();
@@ -130,8 +152,9 @@ public class CategoryInfoDaoUnitTest {
 	}
 
 	/**
-	 * PR-UN-005
+	 * PR-UN-006
 	 */
+	@Test
 	public void testFindAllCategoriesWithoutSavedCategorys() {
 		/* Setup */
 
