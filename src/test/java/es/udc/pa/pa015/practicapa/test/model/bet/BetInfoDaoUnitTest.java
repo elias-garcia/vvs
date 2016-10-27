@@ -92,7 +92,7 @@ public class BetInfoDaoUnitTest {
  
 	}
 	/**
-	 * PR-UN-00X
+	 * PR-UN-015
 	 * 
 	 */
 	@Test
@@ -121,7 +121,7 @@ public class BetInfoDaoUnitTest {
 
 	/**
 	/**
-	 * PR-UN-00X
+	 * PR-UN-016
 	 * 
 	 */
 	@Test

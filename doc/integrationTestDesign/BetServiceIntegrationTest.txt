@@ -1,0 +1,141 @@
+PR-IT-001
+
+	Unidad: BetServiceImpl
+
+	Método: createBet
+
+		Motivación: Crear una apuesta correctamente sobre la opción indicada y con la cantidad indicada por el usuario.
+
+		Valores de entrada:
+			- userId: identificador de un usuario existente
+			- typeOptionId: identificador de una opción existente
+			- amount: cantidad positivo de dinero
+
+		Valores de salida:
+			- BetInfo
+
+		Inicialización:
+			- UserProfile
+			- CategoryInfo
+			- EventInfo
+			- BetType
+			- TypeOption
+
+---------------------------------------------------------------------------------------------------------------
+
+PR-IT-002
+
+	Unidad: BetServiceImpl
+
+	Método: createBet
+
+	Motivación: Obtener excepción InstanceNotFoundException al intentar crear una apuesta con un identificador de usuario no existente.
+
+	Valores de entrada:
+			- userId: identificador de un usuario no existente
+			- typeOptionId: identificador de una opción existente
+			- amount: cantidad positivo de dinero
+
+		Valores de salida:
+			- InstanceNotFoundException
+
+		Inicialización:
+			- N/A
+
+---------------------------------------------------------------------------------------------------------------
+
+PR-IT-003
+
+	Unidad: BetServiceImpl
+
+	Método: createBet
+
+	Motivación: Obtener excepción InstanceNotFoundException al intentar crear una apuesta con un identificador de opción no existente.
+
+	Valores de entrada:
+			- userId: identificador de un usuario existente
+			- typeOptionId: identificador de una opción no existente
+			- amount: cantidad positivo de dinero
+
+		Valores de salida:
+			- InstanceNotFoundException
+
+		Inicialización:
+			- UserProfile
+
+---------------------------------------------------------------------------------------------------------------
+
+PR-IT-004
+
+	Unidad: BetServiceImpl
+
+	Método: findBetsByUserId
+
+	Motivación: Obtener todas las apuestas realizadas por un usuario.
+
+	Valores de entrada:
+			- userId: identificador de un usuario existente
+			- startIndex: 0
+			- count: 4
+
+		Valores de salida:
+			- BetInfoBlock:
+				- bets: todas las apuestas realizadas por el usuario
+				- existsMoreBets: false
+
+		Inicialización:
+			- UserProfile
+			- CategoryInfo
+			- EventInfo
+			- BetType
+			- TypeOption
+			- 3 Apuestas hechas por el usuario.
+
+---------------------------------------------------------------------------------------------------------------
+
+PR-IT-005
+
+	Unidad: BetServiceImpl
+
+	Método: findBetsByUserId
+
+	Motivación: Obtener una parte de todas las apuestas realizadas por un usuario.
+
+	Valores de entrada:
+			- userId: identificador de un usuario existente
+			- startIndex: 0
+			- count: 3
+
+		Valores de salida:
+			- BetInfoBlock:
+				- bets: 3 apuestas realizadas por el usuario
+				- existsMoreBets: true
+
+		Inicialización:
+			- UserProfile
+			- CategoryInfo
+			- EventInfo
+			- BetType
+			- TypeOption
+			- 3 Apuestas hechas por el usuario.
+
+---------------------------------------------------------------------------------------------------------------
+
+PR-IT-006
+
+	Unidad: BetServiceImpl
+
+	Método: findBetsByUserId
+
+	Motivación: Obtener InstanceNotFoundException al intentar buscar las apuestas de un usuario no existente.
+
+	Valores de entrada:
+			- userId: identificador de un usuario no existente
+			- startIndex: 1
+			- count: entero
+
+		Valores de salida:
+			- InstanceNotFoundException
+
+		Inicialización:
+			- N/A

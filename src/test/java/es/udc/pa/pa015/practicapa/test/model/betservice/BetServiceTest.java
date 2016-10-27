@@ -3,6 +3,8 @@ package es.udc.pa.pa015.practicapa.test.model.betservice;
 import static es.udc.pa.pa015.practicapa.model.util.GlobalNames.SPRING_CONFIG_FILE;
 import static es.udc.pa.pa015.practicapa.test.util.GlobalNames.SPRING_CONFIG_TEST_FILE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,91 +52,203 @@ public class BetServiceTest {
 
 	@Autowired
 	private CategoryInfoDao categoryInfoDao;
+	
+	UserProfile user;
+	CategoryInfo category;
+	EventInfo event;
+	BetType type;
+	TypeOption option1,option2,option3;
+	BetInfo bet,bet2,bet3;
+
+	private void initializeUserProfile() throws DuplicateInstanceException {
+		user = userService.registerUser("Teje", "tj11", new UserProfileDetails("Teje", "Valcarcel", "diegoteje11@gmail.com"));
+	}
+
+	private void initializeCategoryInfo() {
+		category = new CategoryInfo("categoria1");
+		categoryInfoDao.save(category);
+	}
+
+	private void initializeEventInfo() throws InstanceNotFoundException, EventDateException {
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DATE, 5);
+		event = eventService.createEvent("Barça-Madrid", date, category.getCategoryId());
+	}
+
+	private void initializeBetType() {
+		type = new BetType("¿Quien ganará?", true, event);
+	}
+
+	private void initializeTypeOptions() {
+		option1 = new TypeOption(1.20, "Cristiano Ronaldo", type);
+		option2 = new TypeOption(2.40, "Lionel Messi", type);
+	}
+
+	private void initializeBets() throws InstanceNotFoundException {
+		bet = betService.createBet(user.getUserProfileId(), option1.getOptionId(), 10);
+		bet2 = betService.createBet(user.getUserProfileId(), option1.getOptionId(), 10);
+		bet3 = betService.createBet(user.getUserProfileId(), option1.getOptionId(), 10);
+	}
+	/*
+	 * 
+	 * PR-IT-001
+	 * 
+	 */
 
 	@Test
 	public void testCreateBetAndFindByUserId()
 			throws InstanceNotFoundException, DuplicateInstanceException, EventDateException {
-
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
-
-		UserProfile user = userService.registerUser("Teje", "tj11",
-				new UserProfileDetails("Teje", "Valcarcel", "diegoteje11@gmail.com"));
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter, category.getCategoryId());
-
-		BetType type = new BetType("¿Quien ganará?", true, event);
+		
+		/*Setup*/
+		initializeUserProfile();
+		initializeCategoryInfo();
+		initializeEventInfo();
+		initializeBetType();
+		initializeTypeOptions();
 
 		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Cristiano Ronaldo", type);
 		options.add(option1);
-		TypeOption option2 = new TypeOption(2.40, "Lionel Messi", type);
 		options.add(option2);
 
 		eventService.addBetType(event.getEventId(), type, options);
 
+		/*Call*/
 		BetInfo bet = betService.createBet(user.getUserProfileId(), option1.getOptionId(), 10);
 
 		BetInfoBlock finded = betService.findBetsByUserId(user.getUserProfileId(), 0, 10);
 
+		/*Assertion*/
 		assertEquals(bet, finded.getBets().get(0));
 	}
 
+	/*
+	 * 
+	 * PR-IT-002
+	 * 
+	 */
 	@Test(expected = InstanceNotFoundException.class)
 	public void testCreateBetWithInvalidUserId()
 			throws DuplicateInstanceException, InstanceNotFoundException, EventDateException {
 
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		/*Setup*/
+		initializeCategoryInfo();
+		initializeEventInfo();
+		initializeBetType();
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter, category.getCategoryId());
-
-		BetType type = new BetType("¿Quien ganará?", true, event);
+		initializeTypeOptions();
 
 		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Cristiano Ronaldo", type);
 		options.add(option1);
-		TypeOption option2 = new TypeOption(2.40, "Lionel Messi", type);
 		options.add(option2);
 
+		/*Call*/
 		eventService.addBetType(event.getEventId(), type, options);
 
 		betService.createBet(NON_EXISTENT_USER_ID, option1.getOptionId(), 10);
 	}
 
+	/*
+	 * 
+	 * PR-IT-003
+	 * 
+	 */
 	@Test(expected = InstanceNotFoundException.class)
 	public void testCreateBetWithInvalidOptionId()
 			throws DuplicateInstanceException, InstanceNotFoundException, EventDateException {
+		/*Setup*/
+		initializeUserProfile();
 
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
-
-		UserProfile user = userService.registerUser("Teje", "tj11",
-				new UserProfileDetails("Teje", "Valcarcel", "diegoteje11@gmail.com"));
-
+		/*Call*/
 		betService.createBet(user.getUserProfileId(), NON_EXISTENT_OPTION_ID, 10);
 	}
 
+	/*
+	 * 
+	 * PR-IT-004
+	 * 
+	 */
 	@Test
-	public void testFindBetsByUserIdEmpty() throws InstanceNotFoundException, DuplicateInstanceException {
+	public void testFindBetsByUserId() throws InstanceNotFoundException, DuplicateInstanceException, EventDateException {
+		/*Setup*/
+		initializeUserProfile();
+		initializeCategoryInfo();
+		initializeEventInfo();
+		initializeBetType();
+		initializeTypeOptions();
 
-		UserProfile user2 = userService.registerUser("Elias", "Elias10",
-				new UserProfileDetails("Elias", "Garcia", "elias.g_10@gmail.com"));
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		options.add(option1);
+		options.add(option2);
 
-		BetInfoBlock bets = betService.findBetsByUserId(user2.getUserProfileId(), 0, 10);
+		eventService.addBetType(event.getEventId(), type, options);
+		
+		initializeBets();
+		
+		List<BetInfo> bets = new ArrayList<BetInfo>();
 
-		assertEquals(0, bets.getBets().size());
+		bets.add(bet);
+		bets.add(bet2);
+		bets.add(bet3);
+		
+		/*Call*/
+		BetInfoBlock finded = betService.findBetsByUserId(user.getUserProfileId(), 0, 10);
+		
+		/*Assertion*/
+		assertEquals(bets, finded.getBets());
+		assertFalse(finded.isExistMoreBets());
+
 	}
+	
+	/*
+	 * 
+	 * PR-IT-005
+	 * 
+	 */
+	@Test
+	public void testFindPartBetsByUserId() throws InstanceNotFoundException, DuplicateInstanceException, EventDateException {
+
+		/*Setup*/
+		initializeUserProfile();
+		initializeCategoryInfo();
+		initializeEventInfo();
+		initializeBetType();
+		initializeTypeOptions();
+
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		options.add(option1);
+		options.add(option2);
+
+		eventService.addBetType(event.getEventId(), type, options);
+		
+		initializeBets();
+		
+		List<BetInfo> bets = new ArrayList<BetInfo>();
+
+		bets.add(bet);
+		bets.add(bet2);
+		bets.add(bet3);
+		
+		/*Call*/
+		BetInfoBlock betsBlock = betService.findBetsByUserId(user.getUserProfileId(), 0, 2);
+
+		bets.remove(bet3);
+
+		/*Assertion*/
+		assertEquals(bets, betsBlock.getBets());
+		assertTrue(betsBlock.isExistMoreBets());
+
+	}
+	
+	/*
+	 * 
+	 * PR-IT-006
+	 * 
+	 */
 
 	@Test(expected = InstanceNotFoundException.class)
 	public void testFindBetsByNonExistentUserId() throws InstanceNotFoundException {
 
+		/*Call*/
 		betService.findBetsByUserId(NON_EXISTENT_USER_ID, 0, 10);
 	}
 
