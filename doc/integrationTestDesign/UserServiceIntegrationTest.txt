@@ -1,0 +1,203 @@
+﻿PR-IT-007
+
+	UserService- registerUser
+	
+	Motivación: Comprobar que se registra correctamente un usuario.
+				
+	Entradas: loginName = "user1"
+			  clearPassword = "passwd"
+			  userProfileDetails = UserProfileDetails
+			  
+	Salida: userProfile creado
+	
+	Inicialización: -
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-008
+
+	UserService- registerUser
+	
+	Motivación: Comprobar que al intentar registrar un usuario ya existente salta un excepción.
+				
+	Entradas: loginName = "user1"
+			  clearPassword = "passwd"
+			  userProfileDetails = UserProfileDetails
+			  
+	Salida: DuplicateInstanceException
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "pass" y UserProfileDetails.
+	
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-009
+
+	UserService- login
+	
+	Motivación: Comprobar que la contraseña pasada como entrada y la contraseña del usuario que corresponde
+			    al loginName pasado, sean iguales.
+				
+	Entradas: loginName = "user1"
+			  password = "pass"
+			  passwordEncrypted = false
+			  
+	Salida: userProfile creado en la inicialización.
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "pass" y UserProfileDetails.
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-010
+
+	UserService- login
+	
+	Motivación: Comprobar que la contraseña pasada como entrada y la contraseña del usuario que corresponde
+			    al loginName pasado, no sean iguales y por tanto salte una excepción.
+				
+	Entradas: loginName = "user1"
+			  password = "pass2"
+			  passwordEncrypted = false
+			  
+	Salida: IncorrectPasswordException
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "passwd" y UserProfileDetails.
+	
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-011
+
+	UserService- login
+	
+	Motivación: Comprobar que la función devuelve una excepción al pasarle un userName de un user no existente.
+				
+	Entradas: loginName = "user2"
+		  password = "pass"
+		  passwordEncrypted = false
+			  
+	Salida: InstanceNotFoundException
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "passwd" y UserProfileDetails.
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-012
+
+	UserService- login
+	
+	Motivación: Comprobar que la contraseña encriptada pasada como entrada y la contraseña encriptada del usuario que corresponde
+			    al loginName pasado, sean iguales.
+				
+	Entradas: loginName = "user1"
+			  password = "pass"
+			  passwordEncrypted = true
+			  
+	Salida: userProfile creado en la inicialización.
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "pass" y UserProfileDetails.
+	
+-------------------------------------------------------------------------------------------------
+
+PR-IT-013
+
+	UserService- findUserProfile
+	
+	Motivación: Comprobar que la función devuelve una excepción al pasarle un id de un user no existente.
+				
+	Entradas: userId = -1
+			  
+	Salida: InstanceNotFoundException
+	
+	Inicialización: Creamos un user
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-014
+
+	UserService- findUserProfile
+	
+	Motivación: Comprobar que la función devuelve un user al pasarle un id de un user existente.
+				
+	Entradas: userId = userId del user creado en la inicialización
+			  
+	Salida: user creado en la inicialización
+	
+	Inicialización: Creamos un user
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-015
+
+	UserService- changePassword
+	
+	Motivación: Comprobar que la contraseña se cambia adecuadamente pasando un user existente.
+				
+	Entradas: userProfileId = id del user creado en inicialización
+		  oldClearPassword = password del user creado en inicialización
+		  newClearPassword = "Xpass"
+			  
+	Salida: userProfile creado en la inicialización con la password nueva.
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "pass" y UserProfileDetails.
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-016
+
+	UserService- changePassword
+	
+	Motivación: Comprobar que la contraseña antigua pasada como entrada y la contraseña del usuario pasado, 
+		    no sean iguales y por tanto salte una excepción.
+				
+	Entradas: userProfileId = id del user creado en inicialización
+		  oldClearPassword = "Xpass"
+		  newClearPassword = "Ypass"
+			  
+	Salida: IncorrectPasswordException
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "passwd" y UserProfileDetails.
+	
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-017
+
+	UserService- changePassword
+	
+	Motivación: Comprobar que la función devuelve una excepción al pasarle un userId de un user no existente.
+				
+	Entradas: userProfileId = -1
+		  oldClearPassword = "pass"
+		  newClearPassword = "newPass"
+			  
+	Salida: InstanceNotFoundException
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "passwd" y UserProfileDetails.
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-018
+
+	UserService- updateUserProfileDetails
+	
+	Motivación: Comprobar que el profileDetails se cambia adecuadamente pasando un user existente.
+				
+	Entradas: userProfileId = id del user creado en inicialización
+		  userProfileDetails = nuevo UserProfileDetails
+			  
+	Salida: userProfile creado en la inicialización con la password nueva.
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "pass" y UserProfileDetails.
+
+-------------------------------------------------------------------------------------------------					
+
+PR-IT-019
+
+	UserService- updateUserProfileDetails
+	
+	Motivación: Comprobar que la función devuelve una excepción al pasarle un userId de un user no existente.
+				
+	Entradas: userProfileId = -1
+		  userProfileDetails = nuevo UserProfileDetails
+			  
+	Salida: InstanceNotFoundException
+	
+	Inicialización: Creamos un user con loginName = "user1", password = "pass" y UserProfileDetails.
