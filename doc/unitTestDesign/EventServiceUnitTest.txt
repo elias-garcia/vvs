@@ -1,0 +1,429 @@
+
+--------------------------------------------------------------
+
+PR-UN-017
+
+	Unidad: EventServiceImpl
+
+	Método: createEvent
+
+	Motivación: Crear un evento correctamente con un nombre 
+	valido(not null y algun caracter sin ser espacio), una
+	fecha valida(posterior al actual) y un id de una categoria
+	existente.
+
+	Valores de entrada:
+		- eventName: Real Madrid - Barcelona
+		- eventDate: Fecha posterior a la actual
+		- categoryId: Identificador de un categoria existente
+
+	Valores de salida:
+		- EventInfo
+
+	Inicialización:
+		- CategoryInfo
+
+--------------------------------------------------------------
+
+PR-UN-018
+
+	Unidad: EventServiceImpl
+
+	Método: createEvent
+
+	Motivación: Crear un evento con el nombre de evento con el valor null. 
+	El nombre del evento no puede ser null(restriccion de diseño), por lo tanto se tendria que 
+	generar una excepcion NullEventNameException.
+
+	Valores de entrada:
+		- eventName: null
+		- eventDate: Fecha posterior a la actual
+		- categoryId: Identificador de un categoria existente
+
+	Valores de salida:
+		- NullEventNameException
+
+	Inicialización:
+		- CategoryInfo
+
+Se podria comprobar que el nombre tuviese carácteres alfanumericos y no una cadena de texto
+vacia o construida por espacios, pero por falta de tiempo hemos obviado ese caso de prueba.
+
+Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
+NullEventNameException de hecho ni siquiera esta creada. Crearla y modificar la implementacion
+para que devuelva la excepcion.
+
+--------------------------------------------------------------
+
+PR-UN-019
+
+	Unidad: EventServiceImpl
+
+	Método: createEvent
+
+	Motivación: Crear un evento con la fecha de evento con el valor null. 
+	Se deberia lanzar la excepcion EventDateException.
+	Valores de entrada:
+		- eventName: Real Madrid - Barcelona
+		- eventDate: null
+		- categoryId: Identificador de un categoria existente
+
+	Valores de salida:
+		- EventDateException
+
+	Inicialización:
+		- CategoryInfo
+
+Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
+EventDateException cuando la fecha es null. Modificar la implementacion para que devuelva
+la excepcion en ese caso.
+
+--------------------------------------------------------------
+
+PR-UN-020
+
+	Unidad: EventServiceImpl
+
+	Método: createEvent
+
+	Motivación: Obtener excepción EventDateException
+	al intentar crear un evento con una fecha anterior a 
+	la actual.
+
+	Valores de entrada:
+			- eventName: Real Madrid - Barcelona
+			- eventDate: Fecha anterior a la actual
+			- categoryId: Identificador de un categoria existente
+
+		Valores de salida:
+			- EventDateException
+
+		Inicialización:
+			- CategoryInfo
+
+--------------------------------------------------------------
+
+PR-UN-021
+
+	Unidad: EventServiceImpl
+
+	Método: createEvent
+
+	Motivación: Obtener excepción InstanceNotFoundException
+	al intentar crear un evento con identificador de categoria
+	no existente.
+
+	Valores de entrada:
+			- eventName: Real Madrid - Barcelona
+			- eventDate: Fecha posterior a la actual
+			- categoryId: Identificador de un categoria no existente
+
+		Valores de salida:
+			- InstanceNotFoundException
+
+		Inicialización:
+			- NA
+
+--------------------------------------------------------------
+
+PR-UN-021
+
+	Unidad: EventServiceImpl
+
+	Método: findEvent
+
+	Motivación: Obtener excepción InstanceNotFoundException
+	al intentar crear un evento con identificador de categoria
+	no existente.
+
+	Valores de entrada:
+		- eventName: Real Madrid - Barcelona
+		- eventDate: Fecha posterior a la actual
+		- categoryId: Identificador de un categoria no existente
+
+	Valores de salida:
+		- InstanceNotFoundException
+
+	Inicialización:
+		- NA
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+PR-UN-022
+
+	Unidad: EventServiceImpl
+
+	Método: findEvents
+
+	Motivación: Obtener la excepcion InstanceNotFoundException al pasarle un identificador
+	de una categoria no existente.
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: Identificador de una categoria no existente.
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 4
+
+	Valores de salida:
+		InstanceNotFoundException
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo
+
+Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
+InstanceNotFoundException es este metodo. Modificar la implementación para que devuelva la excepcion.
+
+--------------------------------------------------------------
+
+PR-UN-023
+
+	Unidad: EventServiceImpl
+
+	Método: findEvents
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento segun
+	el startIndex y el account, devolviendo el correspondiente EventInfoBlock.
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: null
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 4
+
+	Valores de salida:
+		- EventInfoBlock
+			- events: Todos los EventInfo insertados hasta el momento ordenados
+			por la fecha ascendentemente.
+			- existsMoreBets: false.
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo
+
+--------------------------------------------------------------
+
+PR-UN-024
+
+	Unidad: EventServiceImpl
+
+	Método: findEvents
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento segun
+	el startIndex y el account, devolviendo el correspondiente EventInfoBlock.
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: null
+		- eventsStarted: true
+		- startIndex: 0 
+		- count: 2
+
+	Valores de salida:
+		- EventInfoBlock
+			- events: Los dos primeros eventos insertados hasta el momento ordenados
+			por la fecha ascendentemente.
+			- existsMoreBets: true.
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo
+
+--------------------------------------------------------------
+
+PR-UN-025
+
+	Unidad: EventServiceImpl
+
+	Método: findEvents
+
+	Motivación: Obtener un StartIndexOrCountException al pasarle al metodo los parametros
+	startIndex o count negativos.
+
+	Valores de entrada:
+		- keywords: null
+		- categoryId: null
+		- eventsStarted: true
+		- startIndex: -1
+		- count: -1
+
+	Valores de salida:
+		- StartIndexOrCountException
+
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo.
+
+Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
+StartIndexOrCountException es este metodo para este caso. Crearla y modificar la implementación
+para que devuelva la excepcion.
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+PR-UN-028
+
+	Unidad: EventServiceImpl
+
+	Método: addBetType
+
+	Motivación: Comprobar que se inserta adecuadamente una
+	BetType en el sistema con sus BetTypeOption correspondientes
+	asociada a un EventInfo.
+
+	Valores de entrada:
+			- eventId: Identificador de un evento existente
+			- type: BetType 
+			- options: Lista de BetTypeOption
+
+		Valores de salida:
+			- NA
+
+		Inicialización:
+			- CategoryInfo
+			- EventInfo
+
+--------------------------------------------------------------
+
+PR-UN-029
+
+	Unidad: EventServiceImpl
+
+	Método: addBetType
+
+	Motivación: Obtener excepción InstanceNotFoundException
+	al intentar crear añadir un BetType con un identificador
+	de evento no existente.
+
+	Valores de entrada:
+			- eventId: Identificador de un evento no existente
+			- type: BetType 
+			- options: Lista de BetTypeOption
+
+		Valores de salida:
+			- InstanceNotFoundException
+
+		Inicialización:
+			- NA
+
+--------------------------------------------------------------
+
+PR-UN-030
+
+	Unidad: EventServiceImpl
+
+	Método: addBetType
+
+	Motivación: Segun la especificación un BetType no puede
+	no tener la lista de BetTypeOption vacia. Por lo tanto
+	deberia devolver una excepcion NoAssignedTypeOptionsException
+
+	Valores de entrada:
+			- eventId: Identificador de un evento existente
+			- type: BetType 
+			- options: Lista de BetTypeOption vacia o null
+
+		Valores de salida:
+			- NoAssignedTypeOptionsException
+
+		Inicialización:
+			- CategoryInfo
+			- EventInfo
+
+--------------------------------------------------------------
+
+PR-UN-031
+
+	Unidad: EventServiceImpl
+
+	Método: addBetType
+
+	Motivación: Segun la especificación un BetType no puede
+	no tener la lista de BetTypeOption con el mismo nombre. 
+	Por lo tanto deberia devolver una excepcion DuplicatedResultTypeOptionsException.
+
+	Valores de entrada:
+			- eventId: Identificador de un evento existente
+			- type: BetType 
+			- options: Lista de BetTypeOption con al menos
+			dos TypeOptions con los result con el mismo 
+			valor.
+
+		Valores de salida:
+			- DuplicatedResultTypeOptionsException
+
+		Inicialización:
+			- CategoryInfo
+			- EventInfo
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+PR-UN-032
+
+	Unidad: EventServiceImpl
+
+	Método: findEvent
+
+	Motivación: Obtener un evento por su identificador.
+
+	Valores de entrada:
+			- eventId: Identificador de un evento existente
+
+		Valores de salida:
+			- EventInfo
+
+		Inicialización:
+			- CategoryInfo
+			- EventInfo
+
+--------------------------------------------------------------
+
+PR-UN-033
+
+	Unidad: EventServiceImpl
+
+	Método: findEvent
+
+	Motivación: Obtener excepción InstanceNotFoundException
+	al intentar buscar un evento con un identificador
+	de evento no existente.
+
+	Valores de entrada:
+			- eventId: Identificador de un evento no existente
+
+		Valores de salida:
+			- InstanceNotFoundException
+
+		Inicialización:
+			- NA
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+PR-UN-034
+
+	Unidad: EventServiceImpl
+
+	Método: findAllCategories
+
+	Motivación: Obtener la lista de categorias insertadas
+	hasta el momento.
+
+	Valores de entrada:
+			- NA
+
+		Valores de salida:
+			- List<CategoryInfo>: Resultados obtenidos.
+
+		Inicialización:
+			- NA
+			- CategoryInfo
+

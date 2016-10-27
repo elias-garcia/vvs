@@ -1,0 +1,38 @@
+﻿PR-UN-015
+
+	BetInfoDao - findBetsByUserId
+	
+	Motivación: Comprobar que la función devuelve los bets de un user existente. 
+				Se prueba, además, que estos sean tantos como se indica por count.
+				
+	Entradas: userId = Id del user creado en la inicialización 
+			  startIndex = 0
+			  count = 4
+			 
+	Salida: Los Bets del user creados en la inicialización.
+	
+	Inicialización: Creamos dos user, un typeOption y un event asignado a typeOption.
+			Necesitamos crear también una category y betType que iran asignados al event, así
+			mismo el betType va a asignado también al TypeOption.
+			Además creamos 2 Bets y se los asignamos al user con el typeOption.
+					
+-------------------------------------------------------------------------------------------------					
+					
+PR-UN-016
+
+	BetInfoDao - findBetsByUserId
+	
+	Motivación: Comprobar que la función devuelve una lista vacía para un user que no tiene bets.
+				
+	Entradas: userId = Id del user creado en la inicialización 
+			  startIndex = 0
+			  count = 4
+			 
+	Salida: List vacía.
+	
+	Inicialización: Creamos dos user.
+	
+-------------------------------------------------------------------------------------------------
+					
+Por falta de tiempo no comprobamos el caso de un usuario no existente. 
+Podemos obviarlo ya que esto se controlara en el BetService.
