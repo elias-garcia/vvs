@@ -38,6 +38,10 @@ public class EventInfoDaoHibernate extends GenericDaoHibernate<EventInfo, Long> 
         	if ((words == null || words.length <= 0) && categoryId.longValue() == -1)
         		queryString += " WHERE e.eventDate >= :eventDate";
         	else queryString += " AND e.eventDate >= :eventDate";
+        } else {
+        	if ((words == null || words.length <= 0) && categoryId.longValue() == -1)
+        		queryString += " WHERE e.eventDate < :eventDate";
+        	else queryString += " AND e.eventDate < :eventDate";
         }
         
         queryString += " ORDER BY e.eventDate ASC";
@@ -55,8 +59,7 @@ public class EventInfoDaoHibernate extends GenericDaoHibernate<EventInfo, Long> 
         	query.setParameter("categoryId", categoryId);
         
         /* Fill date parameter */
-        if (!eventsStarted)
-        	query.setCalendar("eventDate", Calendar.getInstance());
+        query.setCalendar("eventDate", Calendar.getInstance());
         
         return query.setFirstResult(startIndex).setMaxResults(count).list();
 	}

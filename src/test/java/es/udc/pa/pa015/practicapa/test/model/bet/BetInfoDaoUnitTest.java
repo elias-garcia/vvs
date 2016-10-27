@@ -90,7 +90,6 @@ public class BetInfoDaoUnitTest {
 		bet2 = new BetInfo(date, (double) 10, userWithBets, typeOption);
 		sessionFactory.getCurrentSession().saveOrUpdate(bet1);
 		sessionFactory.getCurrentSession().saveOrUpdate(bet2);
-
 	}
 
 	/**
