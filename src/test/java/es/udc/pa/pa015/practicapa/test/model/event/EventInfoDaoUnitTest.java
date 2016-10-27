@@ -80,8 +80,6 @@ public class EventInfoDaoUnitTest {
 		List<EventInfo> eventsCreated = new ArrayList<EventInfo>();
 		
 		eventsCreated.add(eventStarted2);
-		eventsCreated.add(eventNoStarted1);
-		eventsCreated.add(eventNoStarted2);
 		
 		List<EventInfo> eventsFound = new ArrayList<EventInfo>();
 		
@@ -90,7 +88,7 @@ public class EventInfoDaoUnitTest {
 		
 		/* Assertion */
 		assertEquals(eventsFound,eventsCreated);
-		assertEquals(3, eventsFound.size());
+		assertEquals(1, eventsFound.size());
 	}
 
 	/**
