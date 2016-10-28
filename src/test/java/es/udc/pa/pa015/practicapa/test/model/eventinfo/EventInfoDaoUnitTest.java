@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfoDao;
-import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE })
@@ -33,8 +32,7 @@ public class EventInfoDaoUnitTest {
 	private final String EXISTENT_EVENT_NAME2 = "Deportivo - Alaves";
 	private final String EXISTENT_EVENT_NAME3 = "Unicaja - Fuenlabrada";
 	private final String KEYWORDS = "Ma";
-	private final long NON_EXISTENT_CATEGORY_ID = -1;
-
+	
 	List<EventInfo> persistentEventInfos = new ArrayList<>();
 	List<CategoryInfo> persistentCategoryInfos = new ArrayList<>();
 
@@ -93,8 +91,8 @@ public class EventInfoDaoUnitTest {
 	public void testFindEventsFilteringWithKeywords() {
 		/* Setup */
 		initializeEventInfos();
-		persistentEventInfos.remove(2);
 		persistentEventInfos.remove(3);
+		persistentEventInfos.remove(2);
 		/* Call */
 		List<EventInfo> results = eventInfoDao.findEvents(KEYWORDS, null, true, 0, 4);
 		/* Assertion */
@@ -102,31 +100,14 @@ public class EventInfoDaoUnitTest {
 	}
 
 	/**
-	 * PR-UN-009
-	 * 
-	 * @throws InstanceNotFoundException
-	 */
-	@Test(expected = InstanceNotFoundException.class)
-	public void testFindEventsFilteringWithANonExistentCategoryId() {
-		/* Setup */
-		initializeEventInfos();
-		/* Call */
-		eventInfoDao.findEvents(null, NON_EXISTENT_CATEGORY_ID, true, 0, 4);
-		/* Assertion */
-		/* InstanceNotFoundException expected */
-	}
-
-	/**
 	 * PR-UN-010
-	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@Test
 	public void testFindEventsFilteringWithCategoryInfo() {
 		/* Setup */
 		initializeEventInfos();
-		persistentEventInfos.remove(1);
 		persistentEventInfos.remove(3);
+		persistentEventInfos.remove(1);
 		/* Call */
 		List<EventInfo> results = eventInfoDao.findEvents(null, persistentCategoryInfos.get(0).getCategoryId(), true, 0,
 				4);
@@ -136,15 +117,13 @@ public class EventInfoDaoUnitTest {
 
 	/**
 	 * PR-UN-011
-	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@Test
 	public void testFindEventsFilteringWithStartDate() {
 		/* Setup */
 		initializeEventInfos();
-		persistentEventInfos.remove(0);
 		persistentEventInfos.remove(1);
+		persistentEventInfos.remove(0);
 		/* Call */
 		List<EventInfo> results = eventInfoDao.findEvents(null, null, false, 0, 4);
 		/* Assertion */
@@ -153,15 +132,13 @@ public class EventInfoDaoUnitTest {
 
 	/**
 	 * PR-UN-012
-	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@Test
 	public void testFindEventsFilteringWithStartInteAndCount() {
 		/* Setup */
 		initializeEventInfos();
-		persistentEventInfos.remove(2);
 		persistentEventInfos.remove(3);
+		persistentEventInfos.remove(2);
 		/* Call */
 		List<EventInfo> results = eventInfoDao.findEvents(null, null, true, 0, 2);
 		/* Assertion */

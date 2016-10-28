@@ -60,7 +60,7 @@ public class CategoryInfoDaoUnitTest {
 		categoryInfoDao.save(categoryInfo);
 		foundCategoryInfo = categoryInfoDao.find(categoryInfo.getCategoryId());
 		/* Assertion */
-		assertEquals(categoryInfoDao, foundCategoryInfo);
+		assertEquals(categoryInfo, foundCategoryInfo);
 	}
 
 	/**
@@ -127,14 +127,14 @@ public class CategoryInfoDaoUnitTest {
 		/* Setup */
 		CategoryInfo categoryInfo = newCategory();
 		CategoryInfo foundCategoryInfo;
-		long newId = 2;
+		String newName = "Tenis";
 		/* Call */
 		categoryInfoDao.save(categoryInfo);
-		categoryInfo.setCategoryId(newId);
+		categoryInfo.setCategoryName(newName);
 		categoryInfoDao.save(categoryInfo);
-		foundCategoryInfo = categoryInfoDao.find(newId);
+		foundCategoryInfo = categoryInfoDao.find(categoryInfo.getCategoryId());
 		/* Assertion */
-		assertEquals(categoryInfo, foundCategoryInfo);
+		assertEquals(foundCategoryInfo.getCategoryName(), newName);
 	}
 
 	/**
