@@ -96,7 +96,7 @@ public class EventServiceImpl implements EventService {
 	public void addBetType(Long eventId, BetType type, List<TypeOption> options)
 			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
 
-		if (options.isEmpty() || options == null)
+		if (options == null || options.isEmpty())
 			throw new NoAssignedTypeOptionsException();
 
 		EventInfo event = eventInfoDao.find(eventId);
