@@ -25,7 +25,6 @@ public class EventInfoDaoHibernate extends GenericDaoHibernate<EventInfo, Long> 
 				hqlQuery += " AND ";
 		}
 
-		String w;
 		if (words != null && words.length > 0) {
 			if (categoryId == null) {
 				hqlQuery += " WHERE ";
@@ -34,7 +33,6 @@ public class EventInfoDaoHibernate extends GenericDaoHibernate<EventInfo, Long> 
 				if (i > 0) {
 					hqlQuery += " AND";
 				}
-				w = words[i];
 				hqlQuery += " LOWER(e.eventName) LIKE LOWER(:eventName" + i + ")";
 			}
 		}

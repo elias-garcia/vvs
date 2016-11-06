@@ -102,7 +102,7 @@ public class EventServiceTest {
 		EventInfo event1 = eventService.createEvent("evento 1", after, category.getCategoryId());
 		EventInfo event2 = eventService.createEvent("evento 2", after, category.getCategoryId());
 
-		EventInfoBlock finded1 = eventService.findEvents("eVe", NON_EXISTENT_CATEGORY_ID, false, 0, 10);
+		EventInfoBlock finded1 = eventService.findEvents("eVe", category.getCategoryId(), false, 0, 10);
 
 		assertEquals(event1, finded1.getEvents().get(0));
 		assertEquals(event2, finded1.getEvents().get(1));
@@ -158,7 +158,7 @@ public class EventServiceTest {
 		EventInfo event2 = new EventInfo("evento 2", before, category);
 		eventInfoDao.save(event2);
 
-		EventInfoBlock finded1 = eventService.findEvents("eVe", NON_EXISTENT_CATEGORY_ID, true, 0, 10);
+		EventInfoBlock finded1 = eventService.findEvents("eVe", category.getCategoryId(), true, 0, 10);
 
 		assertEquals(event1, finded1.getEvents().get(0));
 		assertEquals(event2, finded1.getEvents().get(1));
@@ -268,37 +268,36 @@ public class EventServiceTest {
 	@Test
 	public void testFindEventsEmpty() throws InstanceNotFoundException, StartIndexOrCountException {
 
-		EventInfoBlock finded = eventService.findEvents("evento1", NON_EXISTENT_CATEGORY_ID, false, 0, 10);
+		CategoryInfo category = new CategoryInfo("categoria1");
+		categoryInfoDao.save(category);
+
+		EventInfoBlock finded = eventService.findEvents("evento1", category.getCategoryId(), false, 0, 10);
 
 		assertTrue(finded.getEvents().isEmpty());
 	}
 
-	/*
-	 * @Test public void addBetType() throws InstanceNotFoundException,
-	 * EventDateException {
-	 * 
-	 * Calendar now = Calendar.getInstance(); now.add(Calendar.WEEK_OF_YEAR, 1);
-	 * 
-	 * CategoryInfo category = new CategoryInfo("categoria1");
-	 * categoryInfoDao.save(category);
-	 * 
-	 * EventInfo event = eventService.createEvent("Barça-Madrid", now,
-	 * category.getCategoryId());
-	 * 
-	 * BetType type = new BetType("¿Quien ganará?", true, event);
-	 * 
-	 * List<TypeOption> options = new ArrayList<TypeOption>(); options.add(new
-	 * TypeOption(1.20, "Cristiano Ronaldo", type)); options.add(new
-	 * TypeOption(1.20, "Lionel Messi", type));
-	 * 
-	 * eventService.addBetType(event.getEventId(), type, options);
-	 * 
-	 * List<BetType> eventTypes = new ArrayList<BetType>(event.getBetTypes());
-	 * List <TypeOption> typeOptions = new
-	 * ArrayList<TypeOption>(eventTypes.get(0).getTypeOptions());
-	 * 
-	 * assertEquals(options.get(0), typeOptions.get(0)); }
-	 */
+	@Test
+	public void addBetType() throws InstanceNotFoundException, EventDateException, NullEventNameException,
+			NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+
+		Calendar after = Calendar.getInstance();
+		after.add(Calendar.WEEK_OF_YEAR, 1);
+
+		CategoryInfo category = new CategoryInfo("categoria1");
+		categoryInfoDao.save(category);
+
+		EventInfo event = eventService.createEvent("Barça-Madrid", after, category.getCategoryId());
+
+		BetType type = new BetType("¿Quien ganará?", true, event);
+
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		options.add(new TypeOption(1.20, "Cristiano Ronaldo", type));
+		options.add(new TypeOption(1.20, "Lionel Messi", type));
+
+		eventService.addBetType(event.getEventId(), type, options);
+
+		assertEquals(event.getBetTypes().toArray()[0], type);
+	}
 
 	@Test(expected = InstanceNotFoundException.class)
 	public void addBetTypeToNonExistentEvent() throws InstanceNotFoundException, EventDateException,

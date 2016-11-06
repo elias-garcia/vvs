@@ -3,6 +3,7 @@ package es.udc.pa.pa015.practicapa.test.model.eventservice;
 import static es.udc.pa.pa015.practicapa.model.util.GlobalNames.SPRING_CONFIG_FILE;
 import static es.udc.pa.pa015.practicapa.test.util.GlobalNames.SPRING_CONFIG_TEST_FILE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -48,7 +49,6 @@ public class EventServiceUnitTest {
 	private final String EXISTENT_EVENT_NAME1 = "Real Madrid - Barcelona";
 	private final String EXISTENT_EVENT_NAME2 = "Deportivo - Alaves";
 	private final String EXISTENT_EVENT_NAME3 = "Unicaja - Fuenlabrada";
-	private final String KEYWORDS = "Ma";
 	private final long NON_EXISTENT_ID = -1;
 	private static Calendar pastDate = null;
 	private static Calendar futureDate = null;
@@ -243,10 +243,6 @@ public class EventServiceUnitTest {
 		verify(categoryInfoDaoMock).find(NON_EXISTENT_ID);
 	}
 
-	/*****************************************************************/
-	/*****************************************************************/
-	/*****************************************************************/
-
 	/**
 	 * PR-UN-022
 	 * 
@@ -296,10 +292,6 @@ public class EventServiceUnitTest {
 		verify(eventInfoDaoMock).find(1L);
 	}
 
-	/*****************************************************************/
-	/*****************************************************************/
-	/*****************************************************************/
-
 	/**
 	 * PR-UN-024
 	 * 
@@ -345,16 +337,16 @@ public class EventServiceUnitTest {
 		persistentEventInfos.remove(2);
 
 		/* Mock behavior */
-		when(eventInfoDaoMock.findEvents(null, null, true, 0, 2)).thenReturn(persistentEventInfos);
+		when(eventInfoDaoMock.findEvents(null, null, true, 0, 3)).thenReturn(persistentEventInfos);
 
 		/* Call */
 		EventInfoBlock eventInfoBlock = eventService.findEvents(null, null, true, 0, 2);
 
 		/* Assertion */
-		// assertEquals(eventInfoBlock.getEvents(), persistentEventInfos);
-		// assertTrue(eventInfoBlock.getExistMoreEvents());
+		assertEquals(eventInfoBlock.getEvents(), persistentEventInfos);
+		assertFalse(eventInfoBlock.getExistMoreEvents());
 
-		// verify(eventInfoDaoMock).findEvents(null, null, true, 0, 2);
+		verify(eventInfoDaoMock).findEvents(null, null, true, 0, 3);
 	}
 
 	/**
@@ -381,10 +373,6 @@ public class EventServiceUnitTest {
 
 		verify(eventInfoDaoMock.findEvents(null, null, true, -1, 0));
 	}
-
-	/*****************************************************************/
-	/*****************************************************************/
-	/*****************************************************************/
 
 	/**
 	 * PR-UN-027
@@ -454,7 +442,6 @@ public class EventServiceUnitTest {
 	 * @throws NoAssignedTypeOptionsException
 	 * @throws DuplicatedResultTypeOptionsException
 	 */
-	@SuppressWarnings("unchecked")
 	@Test(expected = NoAssignedTypeOptionsException.class)
 	public void testAddBetTypeWithEmptyTypeOptions()
 			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
@@ -482,7 +469,6 @@ public class EventServiceUnitTest {
 	 * @throws NoAssignedTypeOptionsException
 	 * @throws DuplicatedResultTypeOptionsException
 	 */
-	@SuppressWarnings("unchecked")
 	@Test(expected = DuplicatedResultTypeOptionsException.class)
 	public void testAddBetTypeWithDuplicatedResultInTypeOptions()
 			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
@@ -506,11 +492,7 @@ public class EventServiceUnitTest {
 		verify(eventInfoDaoMock.find(NON_EXISTENT_ID));
 		verify(betTypeDaoMock).save(persistentBetTypes.get(0));
 	}
-
-	/*****************************************************************/
-	/*****************************************************************/
-	/*****************************************************************/
-
+	
 	/**
 	 * PR-UN-031
 	 * 
@@ -533,9 +515,5 @@ public class EventServiceUnitTest {
 
 		verify(categoryInfoDaoMock).findAllCategories();
 	}
-
-	/*****************************************************************/
-	/*****************************************************************/
-	/*****************************************************************/
 
 }
