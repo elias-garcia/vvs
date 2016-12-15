@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
+import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfoDao;
 import es.udc.pa.pa015.practicapa.model.eventService.DuplicatedResultTypeOptionsException;
@@ -31,6 +32,7 @@ import es.udc.pa.pa015.practicapa.model.eventService.StartIndexOrCountException;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfoDao;
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
+import es.udc.pa.pa015.practicapa.model.typeoption.TypeOptionDao;
 import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,11 +40,22 @@ import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 @Transactional
 public class EventServiceTest {
 
-	private final static Long NON_EXISTENT_CATEGORY_ID = (long) -1;
-	private final static Long NON_EXISTENT_EVENT_ID = (long) -1;
+	private final String EXISTENT_CATEGORY_NAME0 = "Baloncesto";
+	private final String EXISTENT_CATEGORY_NAME1 = "Fútbol";
+	private final String EXISTENT_EVENT_NAME0 = "Real Madrid - Barcelona";
+	private final String EXISTENT_EVENT_NAME1 = "Real Madrid - Barcelona";
+	private final String EXISTENT_EVENT_NAME2 = "Deportivo - Alaves";
+	private final String EXISTENT_EVENT_NAME3 = "Unicaja - Fuenlabrada";
+	private final long NON_EXISTENT_ID = -1;
+	private static Calendar pastDate = null;
+	private static Calendar futureDate = null;
+	private static String BETTYPE_QUESTION = "¿Quién ganará el encuentro?";
+	private static double TYPEOPTION_ODD = 1.0;
+	private static String TYPEOPTION_RESULT1 = "Barcelona";
+	private static String TYPEOPTION_RESULT2 = "Madrid";
 
-	@Autowired
-	private EventService eventService;
+	List<CategoryInfo> persistentCategoryInfos = new ArrayList<>();
+	List<EventInfo> persistentEventInfos = new ArrayList<>();
 
 	@Autowired
 	private EventInfoDao eventInfoDao;
@@ -50,401 +63,626 @@ public class EventServiceTest {
 	@Autowired
 	private CategoryInfoDao categoryInfoDao;
 
+	@Autowired
+	private BetTypeDao betTypeDao;
+
+	@Autowired
+	private TypeOptionDao typeOptionDao;
+
+	@Autowired
+	private EventService eventService;
+
+	private Calendar getPastDate() {
+		if (pastDate == null) {
+			pastDate = Calendar.getInstance();
+			pastDate.add(Calendar.HOUR, -1);
+		}
+		return pastDate;
+	}
+
+	private Calendar getFutureDate() {
+		if (futureDate == null) {
+			futureDate = Calendar.getInstance();
+			futureDate.add(Calendar.HOUR, 1);
+		}
+		return futureDate;
+	}
+
+	private void initializeCategoryInfos() {
+		persistentCategoryInfos.add(new CategoryInfo(EXISTENT_CATEGORY_NAME0));
+		persistentCategoryInfos.add(new CategoryInfo(EXISTENT_CATEGORY_NAME1));
+		categoryInfoDao.save(persistentCategoryInfos.get(0));
+		categoryInfoDao.save(persistentCategoryInfos.get(1));
+	}
+
+	private void initializeEventInfos() {
+		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME0, getPastDate(), persistentCategoryInfos.get(0)));
+		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME1, getPastDate(), persistentCategoryInfos.get(1)));
+		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME2, getFutureDate(), persistentCategoryInfos.get(0)));
+		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME3, getFutureDate(), persistentCategoryInfos.get(1)));
+		eventInfoDao.save(persistentEventInfos.get(0));
+		eventInfoDao.save(persistentEventInfos.get(1));
+		eventInfoDao.save(persistentEventInfos.get(2));
+		eventInfoDao.save(persistentEventInfos.get(3));
+	}
+
+	private List<Long> getNonExistentTypeOptions() {
+		List<Long> typeOptionsIds = new ArrayList<>();
+		typeOptionsIds.add(NON_EXISTENT_ID);
+		return typeOptionsIds;
+	}
+
+	private List<Long> getTypeOptionsIds(List<TypeOption> typeOptions) {
+		List<Long> typeOptionsIds = new ArrayList<>();
+		for (TypeOption typeOption : typeOptions)
+			typeOptionsIds.add(typeOption.getOptionId());
+		return typeOptionsIds;
+	}
+
+	/**
+	 * 
+	 * PR-IT-020
+	 * 
+	 */
 	@Test
 	public void testCreateAndFindEvent() throws InstanceNotFoundException, EventDateException, NullEventNameException {
 
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event = eventService.createEvent("evento1", after, category.getCategoryId());
-
+		/* Call */
+		EventInfo event = eventService.createEvent(EXISTENT_EVENT_NAME2, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId());
 		EventInfo finded = eventInfoDao.find(event.getEventId());
 
+		/* Assertion */
 		assertEquals(event, finded);
+
 	}
 
-	@Test(expected = InstanceNotFoundException.class)
-	public void testCreateEventWithNonExistenCateogryId()
+	/**
+	 * 
+	 * PR-IT-021
+	 * 
+	 */
+	@Test(expected = NullEventNameException.class)
+	public void testCreateEventWithNullName()
 			throws InstanceNotFoundException, EventDateException, NullEventNameException {
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
 
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
+		/* Call */
+		eventService.createEvent(null, getFutureDate(), persistentCategoryInfos.get(0).getCategoryId());
 
-		eventService.createEvent("evento1", after, NON_EXISTENT_CATEGORY_ID);
+		/* Assertion */
+		/* NullEventNameException expected */
 	}
 
+	/**
+	 * 
+	 * PR-IT-022
+	 * 
+	 */
 	@Test(expected = EventDateException.class)
-	public void testCreateEventWithInvalidDate()
+	public void testCreateEventWithNullDate()
 			throws InstanceNotFoundException, EventDateException, NullEventNameException {
 
-		Calendar before = Calendar.getInstance();
-		before.add(Calendar.WEEK_OF_YEAR, -1);
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
+		/* Call */
+		eventService.createEvent(EXISTENT_EVENT_NAME0, null, persistentCategoryInfos.get(0).getCategoryId());
 
-		eventService.createEvent("evento1", before, category.getCategoryId());
+		/* Assertion */
+		/* EventDateException expected */
 	}
 
-	@Test
-	public void testFindEventsNotStartedByKeywords()
-			throws InstanceNotFoundException, EventDateException, NullEventNameException, StartIndexOrCountException {
+	/**
+	 * 
+	 * PR-IT-023
+	 * 
+	 */
+	@Test(expected = EventDateException.class)
+	public void testCreateEventWithPastDate()
+			throws InstanceNotFoundException, EventDateException, NullEventNameException {
 
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
+		/* Call */
+		eventService.createEvent(EXISTENT_EVENT_NAME0, getPastDate(), persistentCategoryInfos.get(0).getCategoryId());
 
-		EventInfo event1 = eventService.createEvent("evento 1", after, category.getCategoryId());
-		EventInfo event2 = eventService.createEvent("evento 2", after, category.getCategoryId());
-
-		EventInfoBlock finded1 = eventService.findEvents("eVe", category.getCategoryId(), false, 0, 10);
-
-		assertEquals(event1, finded1.getEvents().get(0));
-		assertEquals(event2, finded1.getEvents().get(1));
+		/* Assertion */
+		/* EventDateException expected */
 	}
 
-	@Test
-	public void testFindEventsNotStartedByCategory()
-			throws InstanceNotFoundException, EventDateException, NullEventNameException, StartIndexOrCountException {
-
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event1 = eventService.createEvent("evento1", after, category.getCategoryId());
-		EventInfo event2 = eventService.createEvent("evento2", after, category.getCategoryId());
-
-		EventInfoBlock finded1 = eventService.findEvents(null, category.getCategoryId(), false, 0, 10);
-
-		assertEquals(event1, finded1.getEvents().get(0));
-		assertEquals(event2, finded1.getEvents().get(1));
-	}
-
-	@Test
-	public void testFindEventsNotStartedByCategoryAndKeywords()
-			throws InstanceNotFoundException, EventDateException, NullEventNameException, StartIndexOrCountException {
-
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event1 = eventService.createEvent("evento1", after, category.getCategoryId());
-
-		EventInfoBlock finded1 = eventService.findEvents("evento1", category.getCategoryId(), false, 0, 10);
-		assertEquals(event1, finded1.getEvents().get(0));
-	}
-
-	@Test
-	public void testFindEventsStartedByKeywords()
-			throws InstanceNotFoundException, EventDateException, StartIndexOrCountException {
-
-		Calendar before = Calendar.getInstance();
-		before.add(Calendar.WEEK_OF_YEAR, -1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event1 = new EventInfo("evento 1", before, category);
-		eventInfoDao.save(event1);
-		EventInfo event2 = new EventInfo("evento 2", before, category);
-		eventInfoDao.save(event2);
-
-		EventInfoBlock finded1 = eventService.findEvents("eVe", category.getCategoryId(), true, 0, 10);
-
-		assertEquals(event1, finded1.getEvents().get(0));
-		assertEquals(event2, finded1.getEvents().get(1));
-	}
-
-	@Test
-	public void testFindEventsStartedByCategory()
-			throws InstanceNotFoundException, EventDateException, StartIndexOrCountException {
-
-		Calendar before = Calendar.getInstance();
-		before.add(Calendar.WEEK_OF_YEAR, -1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event1 = new EventInfo("evento 1", before, category);
-		eventInfoDao.save(event1);
-		EventInfo event2 = new EventInfo("evento 2", before, category);
-		eventInfoDao.save(event2);
-
-		EventInfoBlock finded1 = eventService.findEvents(null, category.getCategoryId(), true, 0, 10);
-
-		assertEquals(event1, finded1.getEvents().get(0));
-		assertEquals(event2, finded1.getEvents().get(1));
-	}
-
-	@Test
-	public void testFindEventsStartedByCategoryAndKeywords()
-			throws InstanceNotFoundException, EventDateException, StartIndexOrCountException {
-
-		Calendar before = Calendar.getInstance();
-		before.add(Calendar.WEEK_OF_YEAR, -1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event1 = new EventInfo("evento 1", before, category);
-		eventInfoDao.save(event1);
-
-		EventInfoBlock finded1 = eventService.findEvents("evEn", category.getCategoryId(), true, 0, 10);
-
-		assertEquals(event1, finded1.getEvents().get(0));
-	}
-
-	@Test
-	public void testFindAllEvents() throws InstanceNotFoundException, EventDateException, StartIndexOrCountException {
-
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
-
-		Calendar before = Calendar.getInstance();
-		before.add(Calendar.WEEK_OF_YEAR, -1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event1 = new EventInfo("evento 1", before, category);
-		eventInfoDao.save(event1);
-		EventInfo event2 = new EventInfo("evento 2", before, category);
-		eventInfoDao.save(event2);
-
-		EventInfoBlock finded = eventService.findEvents("event", category.getCategoryId(), true, 0, 10);
-
-		assertEquals(2, finded.getEvents().size());
-	}
-
-	@Test
-	public void testFindEventsPaginationWithMoreElements()
-			throws InstanceNotFoundException, EventDateException, NullEventNameException, StartIndexOrCountException {
-
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		eventService.createEvent("evento1", after, category.getCategoryId());
-		eventService.createEvent("evento2", after, category.getCategoryId());
-		eventService.createEvent("evento3", after, category.getCategoryId());
-		eventService.createEvent("evento4", after, category.getCategoryId());
-
-		EventInfoBlock events = eventService.findEvents("event", category.getCategoryId(), true, 0, 3);
-
-		assertTrue(events.getExistMoreEvents());
-	}
-
-	@Test
-	public void testFindEventsPaginationWithoutMoreElements()
-			throws InstanceNotFoundException, EventDateException, NullEventNameException, StartIndexOrCountException {
-
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		eventService.createEvent("evento1", after, category.getCategoryId());
-		eventService.createEvent("evento2", after, category.getCategoryId());
-		eventService.createEvent("evento3", after, category.getCategoryId());
-		eventService.createEvent("evento4", after, category.getCategoryId());
-
-		EventInfoBlock events = eventService.findEvents("event", category.getCategoryId(), true, 0, 4);
-
-		assertFalse(events.getExistMoreEvents());
-	}
-
-	@Test
-	public void testFindEventsEmpty() throws InstanceNotFoundException, StartIndexOrCountException {
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfoBlock finded = eventService.findEvents("evento1", category.getCategoryId(), false, 0, 10);
-
-		assertTrue(finded.getEvents().isEmpty());
-	}
-
-	@Test
-	public void addBetType() throws InstanceNotFoundException, EventDateException, NullEventNameException,
-			NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
-
-		Calendar after = Calendar.getInstance();
-		after.add(Calendar.WEEK_OF_YEAR, 1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event = eventService.createEvent("Barça-Madrid", after, category.getCategoryId());
-
-		BetType type = new BetType("¿Quien ganará?", true, event);
-
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		options.add(new TypeOption(1.20, "Cristiano Ronaldo", type));
-		options.add(new TypeOption(1.20, "Lionel Messi", type));
-
-		eventService.addBetType(event.getEventId(), type, options);
-
-		assertEquals(event.getBetTypes().toArray()[0], type);
-	}
-
+	/**
+	 * 
+	 * PR-IT-024
+	 * 
+	 */
 	@Test(expected = InstanceNotFoundException.class)
-	public void addBetTypeToNonExistentEvent() throws InstanceNotFoundException, EventDateException,
-			NullEventNameException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+	public void testCreateEventWithNonExistentCategoryInfoId()
+			throws InstanceNotFoundException, EventDateException, NullEventNameException {
 
-		Calendar now = Calendar.getInstance();
-		now.add(Calendar.WEEK_OF_YEAR, 1);
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
+		/* Call */
+		eventService.createEvent(EXISTENT_EVENT_NAME0, getFutureDate(), NON_EXISTENT_ID);
 
-		EventInfo event = eventService.createEvent("Barça-Madrid", now, category.getCategoryId());
-
-		BetType type = new BetType("¿Quien ganará?", true, event);
-
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		options.add(new TypeOption(1.20, "Cristiano Ronaldo", type));
-		options.add(new TypeOption(1.20, "Lionel Messi", type));
-
-		eventService.addBetType(NON_EXISTENT_EVENT_ID, type, options);
+		/* Assertion */
+		/* InstanceNotFoundException expected */
 	}
 
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
+	/**
+	 * 
+	 * PR-IT-025
+	 * 
+	 */
+	@Test(expected = InstanceNotFoundException.class)
+	public void testFindEventByNonExistentId() throws InstanceNotFoundException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+
+		/* Call */
+		eventService.findEvent(NON_EXISTENT_ID);
+
+		/* Assertion */
+		/* InstanceNotFoundException expected */
+	}
+
+	/**
+	 * 
+	 * PR-IT-026
+	 * 
+	 */
 	@Test
-	public void testPickWinnersNull() throws InstanceNotFoundException, TypeNotMultipleException, EventDateException,
-			NullEventNameException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+	public void testFindEventById() throws InstanceNotFoundException {
 
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
+		/* Call */
+		EventInfo event = eventService.findEvent(persistentEventInfos.get(0).getEventId());
 
-		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter, category.getCategoryId());
+		/* Assertion */
+		assertEquals(event, persistentEventInfos.get(0));
 
-		BetType type = new BetType("¿Quien ganará?", false, event);
-
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Barça", type);
-		options.add(option1);
-		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
-		options.add(option2);
-
-		eventService.addBetType(event.getEventId(), type, options);
-
-		eventService.pickWinners(null, type.getTypeId());
-
-		assertFalse(option1.getIsWinner());
-		assertFalse(option2.getIsWinner());
-		assertTrue(type.getPickedWinners());
 	}
 
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
+	/**
+	 * 
+	 * PR-UN-027
+	 * 
+	 */
 	@Test
-	public void testPickWinner() throws InstanceNotFoundException, TypeNotMultipleException, EventDateException,
-			NullEventNameException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+	public void findEventsFilteringWithStartIndexAndCount1()
+			throws InstanceNotFoundException, StartIndexOrCountException, EventDateException, NullEventNameException {
 
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		/* Setup */
+		initializeCategoryInfos();
+		List<EventInfo> eventInfos = new ArrayList<>();
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME1, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME2, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME3, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		/* Call */
+		EventInfoBlock eventInfoBlock = eventService.findEvents(null, persistentCategoryInfos.get(0).getCategoryId(),
+				true, 0, 3);
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
+		/* Assertion */
+		assertFalse(!eventInfoBlock.getExistMoreEvents());
 
-		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter, category.getCategoryId());
-
-		BetType type = new BetType("¿Quien ganará?", true, event);
-
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Barça", type);
-		options.add(option1);
-		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
-		options.add(option2);
-
-		eventService.addBetType(event.getEventId(), type, options);
-
-		List<Long> optionsIds = new ArrayList<Long>();
-		optionsIds.add(option1.getOptionId());
-		optionsIds.add(option2.getOptionId());
-
-		eventService.pickWinners(optionsIds, type.getTypeId());
-
-		assertTrue(option1.getIsWinner());
-		assertTrue(option2.getIsWinner());
-		assertTrue(type.getPickedWinners());
 	}
 
+	/**
+	 *
+	 * PR-UN-028
+	 * 
+	 */
 	@Test
-	public void testPickOneWinner() throws InstanceNotFoundException, TypeNotMultipleException, EventDateException,
-			NullEventNameException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+	public void findEventsFilteringWithStartIndexAndCount2()
+			throws InstanceNotFoundException, StartIndexOrCountException, EventDateException, NullEventNameException {
 
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
+		/* Setup */
+		initializeCategoryInfos();
+		List<EventInfo> eventInfos = new ArrayList<>();
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME1, getFutureDate(),
+				persistentCategoryInfos.get(1).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME2, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME3, getFutureDate(),
+				persistentCategoryInfos.get(1).getCategoryId()));
 
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
+		/* Call */
+		EventInfoBlock eventInfoBlock = eventService.findEvents(null, persistentCategoryInfos.get(0).getCategoryId(),
+				true, 0, 2);
 
-		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter, category.getCategoryId());
-
-		BetType type = new BetType("¿Quien ganará?", false, event);
-
-		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Barça", type);
-		options.add(option1);
-		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
-		options.add(option2);
-
-		eventService.addBetType(event.getEventId(), type, options);
-
-		List<Long> optionsIds = new ArrayList<Long>();
-		optionsIds.add(option1.getOptionId());
-
-		eventService.pickWinners(optionsIds, type.getTypeId());
-
-		assertTrue(option1.getIsWinner());
-		assertFalse(option2.getIsWinner());
-		assertTrue(type.getPickedWinners());
+		/* Assertion */
+		assertFalse(eventInfoBlock.getExistMoreEvents());
 	}
 
+	/**
+	 *
+	 * PR-UN-029
+	 *
+	 */
+	@Test(expected = StartIndexOrCountException.class)
+	public void findEventsWithANegativeStartIdexOrCount()
+			throws InstanceNotFoundException, StartIndexOrCountException, EventDateException, NullEventNameException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		List<EventInfo> eventInfos = new ArrayList<>();
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME1, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME2, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+		eventInfos.add(eventService.createEvent(EXISTENT_EVENT_NAME3, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId()));
+
+		/* Call */
+		eventService.findEvents(null, persistentCategoryInfos.get(0).getCategoryId(), true, -1, 0);
+
+		/* Assertion */
+		/* StartIndexOrCountException expected */
+
+	}
+
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
+	/**
+	 * 
+	 * PR-IT-030
+	 * 
+	 */
+	@Test
+	public void testAddBetType()
+			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		BetType betType = new BetType(BETTYPE_QUESTION, false, persistentEventInfos.get(2));
+		List<TypeOption> typeOptions = new ArrayList<>();
+		typeOptions.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType));
+
+		/* Call */
+		eventService.addBetType(persistentEventInfos.get(2).getEventId(), betType, typeOptions);
+
+		EventInfo event = eventInfoDao.find(persistentEventInfos.get(2).getEventId());
+
+		/* Assertion */
+		/*
+		 * Usamos for porque es un SET y no se pueden obtener directamente los
+		 * objetos de la colección, necesitamos iterar
+		 */
+		for (BetType betTypeEvent : event.getBetTypes()) {
+			assertEquals(betType, betTypeEvent);
+			for (TypeOption typeOption : betTypeEvent.getTypeOptions())
+				assertEquals(typeOption, typeOptions.get(0));
+		}
+	}
+
+	/**
+	 * 
+	 * PR-IT-031
+	 * 
+	 */
+	@Test(expected = InstanceNotFoundException.class)
+	public void testAddBetTypeWithNonExistentEnventInfoId()
+			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		BetType betType = new BetType(BETTYPE_QUESTION, false, persistentEventInfos.get(2));
+		List<TypeOption> typeOptions = new ArrayList<>();
+		typeOptions.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType));
+
+		/* Call */
+		eventService.addBetType(NON_EXISTENT_ID, betType, typeOptions);
+
+		/* Assertion */
+		/* InstanceNotFoundException expected */
+
+	}
+
+	/**
+	 * 
+	 * PR-IT-032
+	 * 
+	 */
+	@Test(expected = NoAssignedTypeOptionsException.class)
+	public void testAddBetTypeWithEmptyTypeOptions()
+			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		BetType betType = new BetType(BETTYPE_QUESTION, false, persistentEventInfos.get(2));
+		List<TypeOption> typeOptions = new ArrayList<>();
+
+		/* Call */
+		eventService.addBetType(persistentEventInfos.get(2).getEventId(), betType, typeOptions);
+
+		/* Assertion */
+		/* NoAssignedTypeOptionsException expected */
+
+	}
+
+	/**
+	 * 
+	 * PR-IT-033
+	 * 
+	 */
+	@Test(expected = DuplicatedResultTypeOptionsException.class)
+	public void testAddBetTypeWithDuplicatedResultInTypeOptions()
+			throws InstanceNotFoundException, NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		BetType betType = new BetType(BETTYPE_QUESTION, false, persistentEventInfos.get(2));
+		List<TypeOption> typeOptions = new ArrayList<>();
+		typeOptions.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType));
+		typeOptions.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType));
+
+		/* Call */
+		eventService.addBetType(persistentEventInfos.get(2).getEventId(), betType, typeOptions);
+
+		/* Assertion */
+		/* DuplicatedResultTypeOptionsException expected */
+
+	}
+
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
+	/**
+	 * 
+	 * PR-IT-034
+	 *
+	 */
+	@Test(expected = InstanceNotFoundException.class)
+	public void testPickWinnersWithNonExistentBetTypeId()
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException, NullEventNameException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		EventInfo event = eventService.createEvent(EXISTENT_CATEGORY_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId());
+		BetType betType = new BetType(BETTYPE_QUESTION, true, event);
+		betTypeDao.save(betType);
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType);
+		options.add(option1);
+		typeOptionDao.save(option1);
+		TypeOption option2 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT2, betType);
+		options.add(option2);
+		typeOptionDao.save(option2);
+
+		/* Call */
+		eventService.pickWinners(getTypeOptionsIds(options), NON_EXISTENT_ID);
+
+		/* Assertion */
+		/* InstanceNotFoundException expected */
+
+	}
+
+	/**
+	 * 
+	 * PR-IT-035
+	 * 
+	 */
+	@Test
+	public void testPickWinnersWithTypeOptionsNullList()
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException, NullEventNameException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		EventInfo event = eventService.createEvent(EXISTENT_CATEGORY_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId());
+		BetType betType = new BetType(BETTYPE_QUESTION, true, event);
+		betTypeDao.save(betType);
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType);
+		options.add(option1);
+		typeOptionDao.save(option1);
+		TypeOption option2 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT2, betType);
+		options.add(option2);
+		typeOptionDao.save(option2);
+
+		/* Call */
+		eventService.pickWinners(null, betType.getTypeId());
+
+		/* Assertion */
+		for (TypeOption typeOption : betType.getTypeOptions())
+			assertTrue(!typeOption.getIsWinner());
+
+	}
+
+	/**
+	 * 
+	 * PR-IT-036
+	 * 
+	 */
+	@Test
+	public void testPickWinnersWithTypeOptionsEmptyList()
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException, NullEventNameException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		EventInfo event = eventService.createEvent(EXISTENT_CATEGORY_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId());
+		BetType betType = new BetType(BETTYPE_QUESTION, true, event);
+		betTypeDao.save(betType);
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType);
+		options.add(option1);
+		typeOptionDao.save(option1);
+		TypeOption option2 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT2, betType);
+		options.add(option2);
+		typeOptionDao.save(option2);
+
+		/* Call */
+		eventService.pickWinners(new ArrayList<Long>(), betType.getTypeId());
+
+		/* Assertion */
+		for (TypeOption typeOption : betType.getTypeOptions())
+			assertTrue(!typeOption.getIsWinner());
+	}
+
+	/**
+	 * 
+	 * PR-IT-037
+	 * 
+	 */
+	@Test(expected = InstanceNotFoundException.class)
+	public void testPickWinnersWithNonExistentTypeOptions()
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException, NullEventNameException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		/* Setup */
+		initializeCategoryInfos();
+		EventInfo event = eventService.createEvent(EXISTENT_CATEGORY_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId());
+		BetType betType = new BetType(BETTYPE_QUESTION, true, event);
+		betTypeDao.save(betType);
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType);
+		options.add(option1);
+		typeOptionDao.save(option1);
+		TypeOption option2 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT2, betType);
+		options.add(option2);
+		typeOptionDao.save(option2);
+
+		/* Call */
+		eventService.pickWinners(getNonExistentTypeOptions(), betType.getTypeId());
+
+		/* Assertion */
+		/* InstanceNotFoundException expected */
+
+	}
+
+	/**
+	 * 
+	 * PR-IT-038
+	 * 
+	 */
 	@Test(expected = TypeNotMultipleException.class)
-	public void testPickWinnerTypeNotMultiple()
-			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException, NullEventNameException,
-			NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+	public void testPickWinnersTypeNotMultiple()
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException, NullEventNameException {
 
-		Calendar betDateAfter = Calendar.getInstance();
-		betDateAfter.add(Calendar.WEEK_OF_YEAR, 1);
-
-		CategoryInfo category = new CategoryInfo("categoria1");
-		categoryInfoDao.save(category);
-
-		EventInfo event = eventService.createEvent("Barça-Madrid", betDateAfter, category.getCategoryId());
-
-		BetType type = new BetType("¿Quien ganará?", false, event);
-
+		/* Setup */
+		initializeCategoryInfos();
+		EventInfo event = eventService.createEvent(EXISTENT_CATEGORY_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId());
+		BetType betType = new BetType(BETTYPE_QUESTION, false, event);
+		betTypeDao.save(betType);
 		List<TypeOption> options = new ArrayList<TypeOption>();
-		TypeOption option1 = new TypeOption(1.20, "Barça", type);
+		TypeOption option1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType);
 		options.add(option1);
-		TypeOption option2 = new TypeOption(10, "Real Madrid", type);
+		typeOptionDao.save(option1);
+		TypeOption option2 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT2, betType);
 		options.add(option2);
+		typeOptionDao.save(option2);
 
-		eventService.addBetType(event.getEventId(), type, options);
+		/* Call */
+		eventService.pickWinners(getTypeOptionsIds(options), betType.getTypeId());
 
-		List<Long> optionsIds = new ArrayList<Long>();
-		optionsIds.add(option1.getOptionId());
-		optionsIds.add(option2.getOptionId());
-
-		eventService.pickWinners(optionsIds, type.getTypeId());
-
-		assertTrue(option1.getIsWinner());
-		assertTrue(option2.getIsWinner());
+		/* Assertion */
+		/* TypeNotMultipleException expected */
 	}
 
+	/**
+	 * 
+	 * PR-IT-039
+	 * 
+	 */
+	@Test
+	public void testPickWinners()
+			throws InstanceNotFoundException, TypeNotMultipleException, EventDateException, NullEventNameException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		EventInfo event = eventService.createEvent(EXISTENT_CATEGORY_NAME0, getFutureDate(),
+				persistentCategoryInfos.get(0).getCategoryId());
+		BetType betType = new BetType(BETTYPE_QUESTION, false, event);
+		betTypeDao.save(betType);
+		List<TypeOption> options = new ArrayList<TypeOption>();
+		TypeOption option1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betType);
+		options.add(option1);
+		typeOptionDao.save(option1);
+		TypeOption option2 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT2, betType);
+		options.add(option2);
+		typeOptionDao.save(option2);
+
+		// Pick option1 to winner
+		List<Long> winners = new ArrayList<>();
+		winners.add(new Long(option1.getOptionId()));
+
+		/* Call */
+		eventService.pickWinners(winners, betType.getTypeId());
+
+		/* Assertion */
+		for (TypeOption typeOption : betType.getTypeOptions())
+			if (typeOption.getOptionId() == option1.getOptionId())
+				assertTrue(typeOption.getIsWinner());
+			else
+				assertTrue(!typeOption.getIsWinner());
+
+	}
+
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
+	/**
+	 * 
+	 * PR-IT-040
+	 * 
+	 */
+	@Test
+	public void testFindAllCategories() throws InstanceNotFoundException {
+
+		/* Setup */
+		initializeCategoryInfos();
+
+		/* Call */
+		List<CategoryInfo> results = eventService.findAllCategories();
+
+		/* Assertion */
+		assertEquals(results, persistentCategoryInfos);
+
+	}
 }

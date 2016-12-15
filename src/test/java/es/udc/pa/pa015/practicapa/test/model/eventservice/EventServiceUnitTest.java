@@ -11,7 +11,9 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
@@ -50,18 +53,20 @@ public class EventServiceUnitTest {
 	private final String EXISTENT_EVENT_NAME2 = "Deportivo - Alaves";
 	private final String EXISTENT_EVENT_NAME3 = "Unicaja - Fuenlabrada";
 	private final long NON_EXISTENT_ID = -1;
+	private final long RANDOM_ID = 1;
+	private final long TYPEOPTION_ID_WINNER = 1;
+	private final long TYPEOPTION_ID_LOSSER = TYPEOPTION_ID_WINNER + 1;
 	private static Calendar pastDate = null;
 	private static Calendar futureDate = null;
-
 	private static String BETTYPE_QUESTION = "¿Quién ganará el encuentro?";
-
 	private static double TYPEOPTION_ODD = 1.0;
-	private static String TYPEOPTION_RESULT = "Barcelona";
+	private static String TYPEOPTION_RESULT1 = "Barcelona";
 
-	List<CategoryInfo> persistentCategoryInfos = new ArrayList<>();
-	List<EventInfo> persistentEventInfos = new ArrayList<>();
-	List<BetType> persistentBetTypes = new ArrayList<>();
-	List<TypeOption> persistentTypeOptions = new ArrayList<>();
+	List<CategoryInfo> categoryInfos = new ArrayList<>();
+	List<EventInfo> eventInfos = new ArrayList<>();
+	List<BetType> betTypes = new ArrayList<>();
+	List<TypeOption> typeOptionsList = new ArrayList<>();
+	Set<TypeOption> typeOptionsSet = new HashSet<>();
 
 	@Mock
 	private EventInfoDao eventInfoDaoMock;
@@ -95,32 +100,68 @@ public class EventServiceUnitTest {
 	}
 
 	private void initializeCategoryInfos() {
-		persistentCategoryInfos.add(new CategoryInfo(EXISTENT_CATEGORY_NAME0));
-		persistentCategoryInfos.add(new CategoryInfo(EXISTENT_CATEGORY_NAME1));
+		categoryInfos.add(new CategoryInfo(EXISTENT_CATEGORY_NAME0));
+		categoryInfos.add(new CategoryInfo(EXISTENT_CATEGORY_NAME1));
 	}
 
 	private void initializeEventInfos() {
-		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME0, getPastDate(), persistentCategoryInfos.get(0)));
-		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME1, getPastDate(), persistentCategoryInfos.get(1)));
-		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME2, getFutureDate(), persistentCategoryInfos.get(0)));
-		persistentEventInfos.add(new EventInfo(EXISTENT_EVENT_NAME3, getFutureDate(), persistentCategoryInfos.get(1)));
+		eventInfos.add(new EventInfo(EXISTENT_EVENT_NAME0, getPastDate(), categoryInfos.get(0)));
+		eventInfos.add(new EventInfo(EXISTENT_EVENT_NAME1, getPastDate(), categoryInfos.get(1)));
+		eventInfos.add(new EventInfo(EXISTENT_EVENT_NAME2, getFutureDate(), categoryInfos.get(0)));
+		eventInfos.add(new EventInfo(EXISTENT_EVENT_NAME3, getFutureDate(), categoryInfos.get(1)));
 	}
 
 	private void initializeBetTypes() {
-		persistentBetTypes.add(new BetType(BETTYPE_QUESTION, false, persistentEventInfos.get(0)));
+		betTypes.add(new BetType(BETTYPE_QUESTION, false, eventInfos.get(2)));
+		betTypes.add(new BetType(BETTYPE_QUESTION, true, eventInfos.get(2)));
+		/*
+		 * Para evitar el NullPointerException que se genera cuando se ejecuta
+		 * TypeNotMultipleException(type.getTypeId()) ya que ese id se recupera
+		 * de BBDD, le asignamos en memoria un valor aleatorio
+		 */
+		betTypes.get(0).setTypeId(RANDOM_ID);
 	}
 
-	private void initializeTypeOptions() {
-		persistentTypeOptions.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT, persistentBetTypes.get(0)));
+	private void initializeTypeOptionsList() {
+		typeOptionsList.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betTypes.get(0)));
 	}
 
 	private void initializeRepeatTypeOptions() {
-		persistentTypeOptions.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT, persistentBetTypes.get(0)));
-		persistentTypeOptions.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT, persistentBetTypes.get(0)));
+		typeOptionsList.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betTypes.get(0)));
+		typeOptionsList.add(new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betTypes.get(0)));
+	}
+
+	private void initializeTypeOptionsWinnerSet() {
+		TypeOption typeOption1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betTypes.get(0));
+		typeOption1.setOptionId(TYPEOPTION_ID_WINNER);
+		typeOptionsSet.add(typeOption1);
+		betTypes.get(0).setTypeOptions(typeOptionsSet);
+	}
+
+	private void initializeTypeOptionsLosserSet() {
+		TypeOption typeOption1 = new TypeOption(TYPEOPTION_ODD, TYPEOPTION_RESULT1, betTypes.get(0));
+		typeOption1.setOptionId(TYPEOPTION_ID_LOSSER);
+		typeOptionsSet.add(typeOption1);
+		betTypes.get(0).setTypeOptions(typeOptionsSet);
+	}
+
+	private List<Long> getNonExistentTypeOptions() {
+		List<Long> typeOptionsIds = new ArrayList<>();
+		typeOptionsIds.add(NON_EXISTENT_ID);
+		return typeOptionsIds;
+	}
+
+	private List<Long> getTypeOptionsIds(List<TypeOption> typeOptions) {
+		List<Long> typeOptionsIds = new ArrayList<>();
+		for (TypeOption typeOption : typeOptions)
+			typeOptionsIds.add(typeOption.getOptionId());
+		return typeOptionsIds;
 	}
 
 	/**
+	 * 
 	 * PR-UN-017
+	 * 
 	 */
 	@Test
 	public void testCreateEvent() throws InstanceNotFoundException, EventDateException, NullEventNameException {
@@ -130,7 +171,7 @@ public class EventServiceUnitTest {
 		initializeEventInfos();
 
 		/* Mock behavior */
-		when(categoryInfoDaoMock.find(1L)).thenReturn(persistentCategoryInfos.get(0));
+		when(categoryInfoDaoMock.find(1L)).thenReturn(categoryInfos.get(0));
 
 		/* Call */
 		eventService.createEvent(EXISTENT_EVENT_NAME2, getFutureDate(), 1L);
@@ -141,9 +182,9 @@ public class EventServiceUnitTest {
 	}
 
 	/**
+	 * 
 	 * PR-UN-018
 	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@SuppressWarnings("unchecked")
 	@Test(expected = NullEventNameException.class)
@@ -166,9 +207,9 @@ public class EventServiceUnitTest {
 	}
 
 	/**
+	 * 
 	 * PR-UN-019
 	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@SuppressWarnings("unchecked")
 	@Test(expected = EventDateException.class)
@@ -192,9 +233,9 @@ public class EventServiceUnitTest {
 	}
 
 	/**
-	 * PR-UN-020
 	 * 
-	 * @throws InstanceNotFoundException
+	 * PR-UN-020
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Test(expected = EventDateException.class)
@@ -218,9 +259,9 @@ public class EventServiceUnitTest {
 	}
 
 	/**
+	 * 
 	 * PR-UN-021
 	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@SuppressWarnings("unchecked")
 	@Test(expected = InstanceNotFoundException.class)
@@ -243,10 +284,14 @@ public class EventServiceUnitTest {
 		verify(categoryInfoDaoMock).find(NON_EXISTENT_ID);
 	}
 
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
 	/**
+	 * 
 	 * PR-UN-022
 	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@SuppressWarnings("unchecked")
 	@Test(expected = InstanceNotFoundException.class)
@@ -269,9 +314,9 @@ public class EventServiceUnitTest {
 	}
 
 	/**
+	 * 
 	 * PR-UN-023
 	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@Test
 	public void testFindEventById() throws InstanceNotFoundException {
@@ -281,22 +326,25 @@ public class EventServiceUnitTest {
 		initializeEventInfos();
 
 		/* Mock behavior */
-		when(eventInfoDaoMock.find(1L)).thenReturn(persistentEventInfos.get(0));
+		when(eventInfoDaoMock.find(1L)).thenReturn(eventInfos.get(0));
 
 		/* Call */
 		EventInfo event = eventService.findEvent(1L);
 
 		/* Assertion */
-		assertEquals(event, persistentEventInfos.get(0));
+		assertEquals(event, eventInfos.get(0));
 
 		verify(eventInfoDaoMock).find(1L);
 	}
 
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
 	/**
+	 * 
 	 * PR-UN-024
 	 * 
-	 * @throws InstanceNotFoundException
-	 * @throws StartIndexOrCountException
 	 */
 	@Test
 	public void findEventsFilteringWithStartIndexAndCount1()
@@ -307,24 +355,23 @@ public class EventServiceUnitTest {
 		initializeEventInfos();
 
 		/* Mock behavior */
-		when(eventInfoDaoMock.findEvents(null, null, true, 0, 4)).thenReturn(persistentEventInfos);
+		when(eventInfoDaoMock.findEvents(null, null, true, 0, 5)).thenReturn(eventInfos);
 
 		/* Call */
-		EventInfoBlock foundEventInfoBlock = eventService.findEvents(null, null, true, 0, 4);
+		EventInfoBlock eventInfoBlock = eventService.findEvents(null, null, true, 0, 4);
 
 		/* Assertion */
-		assertTrue(foundEventInfoBlock.getEvents().isEmpty()); // ??
-		// assertEquals(eventInfoBlock.getEvents(), persistentEventInfos);
-		// assertTrue(foundEventInfoBlock.getExistMoreEvents());
+		assertEquals(eventInfoBlock.getEvents(), eventInfos);
+		assertFalse(eventInfoBlock.getExistMoreEvents());
 
-		// verify(eventInfoDaoMock).findEvents(null, null, true, 0, 4);
+		verify(eventInfoDaoMock).findEvents(null, null, true, 0, 5);
 
 	}
 
 	/**
+	 *
 	 * PR-UN-025
 	 * 
-	 * @throws StartIndexOrCountException
 	 */
 	@Test
 	public void findEventsFilteringWithStartIndexAndCount2()
@@ -333,26 +380,26 @@ public class EventServiceUnitTest {
 		/* Setup */
 		initializeCategoryInfos();
 		initializeEventInfos();
-		persistentEventInfos.remove(3);
-		persistentEventInfos.remove(2);
+		eventInfos.remove(3);
+		eventInfos.remove(2);
 
 		/* Mock behavior */
-		when(eventInfoDaoMock.findEvents(null, null, true, 0, 3)).thenReturn(persistentEventInfos);
+		when(eventInfoDaoMock.findEvents(null, null, true, 0, 3)).thenReturn(eventInfos);
 
 		/* Call */
 		EventInfoBlock eventInfoBlock = eventService.findEvents(null, null, true, 0, 2);
 
 		/* Assertion */
-		assertEquals(eventInfoBlock.getEvents(), persistentEventInfos);
+		assertEquals(eventInfoBlock.getEvents(), eventInfos);
 		assertFalse(eventInfoBlock.getExistMoreEvents());
 
 		verify(eventInfoDaoMock).findEvents(null, null, true, 0, 3);
 	}
 
 	/**
+	 *
 	 * PR-UN-026
-	 * 
-	 * @throws StartIndexOrCountException
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Test(expected = StartIndexOrCountException.class)
@@ -374,12 +421,14 @@ public class EventServiceUnitTest {
 		verify(eventInfoDaoMock.findEvents(null, null, true, -1, 0));
 	}
 
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
 	/**
+	 * 
 	 * PR-UN-027
 	 * 
-	 * @throws InstanceNotFoundException
-	 * @throws NoAssignedTypeOptionsException
-	 * @throws DuplicatedResultTypeOptionsException
 	 */
 	@Test
 	public void testAddBetType()
@@ -389,29 +438,27 @@ public class EventServiceUnitTest {
 		initializeCategoryInfos();
 		initializeEventInfos();
 		initializeBetTypes();
-		initializeTypeOptions();
+		initializeTypeOptionsList();
 
 		/* Mock behavior */
-		when(eventInfoDaoMock.find(1L)).thenReturn(persistentEventInfos.get(0));
-		doNothing().when(betTypeDaoMock).save(persistentBetTypes.get(0));
-		doNothing().when(typeOptionDaoMock).save(persistentTypeOptions.get(0));
+		when(eventInfoDaoMock.find(1L)).thenReturn(eventInfos.get(0));
+		doNothing().when(betTypeDaoMock).save(betTypes.get(0));
+		doNothing().when(typeOptionDaoMock).save(typeOptionsList.get(0));
 
 		/* Call */
-		eventService.addBetType(1L, persistentBetTypes.get(0), persistentTypeOptions);
+		eventService.addBetType(1L, betTypes.get(0), typeOptionsList);
 
 		/* Assertion */
 
 		verify(eventInfoDaoMock).find(1L);
-		verify(betTypeDaoMock).save(persistentBetTypes.get(0));
-		verify(typeOptionDaoMock).save(persistentTypeOptions.get(0));
+		verify(betTypeDaoMock).save(betTypes.get(0));
+		verify(typeOptionDaoMock).save(typeOptionsList.get(0));
 	}
 
 	/**
+	 * 
 	 * PR-UN-028
 	 * 
-	 * @throws InstanceNotFoundException
-	 * @throws NoAssignedTypeOptionsException
-	 * @throws DuplicatedResultTypeOptionsException
 	 */
 	@SuppressWarnings("unchecked")
 	@Test(expected = InstanceNotFoundException.class)
@@ -422,13 +469,13 @@ public class EventServiceUnitTest {
 		initializeCategoryInfos();
 		initializeEventInfos();
 		initializeBetTypes();
-		initializeTypeOptions();
+		initializeTypeOptionsList();
 
 		/* Mock behavior */
 		when(eventInfoDaoMock.find(NON_EXISTENT_ID)).thenThrow(InstanceNotFoundException.class);
 
 		/* Call */
-		eventService.addBetType(NON_EXISTENT_ID, persistentBetTypes.get(0), persistentTypeOptions);
+		eventService.addBetType(NON_EXISTENT_ID, betTypes.get(0), typeOptionsList);
 
 		/* Assertion */
 
@@ -436,11 +483,9 @@ public class EventServiceUnitTest {
 	}
 
 	/**
+	 * 
 	 * PR-UN-029
 	 * 
-	 * @throws InstanceNotFoundException
-	 * @throws NoAssignedTypeOptionsException
-	 * @throws DuplicatedResultTypeOptionsException
 	 */
 	@Test(expected = NoAssignedTypeOptionsException.class)
 	public void testAddBetTypeWithEmptyTypeOptions()
@@ -450,12 +495,12 @@ public class EventServiceUnitTest {
 		initializeCategoryInfos();
 		initializeEventInfos();
 		initializeBetTypes();
-		initializeTypeOptions();
+		initializeTypeOptionsList();
 
 		/* Mock behavior */
 
 		/* Call */
-		eventService.addBetType(1L, persistentBetTypes.get(0), null);
+		eventService.addBetType(1L, betTypes.get(0), null);
 
 		/* Assertion */
 		/* NoAssignedTypeOptionsException expected */
@@ -463,11 +508,9 @@ public class EventServiceUnitTest {
 	}
 
 	/**
+	 * 
 	 * PR-UN-030
 	 * 
-	 * @throws InstanceNotFoundException
-	 * @throws NoAssignedTypeOptionsException
-	 * @throws DuplicatedResultTypeOptionsException
 	 */
 	@Test(expected = DuplicatedResultTypeOptionsException.class)
 	public void testAddBetTypeWithDuplicatedResultInTypeOptions()
@@ -480,23 +523,251 @@ public class EventServiceUnitTest {
 		initializeRepeatTypeOptions();
 
 		/* Mock behavior */
-		when(eventInfoDaoMock.find(1L)).thenReturn(persistentEventInfos.get(0));
-		doNothing().when(betTypeDaoMock).save(persistentBetTypes.get(0));
+		when(eventInfoDaoMock.find(1L)).thenReturn(eventInfos.get(0));
+		doNothing().when(betTypeDaoMock).save(betTypes.get(0));
 
 		/* Call */
-		eventService.addBetType(1L, persistentBetTypes.get(0), persistentTypeOptions);
+		eventService.addBetType(1L, betTypes.get(0), typeOptionsList);
 
 		/* Assertion */
 		/* DuplicatedResultTypeOptionsException expected */
 
 		verify(eventInfoDaoMock.find(NON_EXISTENT_ID));
-		verify(betTypeDaoMock).save(persistentBetTypes.get(0));
+		verify(betTypeDaoMock).save(betTypes.get(0));
 	}
-	
+
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
 	/**
+	 * 
+	 * PR-UN-051
+	 *
+	 */
+	@SuppressWarnings("unchecked")
+	@Test(expected = InstanceNotFoundException.class)
+	public void testPickWinnersWithNonExistentBetTypeId() throws InstanceNotFoundException, TypeNotMultipleException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		initializeBetTypes();
+		initializeTypeOptionsList();
+
+		/* Mock behavior */
+		when(betTypeDaoMock.find(NON_EXISTENT_ID)).thenThrow(InstanceNotFoundException.class);
+
+		/* Call */
+		eventService.pickWinners(getTypeOptionsIds(typeOptionsList), NON_EXISTENT_ID);
+
+		/* Assertion */
+		/* InstanceNotFoundException expected */
+
+		verify(betTypeDaoMock).find(NON_EXISTENT_ID);
+	}
+
+	/**
+	 * 
+	 * PR-UN-052
+	 * 
+	 */
+	@Test
+	public void testPickWinnersWithTypeOptionsNullList() throws InstanceNotFoundException, TypeNotMultipleException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		initializeBetTypes();
+		initializeTypeOptionsList();
+
+		/* Mock behavior */
+		when(betTypeDaoMock.find(1L)).thenReturn(betTypes.get(0));
+
+		/* Call */
+		eventService.pickWinners(null, 1L);
+
+		/* Assertion */
+		for (TypeOption typeOption : betTypes.get(0).getTypeOptions())
+			assertTrue(!typeOption.getIsWinner());
+		assertTrue(betTypes.get(0).getPickedWinners());
+
+		verify(betTypeDaoMock).find(1L);
+	}
+
+	/**
+	 * 
+	 * PR-UN-053
+	 * 
+	 */
+	@Test
+	public void testPickWinnersWithTypeOptionsEmptyList() throws InstanceNotFoundException, TypeNotMultipleException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		initializeBetTypes();
+		initializeTypeOptionsList();
+
+		/* Mock behavior */
+		when(betTypeDaoMock.find(1L)).thenReturn(betTypes.get(0));
+
+		/* Call */
+		eventService.pickWinners(new ArrayList<Long>(), 1L);
+
+		/* Assertion */
+		for (TypeOption typeOption : betTypes.get(0).getTypeOptions())
+			assertTrue(!typeOption.getIsWinner());
+		assertTrue(betTypes.get(0).getPickedWinners());
+
+		verify(betTypeDaoMock).find(1L);
+	}
+
+	/**
+	 * 
+	 * PR-UN-054
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	@Test(expected = InstanceNotFoundException.class)
+	public void testPickWinnersWithNonExistentTypeOptions() throws InstanceNotFoundException, TypeNotMultipleException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		initializeBetTypes();
+		initializeTypeOptionsList();
+
+		/* Mock behavior */
+		when(betTypeDaoMock.find(1L)).thenReturn(betTypes.get(0));
+		when(typeOptionDaoMock.find(NON_EXISTENT_ID)).thenThrow(InstanceNotFoundException.class);
+
+		/* Call */
+		eventService.pickWinners(getNonExistentTypeOptions(), 1L);
+
+		/* Assertion */
+		/* InstanceNotFoundException expected */
+
+		verify(betTypeDaoMock).find(1L);
+		verify(typeOptionDaoMock).find(NON_EXISTENT_ID);
+	}
+
+	/**
+	 * 
+	 * PR-UN-055
+	 * 
+	 */
+	@Test(expected = TypeNotMultipleException.class)
+	public void testPickWinnersTypeNotMultiple() throws InstanceNotFoundException, TypeNotMultipleException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		initializeBetTypes();
+		initializeRepeatTypeOptions();
+
+		/* Mock behavior */
+		when(betTypeDaoMock.find(1L)).thenReturn(betTypes.get(0));
+		when(typeOptionDaoMock.find(1L)).thenReturn(typeOptionsList.get(0), typeOptionsList.get(1));
+
+		/* Call */
+		eventService.pickWinners(getTypeOptionsIds(typeOptionsList), 1L);
+
+		/* Assertion */
+		/* TypeNotMultipleException expected */
+
+		verify(betTypeDaoMock).find(1L);
+		verify(typeOptionDaoMock).find(1L);
+	}
+
+	/**
+	 * 
+	 * PR-UN-056
+	 * 
+	 */
+	@Test
+	public void testPickWinners1() throws InstanceNotFoundException, TypeNotMultipleException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		initializeBetTypes();
+		initializeTypeOptionsWinnerSet();
+
+		// Pick winners
+		List<Long> winners = new ArrayList<>();
+		winners.add(new Long(TYPEOPTION_ID_WINNER));
+
+		List<TypeOption> typeOptionsList = new ArrayList<>();
+		for (TypeOption typeOption : typeOptionsSet)
+			typeOptionsList.add(typeOption);
+
+		/* Mock behavior */
+		when(betTypeDaoMock.find(1L)).thenReturn(betTypes.get(0));
+		when(typeOptionDaoMock.find(1L)).thenReturn(typeOptionsList.get(0));
+		doNothing().when(betTypeDaoMock).save(betTypes.get(0));
+		doNothing().when(typeOptionDaoMock).save(typeOptionsList.get(0));
+
+		/* Call */
+		eventService.pickWinners(winners, 1L);
+
+		/* Assertion */
+		assertTrue(typeOptionsList.get(0).getIsWinner());
+
+		verify(betTypeDaoMock).find(1L);
+		verify(typeOptionDaoMock).find(1L);
+		verify(betTypeDaoMock).save(betTypes.get(0));
+		verify(typeOptionDaoMock).save(typeOptionsList.get(0));
+	}
+
+	/**
+	 * 
+	 * PR-UN-057
+	 * 
+	 */
+	@Test
+	public void testPickWinners2() throws InstanceNotFoundException, TypeNotMultipleException {
+
+		/* Setup */
+		initializeCategoryInfos();
+		initializeEventInfos();
+		initializeBetTypes();
+		initializeTypeOptionsLosserSet();
+
+		// Pick winners
+		List<Long> winners = new ArrayList<>();
+		winners.add(new Long(TYPEOPTION_ID_WINNER));
+
+		List<TypeOption> typeOptionsList = new ArrayList<>();
+		for (TypeOption typeOption : typeOptionsSet)
+			typeOptionsList.add(typeOption);
+
+		/* Mock behavior */
+		when(betTypeDaoMock.find(1L)).thenReturn(betTypes.get(0));
+		when(typeOptionDaoMock.find(1L)).thenReturn(typeOptionsList.get(0));
+		doNothing().when(betTypeDaoMock).save(betTypes.get(0));
+		doNothing().when(typeOptionDaoMock).save(typeOptionsList.get(0));
+
+		/* Call */
+		eventService.pickWinners(winners, 1L);
+
+		/* Assertion */
+		assertTrue(!typeOptionsList.get(0).getIsWinner());
+
+		verify(betTypeDaoMock).find(1L);
+		verify(typeOptionDaoMock).find(1L);
+		verify(betTypeDaoMock).save(betTypes.get(0));
+		verify(typeOptionDaoMock).save(typeOptionsList.get(0));
+	}
+
+	/*************************************************************************/
+	/*************************************************************************/
+	/*************************************************************************/
+
+	/**
+	 * 
 	 * PR-UN-031
 	 * 
-	 * @throws InstanceNotFoundException
 	 */
 	@Test
 	public void testFindAllCategories() throws InstanceNotFoundException {
@@ -505,13 +776,13 @@ public class EventServiceUnitTest {
 		initializeCategoryInfos();
 
 		/* Mock behavior */
-		when(categoryInfoDaoMock.findAllCategories()).thenReturn(persistentCategoryInfos);
+		when(categoryInfoDaoMock.findAllCategories()).thenReturn(categoryInfos);
 
 		/* Call */
 		List<CategoryInfo> results = eventService.findAllCategories();
 
 		/* Assertion */
-		assertEquals(results, persistentCategoryInfos);
+		assertEquals(results, categoryInfos);
 
 		verify(categoryInfoDaoMock).findAllCategories();
 	}

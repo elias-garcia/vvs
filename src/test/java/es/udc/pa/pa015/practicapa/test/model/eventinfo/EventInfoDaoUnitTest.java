@@ -32,7 +32,8 @@ public class EventInfoDaoUnitTest {
 	private final String EXISTENT_EVENT_NAME2 = "Deportivo - Alaves";
 	private final String EXISTENT_EVENT_NAME3 = "Unicaja - Fuenlabrada";
 	private final String KEYWORDS = "Ma";
-	
+	private final long ALL_CATEGORYS = -1;
+
 	List<EventInfo> persistentEventInfos = new ArrayList<>();
 	List<CategoryInfo> persistentCategoryInfos = new ArrayList<>();
 
@@ -79,7 +80,7 @@ public class EventInfoDaoUnitTest {
 		/* Setup */
 		initializeEventInfos();
 		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(null, null, true, 0, 4);
+		List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, true, 0, 4);
 		/* Assertion */
 		assertEquals(results, persistentEventInfos);
 	}
@@ -94,7 +95,7 @@ public class EventInfoDaoUnitTest {
 		persistentEventInfos.remove(3);
 		persistentEventInfos.remove(2);
 		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(KEYWORDS, null, true, 0, 4);
+		List<EventInfo> results = eventInfoDao.findEvents(KEYWORDS, ALL_CATEGORYS, true, 0, 4);
 		/* Assertion */
 		assertEquals(results, persistentEventInfos);
 	}
@@ -125,7 +126,7 @@ public class EventInfoDaoUnitTest {
 		persistentEventInfos.remove(1);
 		persistentEventInfos.remove(0);
 		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(null, null, false, 0, 4);
+		List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, false, 0, 4);
 		/* Assertion */
 		assertEquals(results, persistentEventInfos);
 	}
@@ -140,7 +141,7 @@ public class EventInfoDaoUnitTest {
 		persistentEventInfos.remove(3);
 		persistentEventInfos.remove(2);
 		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(null, null, true, 0, 2);
+		List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, true, 0, 2);
 		/* Assertion */
 		assertEquals(results, persistentEventInfos);
 	}

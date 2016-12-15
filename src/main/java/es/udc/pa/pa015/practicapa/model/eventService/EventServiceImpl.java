@@ -48,7 +48,7 @@ public class EventServiceImpl implements EventService {
 		 * If date is previous to the current date or is null, then throw an
 		 * exception
 		 */
-		if (eventDate.before(Calendar.getInstance()) || eventDate == null)
+		if (eventDate == null || eventDate.before(Calendar.getInstance()))
 			throw new EventDateException(eventName);
 
 		EventInfo newEvent = new EventInfo(eventName, eventDate, category);
@@ -70,8 +70,6 @@ public class EventServiceImpl implements EventService {
 
 		if (startIndex < 0 || count < 0)
 			throw new StartIndexOrCountException();
-
-		categoryInfoDao.find(categoryId);
 
 		/*
 		 * Find count+1 events to determine if there exist more events above the
@@ -160,11 +158,11 @@ public class EventServiceImpl implements EventService {
 
 		/* Last, pick options as winners */
 		for (TypeOption option : typeOptions) {
-			if (optionIds.contains(option.getOptionId())) {
+			if (optionIds.contains(option.getOptionId()))
 				option.setIsWinner(true);
-			} else {
+			else
 				option.setIsWinner(false);
-			}
+
 			typeOptionDao.save(option);
 		}
 

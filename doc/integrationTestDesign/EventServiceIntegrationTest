@@ -1,16 +1,13 @@
-
---------------------------------------------------------------
-
-PR-UN-017
+PR-IT-020
 
 	Unidad: EventServiceImpl
 
 	Método: createEvent
 
 	Motivación: Crear un evento correctamente con un nombre 
-	valido(not null y algun caracter sin ser espacio), una
-	fecha valida(posterior al actual) y un id de una categoria
-	existente.
+		valido(not null y algun caracter sin ser espacio), una
+		fecha valida(posterior al actual) y un id de una categoria
+		existente.
 
 	Valores de entrada:
 		- eventName: Real Madrid - Barcelona
@@ -24,9 +21,9 @@ PR-UN-017
 		- CategoryInfo
 		- EventInfo
 
---------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 
-PR-UN-018
+PR-IT-021
 
 	Unidad: EventServiceImpl
 
@@ -48,16 +45,9 @@ PR-UN-018
 		- CategoryInfo
 		- EventInfo
 
-Se podria comprobar que el nombre tuviese carácteres alfanumericos y no una cadena de texto
-vacia o construida por espacios, pero por falta de tiempo hemos obviado ese caso de prueba.
-
-Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
-NullEventNameException de hecho ni siquiera esta creada. Crearla y modificar la implementacion
-para que devuelva la excepcion.
-
 --------------------------------------------------------------
 
-PR-UN-019
+PR-IT-022
 
 	Unidad: EventServiceImpl
 
@@ -77,13 +67,9 @@ PR-UN-019
 		- CategoryInfo
 		- EventInfo
 
-Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
-EventDateException cuando la fecha es null. Modificar la implementacion para que devuelva
-la excepcion en ese caso.
-
 --------------------------------------------------------------
 
-PR-UN-020
+PR-IT-023
 
 	Unidad: EventServiceImpl
 
@@ -107,7 +93,7 @@ PR-UN-020
 
 --------------------------------------------------------------
 
-PR-UN-021
+PR-IT-024
 
 	Unidad: EventServiceImpl
 
@@ -133,7 +119,7 @@ PR-UN-021
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-PR-UN-022
+PR-IT-025
 
 	Unidad: EventServiceImpl
 
@@ -155,7 +141,7 @@ PR-UN-022
 
 --------------------------------------------------------------
 
-PR-UN-023
+PR-IT-026
 
 	Unidad: EventServiceImpl
 
@@ -178,8 +164,7 @@ PR-UN-023
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-
-PR-UN-024
+PR-IT-027
 
 	Unidad: EventServiceImpl
 
@@ -207,7 +192,7 @@ PR-UN-024
 
 --------------------------------------------------------------
 
-PR-UN-025
+PR-IT-028
 
 	Unidad: EventServiceImpl
 
@@ -235,7 +220,7 @@ PR-UN-025
 
 --------------------------------------------------------------
 
-PR-UN-026
+PR-IT-029
 
 	Unidad: EventServiceImpl
 
@@ -258,15 +243,12 @@ PR-UN-026
 		-  CategoryInfo
 		-  4 EventInfo.
 
-Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
-StartIndexOrCountException es este metodo para este caso. Crearla y modificar la implementación
-para que devuelva la excepcion.
 
 --------------------------------------------------------------
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-PR-UN-027
+PR-IT-030
 
 	Unidad: EventServiceImpl
 
@@ -292,7 +274,7 @@ PR-UN-027
 
 --------------------------------------------------------------
 
-PR-UN-028
+PR-IT-031
 
 	Unidad: EventServiceImpl
 
@@ -319,7 +301,7 @@ PR-UN-028
 
 --------------------------------------------------------------
 
-PR-UN-029
+PR-IT-032
 
 	Unidad: EventServiceImpl
 
@@ -341,13 +323,9 @@ PR-UN-029
 		- CategoryInfo
 		- EventInfo
 
-Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
-NoAssignedTypeOptionsException es este metodo para este caso. Crearla y modificar la implementación
-para que devuelva la excepcion.
-
 --------------------------------------------------------------
 
-PR-UN-030
+PR-IT-033
 
 	Unidad: EventServiceImpl
 
@@ -373,15 +351,11 @@ PR-UN-030
 		- BetType
 		- TypeOptions con al menos 2 TypeOptions con el mismo nombre
 
-Nueva issue: Inspeccionando el código se ha dectado que la implementacion no devuelve
-DuplicatedResultTypeOptionsException es este metodo para este caso. Crearla y modificar 
-la implementación para que devuelva la excepcion.
-
 --------------------------------------------------------------
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-PR-UN-051
+PR-IT-034
 
 	Unidad: EventServiceImpl
 
@@ -405,7 +379,7 @@ PR-UN-051
 		
 --------------------------------------------------------------
 
-PR-UN-052
+PR-IT-035
 
 	Unidad: EventServiceImpl
 
@@ -430,7 +404,7 @@ PR-UN-052
 
 --------------------------------------------------------------
 
-PR-UN-053
+PR-IT-036
 
 	Unidad: EventServiceImpl
 
@@ -455,7 +429,7 @@ PR-UN-053
 		
 --------------------------------------------------------------
 
-PR-UN-054
+PR-IT-037
 
 	Unidad: EventServiceImpl
 
@@ -479,7 +453,7 @@ PR-UN-054
 		
 --------------------------------------------------------------
 
-PR-UN-055
+PR-IT-038
 
 	Unidad: EventServiceImpl
 
@@ -504,14 +478,13 @@ PR-UN-055
 
 --------------------------------------------------------------
 
-PR-UN-056
+PR-IT-039
 
 	Unidad: EventServiceImpl
 
 	Método: pickWinners
 
-	Motivación: Comprobar que se ponen las opciones ganadoras correctamente	
-	(atributo isWinner a true).
+	Motivación: Comprobar que se ponen las opciones ganadoras correctamente.
 	
 	Valores de entrada:
 		- optionIds: Opcion ganadora
@@ -527,35 +500,10 @@ PR-UN-056
 		- TypeOption	
 	
 --------------------------------------------------------------
-
-PR-UN-057
-
-	Unidad: EventServiceImpl
-
-	Método: pickWinners
-
-	Motivación: Comprobar que se ponen las opciones no ganadoras correctamente
-	(atributo isWinner a false).
-	
-	Valores de entrada:
-		- optionIds: Opcion ganadora
-		- betTypeId: Identificador del tipo de apuesta
-
-	Valores de salida:
-		- NA
-
-	Inicialización:
-		- CategoryInfo
-		- EventInfo
-		- BetType
-		- TypeOption		
-			
---------------------------------------------------------------
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-
-PR-UN-031
+PR-IT-040
 
 	Unidad: EventServiceImpl
 
@@ -577,6 +525,5 @@ PR-UN-031
 --------------------------------------------------------------
 --------------------------------------------------------------
 --------------------------------------------------------------
-
 
 
