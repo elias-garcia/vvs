@@ -9,14 +9,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class WebTest {
+public class BetWebTest {
+
+	// Versión de selenium 2.53
+	// Versión de Firefox 46
 
 	private static String userLoginName = "user1";
 	private static String userPassword = "user1";
-	private static String userName = "user1";
 	private static String eventName = "España - República Checa";
 	private static String eventCategory = "Fútbol";
-	private static String eventDate = "13/06/16 0:00";
 	private static String betTypeQuestion = "¿Quién ganará el encuentro?";
 	private static String betOption1Answer = "1";
 	private static String betOption1Rate = "1.9";
@@ -28,33 +29,6 @@ public class WebTest {
 	private static String betedMoney = "20";
 	private static String displayedBetedMoney = "20";
 	private static String expectedResult = "?";
-
-	// @Test
-	public void testLoginFirefox() {
-
-		/* Creamos una instancia del driver de Firefox */
-		WebDriver driver = new FirefoxDriver();
-
-		/* Creamos una instancia del driver de Firefox */
-		driver.get("http://localhost:9090/betting-app");
-
-		/* Pulsamos el boton de autentificación */
-		driver.findElement(By.id("authenticationButton")).click();
-
-		/* Nos logueamos */
-		WebElement inputLoginName = driver.findElement(By.id("loginName"));
-		inputLoginName.sendKeys(userLoginName);
-
-		driver.findElement(By.id("password")).sendKeys(userPassword);
-
-		inputLoginName.submit();
-
-		/* Comprobamos que los datos visualizados son correctos */
-		assertEquals(userName, driver.findElement(By.id("userNameLabel")).getText());
-
-		driver.quit();
-
-	}
 
 	// @Test
 	public void testMakeBetFireFox() {
