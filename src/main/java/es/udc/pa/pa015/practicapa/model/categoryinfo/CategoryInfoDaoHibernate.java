@@ -1,22 +1,23 @@
 package es.udc.pa.pa015.practicapa.model.categoryinfo;
 
-import java.util.List;
+import es.udc.pojo.modelutil.dao.GenericDaoHibernate;
 
 import org.springframework.stereotype.Repository;
 
-import es.udc.pojo.modelutil.dao.GenericDaoHibernate;
+import java.util.List;
 
 @Repository("categoryInfoDao")
-public class CategoryInfoDaoHibernate extends GenericDaoHibernate<CategoryInfo, Long> implements CategoryInfoDao {
+public class CategoryInfoDaoHibernate extends
+    GenericDaoHibernate<CategoryInfo, Long> implements CategoryInfoDao {
 
-	@SuppressWarnings("unchecked")
-	public List<CategoryInfo> findAllCategories() {
-		
-		return getSession().createQuery(
-				"SELECT c " +
-				"FROM CategoryInfo c " +
-				"ORDER BY c.categoryName").
-				list();
-	}
-	
+  /**
+   * This method find all the categories.
+   */
+  @SuppressWarnings("unchecked")
+  public List<CategoryInfo> findAllCategories() {
+
+    return getSession().createQuery("SELECT c " + "FROM CategoryInfo c "
+        + "ORDER BY c.categoryName").list();
+  }
+
 }

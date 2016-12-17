@@ -1,9 +1,5 @@
 package es.udc.pa.pa015.practicapa.web.pages.user;
 
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
 import es.udc.pa.pa015.practicapa.model.userprofile.UserProfile;
 import es.udc.pa.pa015.practicapa.model.userservice.UserProfileDetails;
 import es.udc.pa.pa015.practicapa.model.userservice.UserService;
@@ -13,44 +9,46 @@ import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicyType;
 import es.udc.pa.pa015.practicapa.web.util.UserSession;
 import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.ioc.annotations.Inject;
+
 @AuthenticationPolicy(AuthenticationPolicyType.AUTHENTICATED_USERS)
 public class UpdateProfile {
 
-    @Property
-    private String firstName;
+  @Property
+  private String firstName;
 
-    @Property
-    private String lastName;
+  @Property
+  private String lastName;
 
-    @Property
-    private String email;
+  @Property
+  private String email;
 
-    @SessionState(create=false)
-    private UserSession userSession;
+  @SessionState(create = false)
+  private UserSession userSession;
 
-    @Inject
-    private UserService userService;
+  @Inject
+  private UserService userService;
 
-    void onPrepareForRender() throws InstanceNotFoundException {
+  void onPrepareForRender() throws InstanceNotFoundException {
 
-        UserProfile userProfile;
+    UserProfile userProfile;
 
-        userProfile = userService.findUserProfile(userSession
-                .getUserProfileId());
-        firstName = userProfile.getFirstName();
-        lastName = userProfile.getLastName();
-        email = userProfile.getEmail();
+    userProfile = userService.findUserProfile(userSession.getUserProfileId());
+    firstName = userProfile.getFirstName();
+    lastName = userProfile.getLastName();
+    email = userProfile.getEmail();
 
-    }
+  }
 
-    Object onSuccess() throws InstanceNotFoundException {
+  Object onSuccess() throws InstanceNotFoundException {
 
-        userService.updateUserProfileDetails(
-                userSession.getUserProfileId(), new UserProfileDetails(
-                        firstName, lastName, email));
-        userSession.setFirstName(firstName);
-        return Index.class;
+    userService.updateUserProfileDetails(userSession.getUserProfileId(),
+        new UserProfileDetails(firstName, lastName, email));
+    userSession.setFirstName(firstName);
+    return Index.class;
 
-    }
+  }
 
 }

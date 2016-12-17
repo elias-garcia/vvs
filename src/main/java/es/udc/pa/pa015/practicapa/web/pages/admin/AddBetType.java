@@ -1,8 +1,13 @@
 package es.udc.pa.pa015.practicapa.web.pages.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import es.udc.pa.pa015.practicapa.model.bettype.BetType;
+import es.udc.pa.pa015.practicapa.model.eventService.DuplicatedResultTypeOptionsException;
+import es.udc.pa.pa015.practicapa.model.eventService.EventService;
+import es.udc.pa.pa015.practicapa.model.eventService.NoAssignedTypeOptionsException;
+import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
+import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicy;
+import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicyType;
+import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.Component;
@@ -16,168 +21,168 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
-import es.udc.pa.pa015.practicapa.model.bettype.BetType;
-import es.udc.pa.pa015.practicapa.model.eventService.DuplicatedResultTypeOptionsException;
-import es.udc.pa.pa015.practicapa.model.eventService.EventService;
-import es.udc.pa.pa015.practicapa.model.eventService.NoAssignedTypeOptionsException;
-import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
-import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicy;
-import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicyType;
-import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @AuthenticationPolicy(AuthenticationPolicyType.ADMIN_USER)
 public class AddBetType {
-	@Property
-	private Long eventId;
-	@Persist
-	@Property
-	private ArrayList<TypeOption> options;
-	@Property
-	private TypeOption option;
-	@Property
-	private boolean showZone = false;
+  @Property
+  private Long eventId;
+  @Persist
+  @Property
+  private ArrayList<TypeOption> options;
+  @Property
+  private TypeOption option;
+  @Property
+  private boolean showZone = false;
 
-	@Property
-	private String betTypeQuestion;
+  @Property
+  private String betTypeQuestion;
 
-	@Property
-	private String multipleType;
+  @Property
+  private String multipleType;
 
-	@Property
-	private Double odd;
-	@Property
-	private String yesNoSelectModel;
+  @Property
+  private Double odd;
+  @Property
+  private String yesNoSelectModel;
 
-	@Property
-	private String typeOptionNames;
+  @Property
+  private String typeOptionNames;
 
-	@Property
-	private String typeOptionOdds;
-	/*
-	 * @Component(id="typeOptionNames") private TextArea
-	 * typeOptionNamesTextArea;
-	 * 
-	 * @Component(id="typeOptionOdds") private TextArea typeOptionOddsTextArea;
-	 */
-	@Component
-	private Form addBetTypeForm;
+  @Property
+  private String typeOptionOdds;
+  /*
+   * @Component(id="typeOptionNames") private TextArea typeOptionNamesTextArea;
+   * 
+   * @Component(id="typeOptionOdds") private TextArea typeOptionOddsTextArea;
+   */
+  @Component
+  private Form addBetTypeForm;
 
-	@InjectComponent
-	private Zone zone;
+  @InjectComponent
+  private Zone zone;
 
-	@Inject
-	private Locale locale;
+  @Inject
+  private Locale locale;
 
-	@Inject
-	private Messages messages;
+  @Inject
+  private Messages messages;
 
-	@Inject
-	private Request request;
+  @Inject
+  private Request request;
 
-	@InjectComponent
-	private Zone betTypeAddedZone;
+  @InjectComponent
+  private Zone betTypeAddedZone;
 
-	@InjectComponent
-	private Zone formZone;
+  @InjectComponent
+  private Zone formZone;
 
-	@Inject
-	private AjaxResponseRenderer ajaxResponseRenderer;
+  @Inject
+  private AjaxResponseRenderer ajaxResponseRenderer;
 
-	@Inject
-	private EventService eventService;
+  @Inject
+  private EventService eventService;
 
-	void onPrepareForRender() {
-		this.yesNoSelectModel = ("false" + "=" + messages.get("select-no") + "," + "true" + "="
-				+ messages.get("select-yes"));
-	}
+  void onPrepareForRender() {
+    this.yesNoSelectModel = ("false" + "=" + messages.get("select-no") + ","
+        + "true" + "=" + messages.get("select-yes"));
+  }
 
-	void onValidateFromAddBetTypeForm() throws NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
-		if (!addBetTypeForm.isValid()) {
-			return;
-		}
+  void onValidateFromAddBetTypeForm() throws NoAssignedTypeOptionsException,
+      DuplicatedResultTypeOptionsException {
+    if (!addBetTypeForm.isValid()) {
+      return;
+    }
 
-		try {
-			BetType newBetType = new BetType(betTypeQuestion, Boolean.parseBoolean(multipleType),
-					eventService.findEvent(eventId));
-			List<TypeOption> newOptions = new ArrayList<TypeOption>();
-			for (TypeOption opt : options) {
-				if (opt != null) {
-					opt.setOdd(opt.getOdd() / 100);
-					opt.setOdd(Double.valueOf(opt.getOdd()));
-					newOptions.add(opt);
-				}
-			}
+    try {
+      BetType newBetType = new BetType(betTypeQuestion, Boolean.parseBoolean(
+          multipleType), eventService.findEvent(eventId));
+      List<TypeOption> newOptions = new ArrayList<TypeOption>();
+      for (TypeOption opt : options) {
+        if (opt != null) {
+          opt.setOdd(opt.getOdd() / 100);
+          opt.setOdd(Double.valueOf(opt.getOdd()));
+          newOptions.add(opt);
+        }
+      }
 
-			eventService.addBetType(eventId, newBetType, newOptions);
+      eventService.addBetType(eventId, newBetType, newOptions);
 
-		} catch (InstanceNotFoundException ex) {
-		}
-	}
+    } catch (InstanceNotFoundException ex) {
 
-	void onSuccess() {
-		if (request.isXHR()) {
-			showZone = true;
-			ajaxResponseRenderer.addRender(formZone).addRender(betTypeAddedZone);
-		}
-	}
+    }
+  }
 
-	void onFailure() {
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(formZone);
-		}
-	}
+  void onSuccess() {
+    if (request.isXHR()) {
+      showZone = true;
+      ajaxResponseRenderer.addRender(formZone).addRender(betTypeAddedZone);
+    }
+  }
 
-	Object onRefresh() {
-		options = new ArrayList<TypeOption>();
-		return request.isXHR() ? formZone.getBody() : null;
-	}
+  void onFailure() {
+    if (request.isXHR()) {
+      ajaxResponseRenderer.addRender(formZone);
+    }
+  }
 
-	public String getUniqueZoneId() {
-		return "zone_" + options.indexOf(option);
-	}
+  Object onRefresh() {
+    options = new ArrayList<TypeOption>();
+    return request.isXHR() ? formZone.getBody() : null;
+  }
 
-	public int getId() {
-		return options.indexOf(option);
-	}
+  public String getUniqueZoneId() {
+    return "zone_" + options.indexOf(option);
+  }
 
-	void onActivate(Long eventId) {
-		this.eventId = eventId;
-		if (options == null) {
-			options = new ArrayList<TypeOption>();
-		}
-	}
+  public int getId() {
+    return options.indexOf(option);
+  }
 
-	Long onPassivate() {
-		options = new ArrayList<TypeOption>();
-		return eventId;
-	}
+  void onActivate(Long eventId) {
+    this.eventId = eventId;
+    if (options == null) {
+      options = new ArrayList<TypeOption>();
+    }
+  }
 
-	Object onAddRow() {
-		TypeOption newOpt = new TypeOption();
-		options.add(newOpt);
-		return newOpt;
-	}
+  Long onPassivate() {
+    options = new ArrayList<TypeOption>();
+    return eventId;
+  }
 
-	void onRemoveRow(TypeOption newOpt) {
-		options.set(options.indexOf(newOpt), null);
-	}
+  Object onAddRow() {
+    TypeOption newOpt = new TypeOption();
+    options.add(newOpt);
+    return newOpt;
+  }
 
-	Object onZoneUpdate(int index) {
-		option = options.get(index);
-		return zone.getBody();
-	}
+  void onRemoveRow(TypeOption newOpt) {
+    options.set(options.indexOf(newOpt), null);
+  }
 
-	public ValueEncoder<TypeOption> getEncoder() {
-		return new ValueEncoder<TypeOption>() {
+  Object onZoneUpdate(int index) {
+    option = options.get(index);
+    return zone.getBody();
+  }
 
-			public String toClient(TypeOption option) {
-				return String.valueOf(options.indexOf(option));
-			}
+  /**
+   * This method get the encoder.
+   * @return ValueEncoder
+   */
+  public ValueEncoder<TypeOption> getEncoder() {
+    return new ValueEncoder<TypeOption>() {
 
-			public TypeOption toValue(String clientValue) {
-				return options.get(Integer.parseInt(clientValue));
-			}
+      public String toClient(TypeOption option) {
+        return String.valueOf(options.indexOf(option));
+      }
 
-		};
-	}
+      public TypeOption toValue(String clientValue) {
+        return options.get(Integer.parseInt(clientValue));
+      }
+
+    };
+  }
 }

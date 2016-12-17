@@ -2,33 +2,33 @@ package es.udc.pa.pa015.practicapa.web.pages.admin;
 
 public class BetTypeAdded {
 
-	private Long eventId;
-	
-	private Long betTypeId;
+  private Long eventId;
 
-	public Long getEventId() {
-		return eventId;
-	}
+  private Long betTypeId;
 
-	public void setEventId(Long eventId) {
-		this.eventId = eventId;
-	}
-	
-	public Long getBetTypeId() {
-		return betTypeId;
-	}
+  public Long getEventId() {
+    return eventId;
+  }
 
-	public void setBetTypeId(Long betTypeId) {
-		this.betTypeId = betTypeId;
-	}
+  public void setEventId(Long eventId) {
+    this.eventId = eventId;
+  }
 
-	Object onPassivate() {
-		return new Object[] {eventId, betTypeId};
-	}
-	
-	void onActivate(Long eventId, Long betId) {
-		this.eventId = eventId;
-		this.betTypeId = betId;
-	}
-	
+  public Long getBetTypeId() {
+    return betTypeId;
+  }
+
+  public void setBetTypeId(Long betTypeId) {
+    this.betTypeId = betTypeId;
+  }
+
+  Object onPassivate() {
+    return new Object[] { eventId, betTypeId };
+  }
+
+  void onActivate(Long eventId, Long betId) {
+    this.eventId = eventId;
+    this.betTypeId = betId;
+  }
+
 }
