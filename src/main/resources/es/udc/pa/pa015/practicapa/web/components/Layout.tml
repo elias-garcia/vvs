@@ -39,18 +39,19 @@
         
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-	            <li><a href="#" t:type="PageLink" t:page="search/findevents">${message:menu-findEvents}</a></li>
-	            
+	            <li>
+                    <a id="searchEventsButton" href="#" t:type="PageLink" t:page="search/findevents">${message:menu-findEvents}</a>
+                </li>
 	            <t:if test="userSession">
 	            	<t:if test="userSession.admin">
 	            		<li><a href="#" t:type="PageLink" t:page="admin/addevent">${message:menu-addEvent}</a></li>
             		</t:if>
             	</t:if>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul id="authenticationButton" class="nav navbar-nav navbar-right">
             	<t:if test="userSession">
             		<li class="dropdown">
-              			<a href="#" class="dropdown-toggle" data-toggle="dropdown">${userSession.firstName} <span class="caret"></span></a>
+              			<a id="userNameButton" href="#" class="dropdown-toggle" data-toggle="dropdown">${userSession.firstName} <span class="caret"></span></a>
               				<ul class="dropdown-menu" role="menu">
               					<t:if test="!userSession.admin">
               						<li><a href="#" t:type="PageLink" t:page="user/bethistory">${message:menu-betHistory}</a></li>

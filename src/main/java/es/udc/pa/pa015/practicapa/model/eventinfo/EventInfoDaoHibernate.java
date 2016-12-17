@@ -13,60 +13,54 @@ public class EventInfoDaoHibernate extends GenericDaoHibernate<EventInfo, Long>
     implements EventInfoDao {
 
   @SuppressWarnings("unchecked")
-  @Override
-  public List<EventInfo> findEvents(String keyWords, Long categoryId,
+  public List<EventInfo> findEvents(String keywords, Long categoryId,
       boolean eventsStarted, int startIndex, int count) {
 
-    String[] words = keyWords != null ? keyWords.split(" ") : null;
-    String hqlQuery = "SELECT e FROM EventInfo e";
-
-    if (categoryId != null) {
-      hqlQuery += " WHERE e.category.categoryId = :categoryId";
-      if (words != null) {
-        hqlQuery += " AND ";
-      }
-    }
+    String[] words = keywords != null ? keywords.split(" ") : null;
+    String queryString = "SELECT e FROM EventInfo e";
 
     if (words != null && words.length > 0) {
-      if (categoryId == null) {
-        hqlQuery += " WHERE ";
-      }
+      queryString += " WHERE";
       for (int i = 0; i < words.length; i++) {
         if (i > 0) {
-          hqlQuery += " AND";
+          queryString += " AND";
         }
-        hqlQuery += " LOWER(e.eventName) LIKE LOWER(:eventName" + i + ")";
+        queryString += " LOWER(e.eventName) LIKE :word" + i;
       }
     }
 
-    Calendar eventDate = Calendar.getInstance();
-    if ((words == null) && (categoryId == null)) {
-      if (!eventsStarted) {
-        hqlQuery += " WHERE e.eventDate >= :eventDate";
-      }
-    } else {
-      if (!eventsStarted) {
-        hqlQuery += " AND e.eventDate >= :eventDate";
-      }
-    }
-
-    Query queryHql = getSession().createQuery(hqlQuery
-        + " ORDER BY e.eventDate, e.eventName");
-
-    if (categoryId != null) {
-      queryHql.setParameter("categoryId", categoryId);
-    }
-
-    if (words != null && words.length > 0) {
-      for (int i = 0; i < words.length; i++) {
-        queryHql.setString("eventName" + i + "", "%" + words[i] + "%");
-      }
+    if (categoryId.longValue() != -1) {
+      if (words == null || words.length <= 0)
+        queryString += " WHERE e.category.categoryId = :categoryId";
+      else
+        queryString += " AND e.category.categoryId = :categoryId";
     }
 
     if (!eventsStarted) {
-      queryHql.setParameter("eventDate", eventDate);
+      if ((words == null || words.length <= 0) && categoryId.longValue() == -1)
+        queryString += " WHERE e.eventDate >= :eventDate";
+      else
+        queryString += " AND e.eventDate >= :eventDate";
     }
 
-    return queryHql.setFirstResult(startIndex).setMaxResults(count).list();
+    queryString += " ORDER BY e.eventDate ASC";
+
+    Query query = getSession().createQuery(queryString);
+
+    /* Fill keywords parameters */
+    if (words != null && words.length > 0)
+      for (int i = 0; i < words.length; i++) {
+        query.setParameter("word" + i, "%" + words[i].toLowerCase() + "%");
+      }
+
+    /* Fill category parameter */
+    if (categoryId.longValue() != -1)
+      query.setParameter("categoryId", categoryId);
+
+    /* Fill date parameter */
+    if (!eventsStarted)
+      query.setCalendar("eventDate", Calendar.getInstance());
+
+    return query.setFirstResult(startIndex).setMaxResults(count).list();
   }
 }

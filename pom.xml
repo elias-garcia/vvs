@@ -183,14 +183,20 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/pojo-modelutil-2.3.0.jar</systemPath>
 		</dependency>
-		<!-- Mockito -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.10.19</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+        <!--  Selenium Tool -->
+         <dependency>
+             <groupId>org.seleniumhq.selenium</groupId>
+             <artifactId>selenium-java</artifactId>
+             <version>2.53.0</version>
+         </dependency>
+    </dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -410,20 +416,28 @@
 					</connectors>
 				</configuration>
 
-				<dependencies>
-					<dependency>
-						<groupId>${jdbcDriver.groupId}</groupId>
-						<artifactId>${jdbcDriver.artifactId}</artifactId>
-						<version>${jdbcDriver.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-jdbc</artifactId>
-						<version>${spring.version}</version>
-						<scope>runtime</scope>
-					</dependency>
-				</dependencies>
+                <dependencies>
+                    <dependency>
+                        <groupId>${jdbcDriver.groupId}</groupId>
+                        <artifactId>${jdbcDriver.artifactId}</artifactId>
+                        <version>${jdbcDriver.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                        <version>${spring.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
+            <plugin>
+		    	<groupId>org.apache.maven.plugins</groupId>
+		       	<artifactId>maven-surefire-plugin</artifactId>
+		       	<version>2.19.1</version>        
 			</plugin>
-		</plugins>
-	</build>
+
+        </plugins>
+
+    </build>
 </project>
