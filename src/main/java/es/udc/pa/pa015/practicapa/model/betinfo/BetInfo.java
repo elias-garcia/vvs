@@ -99,7 +99,7 @@ public class BetInfo {
    * @return bet date
    */
   @Temporal(TemporalType.TIMESTAMP)
-  public final Calendar getBetDate() {
+  public Calendar getBetDate() {
     return betDate;
   }
 
@@ -108,7 +108,7 @@ public class BetInfo {
    * @param betDateParam
    *          bet date
    */
-  public final void setBetDate(final Calendar betDateParam) {
+  public void setBetDate(final Calendar betDateParam) {
     this.betDate = betDateParam;
   }
 
@@ -116,7 +116,7 @@ public class BetInfo {
    * Get bet amount.
    * @return bet amount
    */
-  public final double getAmount() {
+  public double getAmount() {
     return amount;
   }
 
@@ -125,7 +125,7 @@ public class BetInfo {
    * @param amountParam
    *          bet amount
    */
-  public final void setAmount(final double amountParam) {
+  public void setAmount(final double amountParam) {
     this.amount = amountParam;
   }
 
@@ -135,7 +135,7 @@ public class BetInfo {
    */
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "userId")
-  public final UserProfile getUser() {
+  public UserProfile getUser() {
     return user;
   }
 
@@ -144,7 +144,7 @@ public class BetInfo {
    * @param userParam
    *          user that do the bet
    */
-  public final void setUser(final UserProfile userParam) {
+  public void setUser(final UserProfile userParam) {
     this.user = userParam;
   }
 
@@ -154,7 +154,7 @@ public class BetInfo {
    */
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "optionId")
-  public final TypeOption getOption() {
+  public TypeOption getOption() {
     return option;
   }
 
@@ -163,7 +163,7 @@ public class BetInfo {
    * @param optionParam
    *          bet option
    */
-  public final void setOption(final TypeOption optionParam) {
+  public void setOption(final TypeOption optionParam) {
     this.option = optionParam;
   }
 

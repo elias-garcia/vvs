@@ -92,7 +92,7 @@ public class UserProfile {
    * Get user loginName.
    * @return loginName
    */
-  public final String getLoginName() {
+  public String getLoginName() {
     return loginName;
   }
 
@@ -101,7 +101,7 @@ public class UserProfile {
    * @param loginNameParam
    *      user loginName
    */
-  public final void setLoginName(final String loginNameParam) {
+  public void setLoginName(final String loginNameParam) {
     this.loginName = loginNameParam;
   }
 
@@ -110,7 +110,7 @@ public class UserProfile {
    * @return encrypted password
    */
   @Column(name = "enPassword")
-  public final String getEncryptedPassword() {
+  public String getEncryptedPassword() {
     return encryptedPassword;
   }
 
@@ -119,7 +119,7 @@ public class UserProfile {
    * @param encryptedPasswordParam
    *            user encrypted password
    */
-  public final void setEncryptedPassword(final String encryptedPasswordParam) {
+  public void setEncryptedPassword(final String encryptedPasswordParam) {
     this.encryptedPassword = encryptedPasswordParam;
   }
 
@@ -127,7 +127,7 @@ public class UserProfile {
    * Get first name.
    * @return user firstName
    */
-  public final String getFirstName() {
+  public String getFirstName() {
     return firstName;
   }
 
@@ -136,7 +136,7 @@ public class UserProfile {
    * @param firstNameParam
    *      user firstName
    */
-  public final void setFirstName(final String firstNameParam) {
+  public void setFirstName(final String firstNameParam) {
     this.firstName = firstNameParam;
   }
 
@@ -144,7 +144,7 @@ public class UserProfile {
    * Get user lastName.
    * @return user lastName
    */
-  public final String getLastName() {
+  public String getLastName() {
     return lastName;
   }
 
@@ -153,7 +153,7 @@ public class UserProfile {
    * @param lastNameParam
    *        user lastName
    */
-  public final void setLastName(final String lastNameParam) {
+  public void setLastName(final String lastNameParam) {
     this.lastName = lastNameParam;
   }
 
@@ -161,7 +161,7 @@ public class UserProfile {
    * Get user email.
    * @return user email
    */
-  public final String getEmail() {
+  public String getEmail() {
     return email;
   }
 
@@ -170,7 +170,7 @@ public class UserProfile {
    * @param emailParam
    *        user email
    */
-  public final void setEmail(final String emailParam) {
+  public void setEmail(final String emailParam) {
     this.email = emailParam;
   }
 

@@ -100,7 +100,7 @@ public class BetType {
    * Get the question.
    * @return question
    */
-  public final String getQuestion() {
+  public String getQuestion() {
     return question;
   }
 
@@ -109,7 +109,7 @@ public class BetType {
    * @param questionParam
    *          question
    */
-  public final void setQuestion(final String questionParam) {
+  public void setQuestion(final String questionParam) {
     this.question = questionParam;
   }
 
@@ -118,7 +118,7 @@ public class BetType {
    * @return boolean
    */
   @Type(type = "org.hibernate.type.BooleanType")
-  public final Boolean getIsMultiple() {
+  public Boolean getIsMultiple() {
     return isMultiple;
   }
 
@@ -127,7 +127,7 @@ public class BetType {
    * @param isMultipleParam
    *            indicates if it is multiple
    */
-  public final void setIsMultiple(final Boolean isMultipleParam) {
+  public void setIsMultiple(final Boolean isMultipleParam) {
     this.isMultiple = isMultipleParam;
   }
 
@@ -136,7 +136,7 @@ public class BetType {
    * @return boolean
    */
   @Type(type = "org.hibernate.type.BooleanType")
-  public final boolean getPickedWinners() {
+  public boolean getPickedWinners() {
     return pickedWinners;
   }
 
@@ -145,7 +145,7 @@ public class BetType {
    * @param pickedWinnersParam
    *            Indicates if it is picked winners
    */
-  public final void setPickedWinners(final boolean pickedWinnersParam) {
+  public void setPickedWinners(final boolean pickedWinnersParam) {
     this.pickedWinners = pickedWinnersParam;
   }
 
@@ -155,7 +155,7 @@ public class BetType {
    */
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "eventId")
-  public final EventInfo getEvent() {
+  public EventInfo getEvent() {
     return event;
   }
 
@@ -164,7 +164,7 @@ public class BetType {
    * @param eventParam
    *        event
    */
-  public final void setEvent(final EventInfo eventParam) {
+  public void setEvent(final EventInfo eventParam) {
     this.event = eventParam;
   }
 
@@ -173,7 +173,7 @@ public class BetType {
    * @return List of typeOptions
    */
   @OneToMany(mappedBy = "type")
-  public final Set<TypeOption> getTypeOptions() {
+  public Set<TypeOption> getTypeOptions() {
     return typeOptions;
   }
 
@@ -182,7 +182,7 @@ public class BetType {
    * @param typeOptionsParam
    *            TypeOptions list
    */
-  public final void setTypeOptions(final Set<TypeOption> typeOptionsParam) {
+  public void setTypeOptions(final Set<TypeOption> typeOptionsParam) {
     this.typeOptions = typeOptionsParam;
   }
 

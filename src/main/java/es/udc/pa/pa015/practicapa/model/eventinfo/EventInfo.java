@@ -101,7 +101,7 @@ public class EventInfo {
    * Get event name.
    * @return event name
    */
-  public final String getEventName() {
+  public String getEventName() {
     return eventName;
   }
 
@@ -110,7 +110,7 @@ public class EventInfo {
    * @param eventNameParam
    *            event name
    */
-  public final void setEventName(final String eventNameParam) {
+  public void setEventName(final String eventNameParam) {
     this.eventName = eventNameParam;
   }
 
@@ -119,7 +119,7 @@ public class EventInfo {
    * @return event date
    */
   @Temporal(TemporalType.TIMESTAMP)
-  public final Calendar getEventDate() {
+  public Calendar getEventDate() {
     return eventDate;
   }
 
@@ -128,7 +128,7 @@ public class EventInfo {
    * @param eventDateParam
    *          event date
    */
-  public final void setEventDate(final Calendar eventDateParam) {
+  public void setEventDate(final Calendar eventDateParam) {
     this.eventDate = eventDateParam;
   }
 
@@ -138,7 +138,7 @@ public class EventInfo {
    */
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "categoryId")
-  public final CategoryInfo getCategory() {
+  public CategoryInfo getCategory() {
     return category;
   }
 
@@ -147,7 +147,7 @@ public class EventInfo {
    * @param categoryParam
    *          category associated
    */
-  public final void setCategory(final CategoryInfo categoryParam) {
+  public void setCategory(final CategoryInfo categoryParam) {
     this.category = categoryParam;
   }
 
@@ -156,7 +156,7 @@ public class EventInfo {
    * @return list of betTypes
    */
   @OneToMany(mappedBy = "event")
-  public final Set<BetType> getBetTypes() {
+  public Set<BetType> getBetTypes() {
     return betTypes;
   }
 
@@ -165,7 +165,7 @@ public class EventInfo {
    * @param betTypesParam
    *      List of betTypes
    */
-  public final void setBetTypes(final Set<BetType> betTypesParam) {
+  public void setBetTypes(final Set<BetType> betTypesParam) {
     this.betTypes = betTypesParam;
   }
 

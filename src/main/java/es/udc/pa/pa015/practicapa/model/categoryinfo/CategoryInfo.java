@@ -70,7 +70,7 @@ public class CategoryInfo {
    * Get category name.
    * @return category name
    */
-  public final String getCategoryName() {
+  public String getCategoryName() {
     return categoryName;
   }
 
@@ -79,7 +79,7 @@ public class CategoryInfo {
    * @param categoryNameParam
    *                category name
    */
-  public final void setCategoryName(final String categoryNameParam) {
+  public void setCategoryName(final String categoryNameParam) {
     this.categoryName = categoryNameParam;
   }
 

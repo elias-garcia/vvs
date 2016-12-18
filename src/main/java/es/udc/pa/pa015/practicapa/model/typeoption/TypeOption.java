@@ -93,7 +93,7 @@ public class TypeOption {
    * Get option odd.
    * @return option odd
    */
-  public final double getOdd() {
+  public double getOdd() {
     return odd;
   }
 
@@ -102,7 +102,7 @@ public class TypeOption {
    * @param oddParam
    *          option odd
    */
-  public final void setOdd(final double oddParam) {
+  public void setOdd(final double oddParam) {
     this.odd = oddParam;
   }
 
@@ -110,7 +110,7 @@ public class TypeOption {
    * Get option result.
    * @return option result
    */
-  public final String getResult() {
+  public String getResult() {
     return result;
   }
 
@@ -119,7 +119,7 @@ public class TypeOption {
    * @param resultParam
    *          option result
    */
-  public final void setResult(final String resultParam) {
+  public void setResult(final String resultParam) {
     this.result = resultParam;
   }
 
@@ -128,7 +128,7 @@ public class TypeOption {
    * @return boolean
    */
   @Type(type = "org.hibernate.type.BooleanType")
-  public final Boolean getIsWinner() {
+  public Boolean getIsWinner() {
     return isWinner;
   }
 
@@ -137,7 +137,7 @@ public class TypeOption {
    * @param isWinnerParam
    *            indicates if it is winner
    */
-  public final void setIsWinner(final Boolean isWinnerParam) {
+  public void setIsWinner(final Boolean isWinnerParam) {
     this.isWinner = isWinnerParam;
   }
 
@@ -146,7 +146,7 @@ public class TypeOption {
    * @return version
    */
   @Version
-  public final Long getVersion() {
+  public Long getVersion() {
     return version;
   }
 
@@ -155,7 +155,7 @@ public class TypeOption {
    * @param versionParam
    *              version
    */
-  public final void setVersion(final Long versionParam) {
+  public void setVersion(final Long versionParam) {
     this.version = versionParam;
   }
 
@@ -165,7 +165,7 @@ public class TypeOption {
    */
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "typeId")
-  public final BetType getType() {
+  public BetType getType() {
     return type;
   }
 
@@ -174,7 +174,7 @@ public class TypeOption {
    * @param typeParam
    *            betType
    */
-  public final void setType(final BetType typeParam) {
+  public void setType(final BetType typeParam) {
     this.type = typeParam;
   }
 
