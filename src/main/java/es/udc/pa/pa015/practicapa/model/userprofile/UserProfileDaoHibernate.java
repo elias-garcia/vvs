@@ -5,14 +5,22 @@ import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 
 import org.springframework.stereotype.Repository;
 
+/**
+ * UserProfile repository.
+ */
 @Repository("userProfileDao")
 public class UserProfileDaoHibernate extends
     GenericDaoHibernate<UserProfile, Long> implements UserProfileDao {
 
   /**
-   * This method find a user by his login name.
+   * Returns an UserProfile by login name (not user identifier).
+   * @param loginName
+   *          the user identifier
+   * @return the UserProfile
+   * @throws InstanceNotFoundException
+   *            thrown out when the loginName doesn't exist
    */
-  public UserProfile findByLoginName(String loginName)
+  public final UserProfile findByLoginName(final String loginName)
       throws InstanceNotFoundException {
 
     UserProfile userProfile = (UserProfile) getSession().createQuery(

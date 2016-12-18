@@ -16,35 +16,49 @@ import org.apache.tapestry5.services.Response;
 
 import java.io.IOException;
 
+/**
+ * Session filter class.
+ */
 public class SessionFilter implements RequestFilter {
 
+  /** application State Manager. */
   private ApplicationStateManager applicationStateManager;
+
+  /** cookies. */
   private Cookies cookies;
+
+  /** userService. */
   private UserService userService;
 
   /**
    * SessionFilter constructor.
-   * @param applicationStateManager
+   * @param applicationStateManagerParam
    *          ApplicationStateManager
-   * @param cookies
+   * @param cookiesParam
    *          Cookies
-   * @param userService
+   * @param userServiceParam
    *          UserService
    */
-  public SessionFilter(ApplicationStateManager applicationStateManager,
-      Cookies cookies, UserService userService) {
+  public SessionFilter(
+      final ApplicationStateManager applicationStateManagerParam,
+      final Cookies cookiesParam, final UserService userServiceParam) {
 
-    this.applicationStateManager = applicationStateManager;
-    this.cookies = cookies;
-    this.userService = userService;
+    this.applicationStateManager = applicationStateManagerParam;
+    this.cookies = cookiesParam;
+    this.userService = userServiceParam;
 
   }
 
   /**
    * This method service.
+   * @param request request
+   * @param response Response
+   * @param handler RequestHandler
+   * @return boolean
+   * @throws IOException ioException
    */
-  public boolean service(Request request, Response response,
-      RequestHandler handler) throws IOException {
+  public boolean service(final Request request, final Response response,
+      final RequestHandler handler) throws IOException {
 
     if (!applicationStateManager.exists(UserSession.class)) {
 

@@ -20,27 +20,48 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Event service implementation.
+ */
 @Service("eventService")
 @Transactional
 public class EventServiceImpl implements EventService {
 
+  /** EventInfoDao. */
   @Autowired
   private EventInfoDao eventInfoDao;
 
+  /** BetTypeDao. */
   @Autowired
   private BetTypeDao betTypeDao;
 
+  /** TypeOptionDao. */
   @Autowired
   private TypeOptionDao typeOptionDao;
 
+  /** CategoryInfoDao. */
   @Autowired
   private CategoryInfoDao categoryInfoDao;
 
   /**
    * This method create a new event.
+   * @param eventName
+   *            event name
+   * @param eventDate
+   *            event date
+   * @param categoryId
+   *            category associated
+   * @return the created event
+   * @throws InstanceNotFoundException
+   *             thrown out when the category doesn't exist
+   * @throws EventDateException
+   *              thrown out when the date is previous to the current date
+   * @throws NullEventNameException
+   *              thrown out when the event name is null
    */
-  public EventInfo createEvent(String eventName, Calendar eventDate,
-      Long categoryId) throws InstanceNotFoundException, EventDateException,
+  public final EventInfo createEvent(final String eventName,
+      final Calendar eventDate, final Long categoryId)
+      throws InstanceNotFoundException, EventDateException,
       NullEventNameException {
 
     if (eventName == null) {
@@ -49,12 +70,13 @@ public class EventServiceImpl implements EventService {
 
     CategoryInfo category = categoryInfoDao.find(categoryId);
 
-		/*
-		 * If date is previous to the current date or is null, then throw an
-		 * exception
-		 */
-		if (eventDate == null || eventDate.before(Calendar.getInstance()))
-			throw new EventDateException(eventName);
+    /*
+     * If date is previous to the current date or is null, then throw an
+     * exception
+     */
+    if (eventDate == null || eventDate.before(Calendar.getInstance())) {
+      throw new EventDateException(eventName);
+    }
 
     EventInfo newEvent = new EventInfo(eventName, eventDate, category);
 
@@ -63,18 +85,43 @@ public class EventServiceImpl implements EventService {
     return newEvent;
   }
 
+  /**
+   * Find an event by a passed id.
+   * @param eventId
+   *          event id to search
+   * @return the event found
+   * @throws InstanceNotFoundException
+   *          thrown out when the event id doesn't exist
+   */
   @Transactional(readOnly = true)
-  public EventInfo findEvent(Long eventId) throws InstanceNotFoundException {
+  public final EventInfo findEvent(final Long eventId)
+                                   throws InstanceNotFoundException {
     EventInfo event = eventInfoDao.find(eventId);
     return event;
   }
 
   /**
-   * This method find events.
+   * Find all the events that contains the keywords, categoryId or have started.
+   * @param keywords
+   *              keyword to search
+   * @param categoryId
+   *              category to search
+   * @param eventsStarted
+   *              indicates if the events must started
+   * @param startIndex
+   *              number of first element of the list
+   * @param count
+   *              number of elements to list
+   * @return EventInfoBlock
+   * @throws InstanceNotFoundException
+   *              thrown out when the category doesn't exist
+   * @throws StartIndexOrCountException
+   *              thrown out when startindex and count are not correct
    */
   @Transactional(readOnly = true)
-  public EventInfoBlock findEvents(String keywords, Long categoryId,
-      boolean eventsStarted, int startIndex, int count)
+  public final EventInfoBlock findEvents(final String keywords,
+      final Long categoryId, final boolean eventsStarted,
+      final int startIndex, final int count)
       throws InstanceNotFoundException, StartIndexOrCountException {
 
     if (startIndex < 0 || count < 0) {
@@ -103,9 +150,22 @@ public class EventServiceImpl implements EventService {
   }
 
   /**
-   * This method add a bet type.
+   * This method add a bet type to an event.
+   * @param eventId
+   *            Event for adding the betType
+   * @param type
+   *            BetType to add
+   * @param options
+   *            List of typeOptions
+   * @throws InstanceNotFoundException
+   *            thrown out when the event doesn't exist
+   * @throws NoAssignedTypeOptionsException
+   *            thrown out when there's not assigned typeOptions
+   * @throws DuplicatedResultTypeOptionsException
+   *            thrown out when the result is duplicated
    */
-  public void addBetType(Long eventId, BetType type, List<TypeOption> options)
+  public final void addBetType(final Long eventId, final BetType type,
+      final List<TypeOption> options)
       throws InstanceNotFoundException, NoAssignedTypeOptionsException,
       DuplicatedResultTypeOptionsException {
 
@@ -131,9 +191,18 @@ public class EventServiceImpl implements EventService {
   }
 
   /**
-   * This method put like winners the typeIptions of a betType.
+   * This method pick the winners of a betType.
+   * @param optionIds
+   *            List of optionsIds.
+   * @param betTypeId
+   *            typeId to search.
+   * @throws InstanceNotFoundException
+   *            thrown out when the betType doesn't exist
+   * @throws TypeNotMultipleException
+   *            thrown out when the betType is not multiple
    */
-  public void pickWinners(List<Long> optionIds, Long betTypeId)
+  public final void pickWinners(final List<Long> optionIds,
+      final Long betTypeId)
       throws InstanceNotFoundException, TypeNotMultipleException {
 
     // Puede lanzar exception = 1 CP
@@ -175,21 +244,25 @@ public class EventServiceImpl implements EventService {
       throw new TypeNotMultipleException(type.getTypeId());
     }
 
-		/* Last, pick options as winners */
-		for (TypeOption option : typeOptions) {
-			if (optionIds.contains(option.getOptionId()))
-				option.setIsWinner(true);
-			else
-				option.setIsWinner(false);
-
-			typeOptionDao.save(option);
-		}
+    /* Last, pick options as winners */
+    for (TypeOption option : typeOptions) {
+      if (optionIds.contains(option.getOptionId())) {
+        option.setIsWinner(true);
+      } else {
+        option.setIsWinner(false);
+      }
+      typeOptionDao.save(option);
+    }
 
     type.setPickedWinners(true);
     betTypeDao.save(type);
   }
 
-  public List<CategoryInfo> findAllCategories() {
+  /**
+   * This method find all the categories.
+   * @return list of categories
+   */
+  public final List<CategoryInfo> findAllCategories() {
     return categoryInfoDao.findAllCategories();
   }
 

@@ -27,68 +27,95 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Class for add event page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.ADMIN_USER)
 public class AddEvent {
 
+  /** Event name. */
   @Property
   private String eventName;
 
+  /** Indicates if its is a show zone. */
   @Property
   private boolean showZone = false;
 
+  /** Start date. */
   @Property
   private String startDate;
 
+  /** Start time. */
   @Property
   private String startTime;
 
+  /** Category id. */
   @Property
   private Long categoryId;
 
+  /** Categories. */
   @Property
   private String categories;
 
+  /** Add event form. */
   @Component
   private Form addEventForm;
 
+  /** startDateTextField. */
   @Component(id = "startDate")
   private TextField startDateTextField;
 
+  /** startTimeTextField. */
   @Component(id = "startTime")
   private TextField startTimeTextField;
 
+  /** categoryIdSelect. */
   @Component(id = "categoryId")
   private Select categoryIdSelect;
 
+  /** Messages. */
   @Inject
   private Messages messages;
 
+  /** Request. */
   @Inject
   private Request request;
 
+  /** eventAddedZone. */
   @InjectComponent
   private Zone eventAddedZone;
 
+  /** formZone. */
   @InjectComponent
   private Zone formZone;
 
+  /** ajaxResponseRenderer. */
   @Inject
   private AjaxResponseRenderer ajaxResponseRenderer;
 
+  /** Locale. */
   @Inject
   private Locale locale;
 
+  /** eventService. */
   @Inject
   private EventService eventService;
 
+  /** javaScripSupport. */
   @Inject
   private JavaScriptSupport javaScriptSupport;
 
-  public void afterRender() {
+  /**
+   * After renderer.
+   */
+  public final void afterRender() {
     javaScriptSupport.require("reset-form");
   }
 
-  void onPrepareForRender() {
+  /**
+   * onPrepareForRender.
+   */
+  final void onPrepareForRender() {
     List<CategoryInfo> tempCategories = eventService.findAllCategories();
 
     for (CategoryInfo temp : tempCategories) {
@@ -102,7 +129,12 @@ public class AddEvent {
     }
   }
 
-  void onValidateFromAddEventForm() throws NullEventNameException {
+  /**
+   * Method to validate the add event form.
+   * @throws NullEventNameException
+   *                      thrown out when the even name is null
+   */
+  final void onValidateFromAddEventForm() throws NullEventNameException {
     if (!addEventForm.isValid()) {
       return;
     }
@@ -128,14 +160,24 @@ public class AddEvent {
     }
   }
 
-  void onSuccess() throws EventDateException, InstanceNotFoundException {
+  /**
+   * Method when the result is success.
+   * @throws EventDateException
+   *            Thrown out when the date isn't correct
+   * @throws InstanceNotFoundException
+   *            Thrown out when the event doesn't exist
+   */
+  final void onSuccess() throws EventDateException, InstanceNotFoundException {
     if (request.isXHR()) {
       showZone = true;
       ajaxResponseRenderer.addRender(formZone).addRender(eventAddedZone);
     }
   }
 
-  void onFailure() {
+  /**
+   * Method when the result is failure.
+   */
+  final void onFailure() {
     if (request.isXHR()) {
       ajaxResponseRenderer.addRender(formZone);
     }

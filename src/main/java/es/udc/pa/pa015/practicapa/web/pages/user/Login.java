@@ -18,36 +18,51 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Cookies;
 
+/**
+ * Class of the login page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.NON_AUTHENTICATED_USERS)
 public class Login {
 
+  /** loginName. */
   @Property
   private String loginName;
 
+  /** password. */
   @Property
   private String password;
 
+  /** indicates if the password must remember. */
   @Property
   private boolean rememberMyPassword;
 
+  /** userSession. */
   @SessionState(create = false)
   private UserSession userSession;
 
+  /** cookies. */
   @Inject
   private Cookies cookies;
 
+  /** loginForm. */
   @Component
   private Form loginForm;
 
+  /** Messages. */
   @Inject
   private Messages messages;
 
+  /** userService. */
   @Inject
   private UserService userService;
 
+  /** userProfile. */
   private UserProfile userProfile = null;
 
-  void onValidateFromLoginForm() {
+  /**
+   * Method to validate the login form.
+   */
+  final void onValidateFromLoginForm() {
 
     if (!loginForm.isValid()) {
       return;
@@ -63,7 +78,11 @@ public class Login {
 
   }
 
-  Object onSuccess() {
+  /**
+   * Method when the result is success.
+   * @return index class
+   */
+  final Object onSuccess() {
 
     userSession = new UserSession();
     userSession.setUserProfileId(userProfile.getUserProfileId());

@@ -26,17 +26,17 @@ import java.util.List;
 @Transactional
 public class EventInfoDaoUnitTest {
 
-	private final String EXISTENT_CATEGORY_NAME0 = "Fútbol";
-	private final String EXISTENT_CATEGORY_NAME1 = "Baloncesto";
-	private final String EXISTENT_EVENT_NAME0 = "Real Madrid - Barcelona";
-	private final String EXISTENT_EVENT_NAME1 = "Real Madrid - Barcelona";
-	private final String EXISTENT_EVENT_NAME2 = "Deportivo - Alaves";
-	private final String EXISTENT_EVENT_NAME3 = "Unicaja - Fuenlabrada";
-	private final String KEYWORDS = "Ma";
-	private final long ALL_CATEGORYS = -1;
+  private final String EXISTENT_CATEGORY_NAME0 = "Fútbol";
+  private final String EXISTENT_CATEGORY_NAME1 = "Baloncesto";
+  private final String EXISTENT_EVENT_NAME0 = "Real Madrid - Barcelona";
+  private final String EXISTENT_EVENT_NAME1 = "Real Madrid - Barcelona";
+  private final String EXISTENT_EVENT_NAME2 = "Deportivo - Alaves";
+  private final String EXISTENT_EVENT_NAME3 = "Unicaja - Fuenlabrada";
+  private final String KEYWORDS = "Ma";
+  private final long ALL_CATEGORYS = -1;
 
-	List<EventInfo> persistentEventInfos = new ArrayList<>();
-	List<CategoryInfo> persistentCategoryInfos = new ArrayList<>();
+  List<EventInfo> persistentEventInfos = new ArrayList<>();
+  List<CategoryInfo> persistentCategoryInfos = new ArrayList<>();
 
   @Autowired
   private EventInfoDao eventInfoDao;
@@ -81,33 +81,35 @@ public class EventInfoDaoUnitTest {
         3));
   }
 
-	/**
-	 * PR-UN-007
-	 */
-	@Test
-	public void testFindEventsWithoutFilters() {
-		/* Setup */
-		initializeEventInfos();
-		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, true, 0, 4);
-		/* Assertion */
-		assertEquals(results, persistentEventInfos);
-	}
+  /**
+   * PR-UN-007
+   */
+  @Test
+  public void testFindEventsWithoutFilters() {
+    /* Setup */
+    initializeEventInfos();
+    /* Call */
+    List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, true,
+        0, 4);
+    /* Assertion */
+    assertEquals(results, persistentEventInfos);
+  }
 
-	/**
-	 * PR-UN-008
-	 */
-	@Test
-	public void testFindEventsFilteringWithKeywords() {
-		/* Setup */
-		initializeEventInfos();
-		persistentEventInfos.remove(3);
-		persistentEventInfos.remove(2);
-		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(KEYWORDS, ALL_CATEGORYS, true, 0, 4);
-		/* Assertion */
-		assertEquals(results, persistentEventInfos);
-	}
+  /**
+   * PR-UN-008
+   */
+  @Test
+  public void testFindEventsFilteringWithKeywords() {
+    /* Setup */
+    initializeEventInfos();
+    persistentEventInfos.remove(3);
+    persistentEventInfos.remove(2);
+    /* Call */
+    List<EventInfo> results = eventInfoDao.findEvents(KEYWORDS, ALL_CATEGORYS,
+        true, 0, 4);
+    /* Assertion */
+    assertEquals(results, persistentEventInfos);
+  }
 
   /**
    * PR-UN-010.
@@ -125,34 +127,36 @@ public class EventInfoDaoUnitTest {
     assertEquals(results, persistentEventInfos);
   }
 
-	/**
-	 * PR-UN-011
-	 */
-	@Test
-	public void testFindEventsFilteringWithStartDate() {
-		/* Setup */
-		initializeEventInfos();
-		persistentEventInfos.remove(1);
-		persistentEventInfos.remove(0);
-		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, false, 0, 4);
-		/* Assertion */
-		assertEquals(results, persistentEventInfos);
-	}
+  /**
+   * PR-UN-011
+   */
+  @Test
+  public void testFindEventsFilteringWithStartDate() {
+    /* Setup */
+    initializeEventInfos();
+    persistentEventInfos.remove(1);
+    persistentEventInfos.remove(0);
+    /* Call */
+    List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS,
+        false, 0, 4);
+    /* Assertion */
+    assertEquals(results, persistentEventInfos);
+  }
 
-	/**
-	 * PR-UN-012
-	 */
-	@Test
-	public void testFindEventsFilteringWithStartInteAndCount() {
-		/* Setup */
-		initializeEventInfos();
-		persistentEventInfos.remove(3);
-		persistentEventInfos.remove(2);
-		/* Call */
-		List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, true, 0, 2);
-		/* Assertion */
-		assertEquals(results, persistentEventInfos);
-	}
+  /**
+   * PR-UN-012
+   */
+  @Test
+  public void testFindEventsFilteringWithStartInteAndCount() {
+    /* Setup */
+    initializeEventInfos();
+    persistentEventInfos.remove(3);
+    persistentEventInfos.remove(2);
+    /* Call */
+    List<EventInfo> results = eventInfoDao.findEvents(null, ALL_CATEGORYS, true,
+        0, 2);
+    /* Assertion */
+    assertEquals(results, persistentEventInfos);
+  }
 
 }

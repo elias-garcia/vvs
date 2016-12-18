@@ -6,21 +6,26 @@ package es.udc.pa.pa015.practicapa.model.betservice;
 @SuppressWarnings("serial")
 public class TypeNotMultipleException extends Exception {
 
+  /** Type id.*/
   private long typeId;
 
   /**
    * Constructor of the exception.
-   * @param typeId
+   * @param typeIdParam
    *          The id of type
    */
-  public TypeNotMultipleException(long typeId) {
+  public TypeNotMultipleException(final long typeIdParam) {
 
-    super("Type not multiple exception => " + "typeId = " + typeId);
+    super("Type not multiple exception => " + "typeId = " + typeIdParam);
 
-    this.typeId = typeId;
+    this.typeId = typeIdParam;
   }
 
-  public long getTypeId() {
+  /**
+   * Get the type id.
+   * @return type id
+   */
+  public final long getTypeId() {
     return typeId;
   }
 }

@@ -4,6 +4,9 @@ import es.udc.pojo.modelutil.dao.GenericDaoHibernate;
 
 import org.springframework.stereotype.Repository;
 
+/**
+ * BetTypeDaoHibernate.
+ */
 @Repository("betTypeDao")
 public class BetTypeDaoHibernate extends GenericDaoHibernate<BetType, Long>
     implements BetTypeDao {

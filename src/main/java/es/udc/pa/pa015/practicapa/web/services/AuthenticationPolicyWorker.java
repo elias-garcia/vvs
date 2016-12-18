@@ -7,12 +7,18 @@ import org.apache.tapestry5.plastic.PlasticMethod;
 import org.apache.tapestry5.services.transform.ComponentClassTransformWorker2;
 import org.apache.tapestry5.services.transform.TransformationSupport;
 
+/**
+ * Authentication Policy Worker class.
+ */
 public class AuthenticationPolicyWorker implements
     ComponentClassTransformWorker2 {
 
+  /**
+   * Transform method.
+   */
   @Override
-  public void transform(PlasticClass plasticClass,
-      TransformationSupport support, MutableComponentModel model) {
+  public final void transform(final PlasticClass plasticClass,
+      final TransformationSupport support, final MutableComponentModel model) {
 
     processPageAnnotations(plasticClass, model);
     processEventHandlerAnnotations(plasticClass, model);
@@ -21,7 +27,7 @@ public class AuthenticationPolicyWorker implements
 
   /**
    * Read and process restriction on page classes annotated with
-   * {@link AuthenticationPolicy} annotation
+   * {@link AuthenticationPolicy} annotation.
    * @param plasticClass
    *          Contains class-specific information used when transforming a raw
    *          component class into an executable component class.
@@ -30,8 +36,8 @@ public class AuthenticationPolicyWorker implements
    *          {@link org.apache.tapestry5.model.ComponentModel} used during the
    *          transformation phase.
    */
-  private void processPageAnnotations(PlasticClass plasticClass,
-      MutableComponentModel model) {
+  private void processPageAnnotations(final PlasticClass plasticClass,
+      final MutableComponentModel model) {
 
     AuthenticationPolicy policy = plasticClass.getAnnotation(
         AuthenticationPolicy.class);
@@ -43,7 +49,7 @@ public class AuthenticationPolicyWorker implements
   }
 
   /**
-   * Inject meta datas about annotated methods
+   * Inject meta datas about annotated methods.
    * @param plasticClass
    *          Contains class-specific information used when transforming a raw
    *          component class into an executable component class.
@@ -52,8 +58,8 @@ public class AuthenticationPolicyWorker implements
    *          {@link org.apache.tapestry5.model.ComponentModel} used during the
    *          transformation phase.
    */
-  private void processEventHandlerAnnotations(PlasticClass plasticClass,
-      MutableComponentModel model) {
+  private void processEventHandlerAnnotations(final PlasticClass plasticClass,
+      final MutableComponentModel model) {
 
     for (PlasticMethod method : plasticClass.getMethodsWithAnnotation(
         AuthenticationPolicy.class)) {
@@ -64,15 +70,14 @@ public class AuthenticationPolicyWorker implements
       if (methodName.startsWith("on") || event != null) {
         String componentId = extractComponentId(methodName, event);
         String eventType = extractEventType(methodName, event);
-        String authenticationPolicyMeta 
+        String authenticationPolicyMeta
             = AuthenticationValidator.EVENT_HANDLER_AUTHENTICATION_TYPE
             + "-" + componentId + "-" + eventType;
 
         authenticationPolicyMeta = authenticationPolicyMeta.toLowerCase();
         model.setMeta(authenticationPolicyMeta, policy.value().toString());
       } else {
-        throw new RuntimeException(
-            "Cannot put AuthenticationPolicy annotation "
+        throw new RuntimeException("Cannot put AuthenticationPolicy annotation "
             + "on a non event handler method");
       }
     }
@@ -89,8 +94,12 @@ public class AuthenticationPolicyWorker implements
    * component id is not specified. The component id is provided by the OnEvent
    * annotation or (if that is not present) by the part of the method name
    * following "From" ("onActionFromFoo").
+   * @param methodName method name
+   * @param annotation OnEvent
+   * @return String
    */
-  private String extractComponentId(String methodName, OnEvent annotation) {
+  private String extractComponentId(final String methodName,
+      final OnEvent annotation) {
     if (annotation != null) {
       return annotation.component();
     }
@@ -110,13 +119,17 @@ public class AuthenticationPolicyWorker implements
    * This code is taken deliberatly from:
    * http://svn.apache.org/viewvc/tapestry/tapestry5/trunk/tapestry-core/src/
    * main /java/org/apache/tapestry5/internal/transform/OnEventWorker.java?view=
-   * markup
+   * markup.
    * <p>
    * Returns the event name to match against, as specified in the annotation or
    * (if the annotation is not present) extracted from the name of the method.
    * "onActionFromFoo" or just "onAction".
+   * @param methodName method name
+   * @param annotation annotation
+   * @return String
    */
-  private String extractEventType(String methodName, OnEvent annotation) {
+  private String extractEventType(final String methodName,
+                                final OnEvent annotation) {
     if (annotation != null) {
       return annotation.value();
     }

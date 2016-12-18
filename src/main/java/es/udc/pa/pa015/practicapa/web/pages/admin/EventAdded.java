@@ -1,22 +1,42 @@
 package es.udc.pa.pa015.practicapa.web.pages.admin;
 
+/**
+ * Class for evenAdded page.
+ */
 public class EventAdded {
 
+  /** eventId. */
   private Long eventId;
 
-  public Long getEventId() {
+  /**
+   * Get event id.
+   * @return event id
+   */
+  public final Long getEventId() {
     return eventId;
   }
 
-  public void setEventId(Long accountId) {
-    this.eventId = accountId;
+  /**
+   * Set event id.
+   * @param accountIdParam account id
+   */
+  public final void setEventId(final Long accountIdParam) {
+    this.eventId = accountIdParam;
   }
 
-  Long onPassivate() {
+  /**
+   * onPassivate.
+   * @return eventId
+   */
+  final Long onPassivate() {
     return eventId;
   }
 
-  void onActivate(Long accountId) {
+  /**
+   * onActivate.
+   * @param accountId accountId
+   */
+  final void onActivate(final Long accountId) {
     this.eventId = accountId;
   }
 

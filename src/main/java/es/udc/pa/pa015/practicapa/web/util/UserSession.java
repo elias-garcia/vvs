@@ -1,33 +1,66 @@
 package es.udc.pa.pa015.practicapa.web.util;
 
+/**
+ * UserSession class.
+ */
 public class UserSession {
 
+  /** userProfileId. */
   private Long userProfileId;
+
+  /** firstName. */
   private String firstName;
+
+  /** indicates if it is admin. */
   private boolean admin;
 
-  public Long getUserProfileId() {
+  /**
+   * Get userProfileId.
+   * @return userProfileId
+   */
+  public final Long getUserProfileId() {
     return userProfileId;
   }
 
-  public void setUserProfileId(Long userProfileId) {
-    this.userProfileId = userProfileId;
+  /**
+   * Set userProfileId.
+   * @param userProfileIdParam user id
+   */
+  public final void setUserProfileId(final Long userProfileIdParam) {
+    this.userProfileId = userProfileIdParam;
   }
 
-  public String getFirstName() {
+  /**
+   * Get firstName.
+   * @return firstName
+   */
+  public final String getFirstName() {
     return firstName;
   }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
+  /**
+   * Set firstName.
+   * @param firstNameParam user's firstName
+   */
+  public final void setFirstName(final String firstNameParam) {
+    this.firstName = firstNameParam;
   }
 
-  public boolean getAdmin() {
+  /**
+   * Get if the user is admin.
+   * @return boolean
+   */
+  public final boolean getAdmin() {
     return admin;
   }
 
-  public void setAdmin(boolean admin) {
-    this.admin = admin;
+  /**
+   * Set if the user is admin.
+   * @param adminParam
+   *            Indicates if the user is admin
+   */
+  public final void setAdmin(final boolean adminParam) {
+    this.admin = adminParam;
   }
 
 }

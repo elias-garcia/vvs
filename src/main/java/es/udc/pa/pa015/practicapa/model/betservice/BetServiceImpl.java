@@ -22,12 +22,15 @@ import java.util.List;
 @Transactional
 public class BetServiceImpl implements BetService {
 
+  /** BetInfoDao. */
   @Autowired
   private BetInfoDao betInfoDao;
 
+  /** TypeOptionDao. */
   @Autowired
   private TypeOptionDao typeOptionDao;
 
+  /** UserProfileDao. */
   @Autowired
   private UserProfileDao userProfileDao;
 
@@ -43,7 +46,8 @@ public class BetServiceImpl implements BetService {
    * @throws InstanceNotFoundException
    *           It thrown out when the userId or typeOptionId don't exist
    */
-  public BetInfo createBet(Long userId, Long typeOptionId, double amount)
+  public final BetInfo createBet(final Long userId,
+                                 final Long typeOptionId, final double amount)
       throws InstanceNotFoundException {
 
     UserProfile currentUser = userProfileDao.find(userId);
@@ -70,7 +74,8 @@ public class BetServiceImpl implements BetService {
    *           It thrown out when the userId doesn't exist
    */
   @Transactional(readOnly = true)
-  public BetInfoBlock findBetsByUserId(Long userId, int startindex, int count)
+  public final BetInfoBlock findBetsByUserId(final Long userId,
+                                         final int startindex, final int count)
       throws InstanceNotFoundException {
 
     userProfileDao.find(userId);

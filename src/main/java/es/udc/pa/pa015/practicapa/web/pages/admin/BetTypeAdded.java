@@ -1,34 +1,64 @@
 package es.udc.pa.pa015.practicapa.web.pages.admin;
 
+/**
+ * Class of betTypeAdded page.
+ */
 public class BetTypeAdded {
 
+  /** event id. */
   private Long eventId;
 
+  /** betType id. */
   private Long betTypeId;
 
-  public Long getEventId() {
+  /**
+   * Get event id.
+   * @return event id
+   */
+  public final Long getEventId() {
     return eventId;
   }
 
-  public void setEventId(Long eventId) {
-    this.eventId = eventId;
+  /**
+   * Set event id.
+   * @param eventIdParam event id
+   */
+  public final void setEventId(final Long eventIdParam) {
+    this.eventId = eventIdParam;
   }
 
-  public Long getBetTypeId() {
+  /**
+   * Get betTypeId.
+   * @return betTypeId
+   */
+  public final Long getBetTypeId() {
     return betTypeId;
   }
 
-  public void setBetTypeId(Long betTypeId) {
-    this.betTypeId = betTypeId;
+  /**
+   * Set betTypeId.
+   * @param betTypeIdParam betTypeId
+   */
+  public final void setBetTypeId(final Long betTypeIdParam) {
+    this.betTypeId = betTypeIdParam;
   }
 
-  Object onPassivate() {
-    return new Object[] { eventId, betTypeId };
+  /**
+   * onPassivate.
+   * @return Object.
+   */
+  final Object onPassivate() {
+    return new Object[] {eventId, betTypeId };
   }
 
-  void onActivate(Long eventId, Long betId) {
-    this.eventId = eventId;
-    this.betTypeId = betId;
+  /**
+   * onActivate.
+   * @param eventIdParam eventId
+   * @param betIdParam betId
+   */
+  final void onActivate(final Long eventIdParam, final Long betIdParam) {
+    this.eventId = eventIdParam;
+    this.betTypeId = betIdParam;
   }
 
 }

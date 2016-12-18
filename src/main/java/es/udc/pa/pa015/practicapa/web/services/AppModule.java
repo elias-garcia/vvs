@@ -21,7 +21,7 @@ public class AppModule {
    * @param binder
    *          service binder
    */
-  public static void bind(ServiceBinder binder) {
+  public static final void bind(final ServiceBinder binder) {
 
     /* Bind filters. */
     binder.bind(SessionFilter.class);
@@ -35,8 +35,8 @@ public class AppModule {
    * @param configuration
    *          the mapped configuration
    */
-  public static void contributeApplicationDefaults(
-      MappedConfiguration<String, Object> configuration) {
+  public static final void contributeApplicationDefaults(
+      final MappedConfiguration<String, Object> configuration) {
 
     configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en,es,gl");
     configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER,
@@ -50,8 +50,8 @@ public class AppModule {
    * @param configuration
    *          component class transformer configuration
    */
-  public static void contributeComponentClassTransformWorker(
-      OrderedConfiguration<ComponentClassTransformWorker2> configuration) {
+  public static final void contributeComponentClassTransformWorker(
+    final OrderedConfiguration<ComponentClassTransformWorker2> configuration) {
 
     configuration.add("AuthenticationPolicy", new AuthenticationPolicyWorker());
 
@@ -64,9 +64,9 @@ public class AppModule {
    * @param sessionFilter
    *          session filter
    */
-  public static void contributeRequestHandler(
-      OrderedConfiguration<RequestFilter> configuration,
-      SessionFilter sessionFilter) {
+  public static final void contributeRequestHandler(
+      final OrderedConfiguration<RequestFilter> configuration,
+      final SessionFilter sessionFilter) {
 
     /* Add filters to the RequestHandler service. */
     configuration.add("SessionFilter", sessionFilter, "after:*");
@@ -76,10 +76,14 @@ public class AppModule {
   /**
    * Contributes "PageRenderAuthenticationFilter" filter which checks for access
    * rights of requests.
+   * @param configuration
+   *          ordered configuration
+   * @param pageRenderAuthenticationFilter
+   *          PageRenderRequestFilter
    */
-  public void contributePageRenderRequestHandler(
-      OrderedConfiguration<PageRenderRequestFilter> configuration,
-      PageRenderRequestFilter pageRenderAuthenticationFilter) {
+  public final void contributePageRenderRequestHandler(
+      final OrderedConfiguration<PageRenderRequestFilter> configuration,
+      final PageRenderRequestFilter pageRenderAuthenticationFilter) {
 
     /*
      * Add filters to the filters pipeline of the PageRender command of the
@@ -93,10 +97,14 @@ public class AppModule {
   /**
    * Contribute "PageRenderAuthenticationFilter" filter to determine if the
    * event can be processed and the user has enough rights to do so.
+   * @param configuration
+   *          ordered configuration
+   * @param componentEventAuthenticationFilter
+   *          ComponentEventRequestFilter
    */
-  public void contributeComponentEventRequestHandler(
-      OrderedConfiguration<ComponentEventRequestFilter> configuration,
-      ComponentEventRequestFilter componentEventAuthenticationFilter) {
+  public final void contributeComponentEventRequestHandler(
+      final OrderedConfiguration<ComponentEventRequestFilter> configuration,
+      final ComponentEventRequestFilter componentEventAuthenticationFilter) {
 
     /*
      * Add filters to the filters pipeline of the ComponentEvent command of the

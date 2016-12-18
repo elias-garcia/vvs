@@ -9,26 +9,38 @@ import java.util.List;
  */
 public class BetInfoBlock {
 
+  /** Bets. */
   private List<BetInfo> bets;
+
+  /** ExistMoreBets. */
   private boolean existMoreBets;
 
   /**
    * Constructor of the BetInfoBlock.
-   * @param bets
+   * @param betsParam
    *          List of bets
-   * @param existMoreBets
+   * @param existMoreBetsParam
    *          Indicates if there are more bets to list
    */
-  public BetInfoBlock(List<BetInfo> bets, boolean existMoreBets) {
-    this.bets = bets;
-    this.existMoreBets = existMoreBets;
+  public BetInfoBlock(final List<BetInfo> betsParam,
+                      final boolean existMoreBetsParam) {
+    this.bets = betsParam;
+    this.existMoreBets = existMoreBetsParam;
   }
 
-  public List<BetInfo> getBets() {
+  /**
+   * Get bets.
+   * @return list of bets
+   */
+  public final List<BetInfo> getBets() {
     return bets;
   }
 
-  public boolean isExistMoreBets() {
+  /**
+   * Indicates if exist more bets.
+   * @return boolean
+   */
+  public final boolean isExistMoreBets() {
     return existMoreBets;
   }
 }

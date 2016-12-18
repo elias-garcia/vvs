@@ -10,36 +10,48 @@ import org.apache.tapestry5.services.PageRenderRequestParameters;
 
 import java.io.IOException;
 
+/**
+ * Page Render Authentication Filter.
+ */
 public class PageRenderAuthenticationFilter implements PageRenderRequestFilter {
 
+  /** application State Manager. */
   private ApplicationStateManager applicationStateManager;
+
+  /** component Source. */
   private ComponentSource componentSource;
+
+  /** Meta Data Locator. */
   private MetaDataLocator locator;
 
   /**
    * Constructor of pageRenderAuthenticationFilter.
-   * @param applicationStateManager
+   * @param applicationStateManagerParam
    *          ApplicationStateManager
-   * @param componentSource
+   * @param componentSourceParam
    *          ComponentSource
-   * @param locator
+   * @param locatorParam
    *          MetaDataLocator
    */
   public PageRenderAuthenticationFilter(
-      ApplicationStateManager applicationStateManager,
-      ComponentSource componentSource, MetaDataLocator locator) {
+      final ApplicationStateManager applicationStateManagerParam,
+      final ComponentSource componentSourceParam,
+      final MetaDataLocator locatorParam) {
 
-    this.applicationStateManager = applicationStateManager;
-    this.componentSource = componentSource;
-    this.locator = locator;
+    this.applicationStateManager = applicationStateManagerParam;
+    this.componentSource = componentSourceParam;
+    this.locator = locatorParam;
 
   }
 
   /**
    * This method handle.
+   * @param parameters parameters
+   * @param handler PageRenderRequestHandler
+   * @throws IOException ioException
    */
-  public void handle(PageRenderRequestParameters parameters,
-      PageRenderRequestHandler handler) throws IOException {
+  public final void handle(final PageRenderRequestParameters parameters,
+      final PageRenderRequestHandler handler) throws IOException {
 
     PageRenderRequestParameters handlerParameters = parameters;
     String redirectPage = AuthenticationValidator.checkForPage(parameters
