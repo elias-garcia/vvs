@@ -23,7 +23,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.bettype.BetTypeDao;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
@@ -35,6 +34,7 @@ import es.udc.pa.pa015.practicapa.model.eventService.EventServiceImpl;
 import es.udc.pa.pa015.practicapa.model.eventService.NoAssignedTypeOptionsException;
 import es.udc.pa.pa015.practicapa.model.eventService.NullEventNameException;
 import es.udc.pa.pa015.practicapa.model.eventService.StartIndexOrCountException;
+import es.udc.pa.pa015.practicapa.model.eventService.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfoDao;
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;

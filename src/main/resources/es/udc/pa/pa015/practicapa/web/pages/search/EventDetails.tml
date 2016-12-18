@@ -16,7 +16,7 @@
 				<t:If t:test="!eventHasStarted">
 					<div class="text-center">
 						<h4>
-							<a href="#" t:type="PageLink" t:page="admin/addBetType"
+							<a id="addBetTypeButton" href="#" t:type="PageLink" t:page="admin/addBetType"
 					    		t:context="event.eventId"> ${message:link-addBetType}
 							</a>
 				    	</h4>

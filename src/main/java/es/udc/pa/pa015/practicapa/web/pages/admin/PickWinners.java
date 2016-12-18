@@ -1,8 +1,8 @@
 package es.udc.pa.pa015.practicapa.web.pages.admin;
 
-import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.eventService.EventService;
+import es.udc.pa.pa015.practicapa.model.eventService.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;
 import es.udc.pa.pa015.practicapa.model.typeoption.TypeOption;
 import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicy;

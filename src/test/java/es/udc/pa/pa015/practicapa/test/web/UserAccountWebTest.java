@@ -2,7 +2,6 @@ package es.udc.pa.pa015.practicapa.test.web;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,7 +15,7 @@ public class UserAccountWebTest {
 	private static String userLoginName = "user";
 	private static String userPassword = "demo";
 
-	@Test
+	// @Test
 	public void testLoginFirefox() throws InterruptedException {
 
 		/* Creamos una instancia del driver de Firefox */

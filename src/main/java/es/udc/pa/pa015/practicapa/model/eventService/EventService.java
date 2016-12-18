@@ -1,6 +1,5 @@
 package es.udc.pa.pa015.practicapa.model.eventService;
 
-import es.udc.pa.pa015.practicapa.model.betservice.TypeNotMultipleException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;

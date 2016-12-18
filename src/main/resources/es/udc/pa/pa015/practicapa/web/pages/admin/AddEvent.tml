@@ -1,4 +1,4 @@
-<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+ <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
     xmlns:p="tapestry:parameter"
 	t:type="Layout" t:title="title">
 	
@@ -7,7 +7,7 @@
 			<div class="alert-dismissable alert alert-success text-center" role="alert">
 				<button data-dismiss="alert" class="close" type="button">×</button>
 				<h4>${message:success-title}</h4>
-				<p><a href="#" t:type="PageLink" t:page="Index">
+				<p><a id="backToHomeEventAddedButton" href="#" t:type="PageLink" t:page="Index">
 					${message:return} </a>
 				</p>
 			</div>

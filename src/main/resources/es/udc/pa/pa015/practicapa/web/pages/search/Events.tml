@@ -19,7 +19,7 @@
 		<tbody>			
 			<tr t:type="Loop" t:source="events" t:value="eventinfo">
 				<td>
-			    	<a href="#" t:type="PageLink" t:page="search/eventdetails"
+			    	<a id="eventDetailsButton" href="#" t:type="PageLink" t:page="search/eventdetails"
 			    		t:context="eventinfo.eventId">
 			    		${eventinfo.eventName}
 			    	</a>
