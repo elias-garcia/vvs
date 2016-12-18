@@ -17,39 +17,54 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.Calendar;
 
+/**
+ * Class of eventDetails page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.ALL_USERS)
 public class EventDetails {
 
+  /** userSession. */
   @Property
   @SessionState(create = false)
   private UserSession userSession;
 
+  /** eventId. */
   @Property
   private Long eventId;
 
+  /** eventInfo. */
   @Property
   private EventInfo event;
 
+  /** Indicates if the event has started. */
   @Property
   private boolean eventHasStarted;
 
+  /** betType. */
   @Property
   private BetType betType;
 
+  /** typeOption. */
   @Property
   private TypeOption typeOption;
 
+  /** eventService. */
   @Inject
   private EventService eventService;
 
+  /** pickWinners. */
   @InjectPage
   private PickWinners pickWinners;
 
-  void onActivate(Long eventId) {
-    this.eventId = eventId;
+  /**
+   * onActivate.
+   * @param eventIdParam eventId
+   */
+  final void onActivate(final Long eventIdParam) {
+    this.eventId = eventIdParam;
 
     try {
-      event = eventService.findEvent(eventId);
+      event = eventService.findEvent(eventIdParam);
 
       Calendar now = Calendar.getInstance();
       if (event.getEventDate().before(now)) {
@@ -61,7 +76,11 @@ public class EventDetails {
     }
   }
 
-  Long onPassivate() {
+  /**
+   * onPassivate.
+   * @return eventId
+   */
+  final Long onPassivate() {
     return eventId;
   }
 

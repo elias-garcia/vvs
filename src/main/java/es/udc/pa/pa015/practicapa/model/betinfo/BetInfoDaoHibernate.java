@@ -16,16 +16,17 @@ public class BetInfoDaoHibernate extends GenericDaoHibernate<BetInfo, Long>
   /**
    * This method find a bet by an user id.
    * @param userId
-   *              user to search
+   *          user to search
    * @param startindex
-   *              number of first element to list
+   *          number of first element to list
    * @param count
-   *              number of elements to list
+   *          number of elements to list
    * @return BetInfo list
    */
   @SuppressWarnings("unchecked")
-  public List<BetInfo> findBetsByUserId(Long userId, int startindex,
-      int count) {
+  public final List<BetInfo> findBetsByUserId(final Long userId,
+      final int startindex,
+      final int count) {
 
     return getSession().createQuery("SELECT b " + "FROM BetInfo b "
         + "WHERE b.user.userProfileId = :userId " + "ORDER BY b.betDate DESC")

@@ -3,6 +3,9 @@ package es.udc.pa.pa015.practicapa.model.userprofile;
 import es.udc.pojo.modelutil.dao.GenericDao;
 import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 
+/**
+ * UserProfile dao.
+ */
 public interface UserProfileDao extends GenericDao<UserProfile, Long> {
 
   /**
@@ -10,7 +13,9 @@ public interface UserProfileDao extends GenericDao<UserProfile, Long> {
    * @param loginName
    *          the user identifier
    * @return the UserProfile
+   * @throws InstanceNotFoundException
+   *            thrown out when the loginName doesn't exist
    */
-  public UserProfile findByLoginName(String loginName)
+  UserProfile findByLoginName(String loginName)
       throws InstanceNotFoundException;
 }

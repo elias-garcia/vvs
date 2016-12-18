@@ -7,105 +7,178 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+/**
+ * UserProfile class.
+ */
 @Entity
 public class UserProfile {
 
+  /** userProfileId. */
   private Long userProfileId;
+
+  /** user loginName. */
   private String loginName;
+
+  /** user encrypted password. */
   private String encryptedPassword;
+
+  /** user firstName. */
   private String firstName;
+
+  /** user lastName. */
   private String lastName;
+
+  /** user email. */
   private String email;
 
+  /** Blank constructor. */
   public UserProfile() {
   }
 
   /**
    * UnerProfile constructor.
-   * @param loginName
+   * @param loginNameParam
    *          User's login name
-   * @param encryptedPassword
+   * @param encryptedPasswordParam
    *          User's encrypted password
-   * @param firstName
+   * @param firstNameParam
    *          User's first name
-   * @param lastName
+   * @param lastNameParam
    *          User's last name
-   * @param email
+   * @param emailParam
    *          User's email
    */
-  public UserProfile(String loginName, String encryptedPassword,
-      String firstName, String lastName, String email) {
+  public UserProfile(final String loginNameParam,
+      final String encryptedPasswordParam, final String firstNameParam,
+      final String lastNameParam, final String emailParam) {
 
     /**
      * NOTE: "userProfileId" *must* be left as "null" since its value is
      * automatically generated.
      */
 
-    this.loginName = loginName;
-    this.encryptedPassword = encryptedPassword;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
+    this.loginName = loginNameParam;
+    this.encryptedPassword = encryptedPasswordParam;
+    this.firstName = firstNameParam;
+    this.lastName = lastNameParam;
+    this.email = emailParam;
   }
 
+  /**
+   * Get userProfile id.
+   * @return userProfile id
+   */
   @Id
   @Column(name = "usrId")
-  @SequenceGenerator( // It only takes effect for
+  @SequenceGenerator(// It only takes effect for
       name = "UserProfileIdGenerator", // databases providing identifier
       sequenceName = "UserProfileSeq") // generators.
-  @GeneratedValue(strategy = GenerationType.AUTO, 
-                                generator = "UserProfileIdGenerator")
-  public Long getUserProfileId() {
+  @GeneratedValue(strategy = GenerationType.AUTO,
+                                    generator = "UserProfileIdGenerator")
+  public final Long getUserProfileId() {
     return userProfileId;
   }
 
-  public void setUserProfileId(Long userProfileId) {
-    this.userProfileId = userProfileId;
+  /**
+   * Set userProfileId.
+   * @param userProfileIdParam
+   *        userProfile id
+   */
+  public final void setUserProfileId(final Long userProfileIdParam) {
+    this.userProfileId = userProfileIdParam;
   }
 
+  /**
+   * Get user loginName.
+   * @return loginName
+   */
   public String getLoginName() {
     return loginName;
   }
 
-  public void setLoginName(String loginName) {
-    this.loginName = loginName;
+  /**
+   * Set user loginName.
+   * @param loginNameParam
+   *      user loginName
+   */
+  public void setLoginName(final String loginNameParam) {
+    this.loginName = loginNameParam;
   }
 
+  /**
+   * Get encrypted password.
+   * @return encrypted password
+   */
   @Column(name = "enPassword")
   public String getEncryptedPassword() {
     return encryptedPassword;
   }
 
-  public void setEncryptedPassword(String encryptedPassword) {
-    this.encryptedPassword = encryptedPassword;
+  /**
+   * Set encrypted password.
+   * @param encryptedPasswordParam
+   *            user encrypted password
+   */
+  public void setEncryptedPassword(final String encryptedPasswordParam) {
+    this.encryptedPassword = encryptedPasswordParam;
   }
 
+  /**
+   * Get first name.
+   * @return user firstName
+   */
   public String getFirstName() {
     return firstName;
   }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
+  /**
+   * Set user firstName.
+   * @param firstNameParam
+   *      user firstName
+   */
+  public void setFirstName(final String firstNameParam) {
+    this.firstName = firstNameParam;
   }
 
+  /**
+   * Get user lastName.
+   * @return user lastName
+   */
   public String getLastName() {
     return lastName;
   }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
+  /**
+   * Set user lastName.
+   * @param lastNameParam
+   *        user lastName
+   */
+  public void setLastName(final String lastNameParam) {
+    this.lastName = lastNameParam;
   }
 
+  /**
+   * Get user email.
+   * @return user email
+   */
   public String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  /**
+   * Set user email.
+   * @param emailParam
+   *        user email
+   */
+  public void setEmail(final String emailParam) {
+    this.email = emailParam;
   }
 
+  /**
+   * Transform user to string.
+   */
   @Override
-  public String toString() {
+  public final String toString() {
     return "UserProfile [userProfileId=" + userProfileId + ", loginName="
         + loginName + ", encryptedPassword=" + encryptedPassword
         + ", firstName=" + firstName + ", lastName=" + lastName + ", email="

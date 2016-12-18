@@ -10,18 +10,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * User service implementation.
+ */
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
+  /** UserProfileDao. */
   @Autowired
   private UserProfileDao userProfileDao;
 
   /**
-   * This method register an user.
+   * Method that register an user.
+   * @param loginName
+   *            User loginName to register.
+   * @param clearPassword
+   *            User clear password to register.
+   * @param userProfileDetails
+   *            UserProfilDetails to register.
+   * @return the userProfile registered
+   * @throws DuplicateInstanceException
+   *            Thrown out when the loginName already exists
    */
-  public UserProfile registerUser(String loginName, String clearPassword,
-      UserProfileDetails userProfileDetails) throws DuplicateInstanceException {
+  public final UserProfile registerUser(final String loginName,
+      final String clearPassword, final UserProfileDetails userProfileDetails)
+      throws DuplicateInstanceException {
 
     try {
       userProfileDao.findByLoginName(loginName);
@@ -41,11 +55,22 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   * This method is the responsible to login an user.
+   * Method that login an user.
+   * @param loginName
+   *            User loginName to login
+   * @param password
+   *            User password to login
+   * @param passwordIsEncrypted
+   *            Indicates if the password is encrypted
+   * @return UserProdile login
+   * @throws InstanceNotFoundException
+   *            The loginName doesn't exist
+   * @throws IncorrectPasswordException
+   *            The password passed isn't correct
    */
   @Transactional(readOnly = true)
-  public UserProfile login(String loginName, String password,
-      boolean passwordIsEncrypted) throws InstanceNotFoundException,
+  public final UserProfile login(final String loginName, final String password,
+      final boolean passwordIsEncrypted) throws InstanceNotFoundException,
       IncorrectPasswordException {
 
     UserProfile userProfile = userProfileDao.findByLoginName(loginName);
@@ -64,18 +89,33 @@ public class UserServiceImpl implements UserService {
 
   }
 
+  /**
+   * This method find an userProfile by an id passed.
+   * @param userProfileId
+   *          userProfile id
+   * @return userProfile found
+   * @throws InstanceNotFoundException
+   *          userProfile doesn't exist
+   */
   @Transactional(readOnly = true)
-  public UserProfile findUserProfile(Long userProfileId)
+  public final UserProfile findUserProfile(final Long userProfileId)
       throws InstanceNotFoundException {
 
     return userProfileDao.find(userProfileId);
   }
 
   /**
-   * This method is the responsible to update an user.
+   * This method update the user passed.
+   * @param userProfileId
+   *          userProfile id of the user to update
+   * @param userProfileDetails
+   *          userProfileDetails to update
+   * @throws InstanceNotFoundException
+   *          thrown out when the userProfil doesn't exists
    */
-  public void updateUserProfileDetails(Long userProfileId,
-      UserProfileDetails userProfileDetails) throws InstanceNotFoundException {
+  public final void updateUserProfileDetails(final Long userProfileId,
+      final UserProfileDetails userProfileDetails)
+      throws InstanceNotFoundException {
 
     UserProfile userProfile = userProfileDao.find(userProfileId);
     userProfile.setFirstName(userProfileDetails.getFirstName());
@@ -85,11 +125,21 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   * This method is the responsible to change the user's password.
+   * This method change the password of an user passed.
+   * @param userProfileId
+   *                userProfile id
+   * @param oldClearPassword
+   *                old clear password
+   * @param newClearPassword
+   *                new clear password
+   * @throws IncorrectPasswordException
+   *                thrown out when the password is incorrect
+   * @throws InstanceNotFoundException
+   *                thrown out when the user doesn't exist
    */
-  public void changePassword(Long userProfileId, String oldClearPassword,
-      String newClearPassword) throws IncorrectPasswordException,
-      InstanceNotFoundException {
+  public final void changePassword(final Long userProfileId,
+      final String oldClearPassword, final String newClearPassword)
+      throws IncorrectPasswordException, InstanceNotFoundException {
 
     UserProfile userProfile;
     userProfile = userProfileDao.find(userProfileId);
@@ -101,7 +151,8 @@ public class UserServiceImpl implements UserService {
       throw new IncorrectPasswordException(userProfile.getLoginName());
     }
 
-    userProfile.setEncryptedPassword(PasswordEncrypter.crypt(newClearPassword));
+    userProfile.setEncryptedPassword(
+                            PasswordEncrypter.crypt(newClearPassword));
 
   }
 

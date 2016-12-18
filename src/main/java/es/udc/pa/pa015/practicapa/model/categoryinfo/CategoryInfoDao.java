@@ -4,8 +4,15 @@ import es.udc.pojo.modelutil.dao.GenericDao;
 
 import java.util.List;
 
+/**
+ * CategoryInfo dao.
+ */
 public interface CategoryInfoDao extends GenericDao<CategoryInfo, Long> {
 
-  public List<CategoryInfo> findAllCategories();
+  /**
+   * Find all the categories.
+   * @return list of categories
+   */
+  List<CategoryInfo> findAllCategories();
 
 }

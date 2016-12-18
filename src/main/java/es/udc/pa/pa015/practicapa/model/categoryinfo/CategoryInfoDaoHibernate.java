@@ -6,15 +6,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * CategoryInfoDaoHibernate.
+ */
 @Repository("categoryInfoDao")
 public class CategoryInfoDaoHibernate extends
     GenericDaoHibernate<CategoryInfo, Long> implements CategoryInfoDao {
 
   /**
    * This method find all the categories.
+   * @return list of categories.
    */
   @SuppressWarnings("unchecked")
-  public List<CategoryInfo> findAllCategories() {
+  public final List<CategoryInfo> findAllCategories() {
 
     return getSession().createQuery("SELECT c " + "FROM CategoryInfo c "
         + "ORDER BY c.categoryName").list();

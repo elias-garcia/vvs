@@ -13,22 +13,29 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Cookies;
 
+/**
+ * Layout class.
+ */
 @Import(library = { "tapestry5/bootstrap/js/collapse.js",
-    "tapestry5/bootstrap/js/dropdown.js" }, 
+    "tapestry5/bootstrap/js/dropdown.js" },
     stylesheet = "tapestry5/bootstrap/css/bootstrap-theme.css")
 public class Layout {
 
+  /** Title. */
   @Property
   @Parameter(required = true, defaultPrefix = "message")
   private String title;
 
+  /** showTitleInBody. */
   @Parameter(defaultPrefix = "literal")
   private Boolean showTitleInBody;
 
+  /** userSession. */
   @Property
   @SessionState(create = false)
   private UserSession userSession;
 
+  /** cookies. */
   @Inject
   private Cookies cookies;
 
@@ -36,7 +43,7 @@ public class Layout {
    * This method gets if the show title is in body.
    * @return boolean
    */
-  public boolean getShowTitleInBody() {
+  public final boolean getShowTitleInBody() {
     if (showTitleInBody == null) {
       return true;
     } else {
@@ -44,8 +51,12 @@ public class Layout {
     }
   }
 
+  /**
+   * This method is for the action of logout.
+   * @return Index class
+   */
   @AuthenticationPolicy(AuthenticationPolicyType.AUTHENTICATED_USERS)
-  Object onActionFromLogout() {
+  final Object onActionFromLogout() {
     userSession = null;
     CookiesManager.removeCookies(cookies);
     return Index.class;

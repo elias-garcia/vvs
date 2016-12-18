@@ -18,48 +18,67 @@ import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+/**
+ * Class of the register page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.NON_AUTHENTICATED_USERS)
 public class Register {
 
+  /** loginName. */
   @Property
   private String loginName;
 
+  /** password. */
   @Property
   private String password;
 
+  /** retypePassword. */
   @Property
   private String retypePassword;
 
+  /** firstName. */
   @Property
   private String firstName;
 
+  /** lastName. */
   @Property
   private String lastName;
 
+  /** email. */
   @Property
   private String email;
 
+  /** userSession. */
   @SessionState(create = false)
   private UserSession userSession;
 
+  /** userService. */
   @Inject
   private UserService userService;
 
+  /** registrationForm. */
   @Component
   private Form registrationForm;
 
+  /** loginName TextField. */
   @Component(id = "loginName")
   private TextField loginNameField;
 
+  /** passwordField. */
   @Component(id = "password")
   private PasswordField passwordField;
 
+  /** Messages. */
   @Inject
   private Messages messages;
 
+  /** userProfileId. */
   private Long userProfileId;
 
-  void onValidateFromRegistrationForm() {
+  /**
+   * Method to validate the registration form.
+   */
+  final void onValidateFromRegistrationForm() {
 
     if (!registrationForm.isValid()) {
       return;
@@ -83,7 +102,11 @@ public class Register {
 
   }
 
-  Object onSuccess() {
+  /**
+   * Method when the result is success.
+   * @return index class
+   */
+  final Object onSuccess() {
 
     userSession = new UserSession();
     userSession.setUserProfileId(userProfileId);

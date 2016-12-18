@@ -7,18 +7,27 @@ import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.ComponentSource;
 import org.apache.tapestry5.services.MetaDataLocator;
 
+/**
+ * Authentication validator class.
+ */
 public class AuthenticationValidator {
 
+  /** Login page. */
   private static final String LOGIN_PAGE = "user/Login";
 
+  /** Index page. */
   private static final String INIT_PAGE = "Index";
 
+  /** Not Allowed page. */
   private static final String NOT_ALLOWED = "NotAllowed";
 
-  public static final String 
-                  PAGE_AUTHENTICATION_TYPE = "page-authentication-type";
-  public static final String 
-        EVENT_HANDLER_AUTHENTICATION_TYPE = "event-handler-authentication-type";
+  /** Authentication type page. */
+  public static final String
+                      PAGE_AUTHENTICATION_TYPE = "page-authentication-type";
+
+  /** Authentication type event handler. */
+  public static final String
+      EVENT_HANDLER_AUTHENTICATION_TYPE = "event-handler-authentication-type";
 
   /**
    * This method check for a page.
@@ -32,9 +41,9 @@ public class AuthenticationValidator {
    *          metaDataLocator
    * @return String with the page
    */
-  public static String checkForPage(String pageName,
-      ApplicationStateManager applicationStateManager,
-      ComponentSource componentSource, MetaDataLocator locator) {
+  public static String checkForPage(final String pageName,
+      final ApplicationStateManager applicationStateManager,
+      final ComponentSource componentSource, final MetaDataLocator locator) {
 
     String redirectPage = null;
     Component page = componentSource.getPage(pageName);
@@ -70,10 +79,10 @@ public class AuthenticationValidator {
    *          MetaDataLocator
    * @return String with the page
    */
-  public static String checkForComponentEvent(String pageName,
-      String componentId, String eventId, String eventType,
-      ApplicationStateManager applicationStateManager,
-      ComponentSource componentSource, MetaDataLocator locator) {
+  public static String checkForComponentEvent(final String pageName,
+      final String componentId, final String eventId, final String eventType,
+      final ApplicationStateManager applicationStateManager,
+      final ComponentSource componentSource, final MetaDataLocator locator) {
 
     String redirectPage = null;
     String authenticationPolicyMeta = EVENT_HANDLER_AUTHENTICATION_TYPE + "-"
@@ -109,8 +118,8 @@ public class AuthenticationValidator {
    *          Authentication state manager
    * @return string
    */
-  public static String check(AuthenticationPolicy policy,
-      ApplicationStateManager applicationStateManager) {
+  public static String check(final AuthenticationPolicy policy,
+      final ApplicationStateManager applicationStateManager) {
 
     if (policy != null) {
       return check(policy.value(), applicationStateManager);
@@ -128,8 +137,8 @@ public class AuthenticationValidator {
    *          Application state manager
    * @return string
    */
-  public static String check(AuthenticationPolicyType policyType,
-      ApplicationStateManager applicationStateManager) {
+  public static String check(final AuthenticationPolicyType policyType,
+      final ApplicationStateManager applicationStateManager) {
     String redirectPage = null;
 
     boolean userAuthenticated = applicationStateManager.exists(

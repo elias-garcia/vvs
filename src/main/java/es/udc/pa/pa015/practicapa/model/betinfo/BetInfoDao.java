@@ -19,5 +19,5 @@ public interface BetInfoDao extends GenericDao<BetInfo, Long> {
    *          Number of elements
    * @return List of betInfo
    */
-  public List<BetInfo> findBetsByUserId(Long userId, int startindex, int count);
+  List<BetInfo> findBetsByUserId(Long userId, int startindex, int count);
 }

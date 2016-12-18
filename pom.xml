@@ -203,6 +203,13 @@
 			  <version>6.8</version>
 			  <scope>test</scope>
 		 </dependency>
+         <!-- QuickCheck -->
+        <dependency>
+            <groupId>net.java.quickcheck</groupId>
+            <artifactId>quickcheck</artifactId>
+            <version>0.6</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 	<build>

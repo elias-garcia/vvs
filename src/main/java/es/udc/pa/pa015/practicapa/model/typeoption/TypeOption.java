@@ -14,30 +14,46 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+/**
+ * TypeOption class.
+ */
 @Entity
 public class TypeOption {
 
+  /** Option id. */
   private Long optionId;
+
+  /** Option odd. */
   private double odd;
+
+  /** Option result. */
   private String result;
+
+  /** Indicates if option is winner. */
   private Boolean isWinner;
+
+  /** Version. */
   private Long version;
+
+  /** betType associated. */
   private BetType type;
 
+  /** Blank constructor. */
   public TypeOption() {
 
   }
 
   /**
    * TypeOption constructor.
-   * @param odd
+   * @param oddParam
    *          Indicates if it is odd
-   * @param result
+   * @param resultParam
    *          The string with the result
-   * @param type
+   * @param typeParam
    *          The bet type associated
    */
-  public TypeOption(double odd, String result, BetType type) {
+  public TypeOption(final double oddParam, final String resultParam,
+      final BetType typeParam) {
 
     /**
      * NOTE: "optionId" *must* be left as "null" since its value is
@@ -45,71 +61,128 @@ public class TypeOption {
      * option is not winner or looser.
      */
 
-    this.odd = odd;
-    this.result = result;
-    this.type = type;
+    this.odd = oddParam;
+    this.result = resultParam;
+    this.type = typeParam;
   }
 
+  /**
+   * Get option id.
+   * @return option id
+   */
   @Id
-  @SequenceGenerator( // It only takes effect for
+  @SequenceGenerator(// It only takes effect for
       name = "BetOptionIdGenerator", // databases providing identifier
       sequenceName = "BetOptionSeq") // generators.
-  @GeneratedValue(strategy = GenerationType.AUTO, 
-                                  generator = "BetOptionIdGenerator")
-  public Long getOptionId() {
+  @GeneratedValue(strategy = GenerationType.AUTO,
+                                    generator = "BetOptionIdGenerator")
+  public final Long getOptionId() {
     return optionId;
   }
 
-  public void setOptionId(Long optionId) {
-    this.optionId = optionId;
+  /**
+   * Set option id.
+   * @param optionIdParam
+   *              option id
+   */
+  public final void setOptionId(final Long optionIdParam) {
+    this.optionId = optionIdParam;
   }
 
+  /**
+   * Get option odd.
+   * @return option odd
+   */
   public double getOdd() {
     return odd;
   }
 
-  public void setOdd(double odd) {
-    this.odd = odd;
+  /**
+   * Set option odd.
+   * @param oddParam
+   *          option odd
+   */
+  public void setOdd(final double oddParam) {
+    this.odd = oddParam;
   }
 
+  /**
+   * Get option result.
+   * @return option result
+   */
   public String getResult() {
     return result;
   }
 
-  public void setResult(String result) {
-    this.result = result;
+  /**
+   * Set option result.
+   * @param resultParam
+   *          option result
+   */
+  public void setResult(final String resultParam) {
+    this.result = resultParam;
   }
 
+  /**
+   * Get if it is winner.
+   * @return boolean
+   */
   @Type(type = "org.hibernate.type.BooleanType")
   public Boolean getIsWinner() {
     return isWinner;
   }
 
-  public void setIsWinner(Boolean isWinner) {
-    this.isWinner = isWinner;
+  /**
+   * Set if it is winner.
+   * @param isWinnerParam
+   *            indicates if it is winner
+   */
+  public void setIsWinner(final Boolean isWinnerParam) {
+    this.isWinner = isWinnerParam;
   }
 
+  /**
+   * Get the version.
+   * @return version
+   */
   @Version
   public Long getVersion() {
     return version;
   }
 
-  public void setVersion(Long version) {
-    this.version = version;
+  /**
+   * Set the version.
+   * @param versionParam
+   *              version
+   */
+  public void setVersion(final Long versionParam) {
+    this.version = versionParam;
   }
 
+  /**
+   * Get betType associated.
+   * @return betType
+   */
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "typeId")
   public BetType getType() {
     return type;
   }
 
-  public void setType(BetType type) {
-    this.type = type;
+  /**
+   * Set betType associated.
+   * @param typeParam
+   *            betType
+   */
+  public void setType(final BetType typeParam) {
+    this.type = typeParam;
   }
 
+  /**
+   * Transform option to string.
+   */
   @Override
-  public String toString() {
+  public final String toString() {
     return "TypeOption [optionId=" + optionId + ", odd=" + odd + ", result="
         + result + ", isWinner=" + isWinner + ", type=" + type.getTypeId()
         + "]";

@@ -21,43 +21,64 @@ import java.text.NumberFormat;
 
 import java.util.Locale;
 
+/**
+ * Class of betHistory page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.NON_ADMIN_AUTHENTICATED_USERS)
 public class BetHistory {
 
+  /** Bets per page. */
   private static final int BETS_PER_PAGE = 10;
 
+  /** Number of first element in the list. */
   private int startIndex = 0;
 
+  /** userSession. */
   @Property
   @SessionState(create = false)
   private UserSession userSession;
 
+  /** userService. */
   @Inject
   private UserService userService;
 
+  /** betInfoBlock. */
   @Property
   private BetInfoBlock betInfoBlock;
 
+  /** betInfo. */
   @Property
   private BetInfo betInfo;
 
+  /** betType. */
   @Property
   private BetType betType;
 
+  /** typeOption. */
   @Property
   private TypeOption typeOption;
 
+  /** betService. */
   @Inject
   private BetService betService;
 
+  /** Locale. */
   @Inject
   private Locale locale;
 
-  public DateFormat getDateFormat() {
+  /**
+   * Get dateFormat.
+   * @return dateFormat
+   */
+  public final DateFormat getDateFormat() {
     return DateFormat.getDateInstance(DateFormat.SHORT, locale);
   }
 
-  public DateFormat getTimeFormat() {
+  /**
+   * Get timeFormat.
+   * @return timeFormat
+   */
+  public final DateFormat getTimeFormat() {
     return DateFormat.getTimeInstance(DateFormat.SHORT, locale);
   }
 
@@ -65,17 +86,21 @@ public class BetHistory {
    * This method get the previous link context.
    * @return Object
    */
-  public Object[] getPreviousLinkContext() {
+  public final Object[] getPreviousLinkContext() {
 
     if (startIndex - BETS_PER_PAGE >= 0) {
-      return new Object[] { startIndex - BETS_PER_PAGE };
+      return new Object[] {startIndex - BETS_PER_PAGE };
     } else {
       return null;
     }
 
   }
 
-  public Format getFormat() {
+  /**
+   * Get format.
+   * @return numberFormat
+   */
+  public final Format getFormat() {
     return NumberFormat.getInstance(locale);
   }
 
@@ -83,26 +108,41 @@ public class BetHistory {
    * This method get the next link context.
    * @return Object
    */
-  public Object[] getNextLinkContext() {
+  public final Object[] getNextLinkContext() {
 
     if (betInfoBlock.isExistMoreBets()) {
-      return new Object[] { startIndex + BETS_PER_PAGE };
+      return new Object[] {startIndex + BETS_PER_PAGE };
     } else {
       return null;
     }
 
   }
 
-  public Double getGain() {
+  /**
+   * Get gain.
+   * @return bet gain
+   */
+  public final Double getGain() {
     return betInfo.getAmount() * betInfo.getOption().getOdd();
   }
 
-  Object[] onPassivate() {
-    return new Object[] { startIndex };
+  /**
+   * onPassivate.
+   * @return Object
+   */
+  final Object[] onPassivate() {
+    return new Object[] {startIndex };
   }
 
-  void onActivate(int startIndex) throws InstanceNotFoundException {
-    this.startIndex = startIndex;
+  /**
+   * onActivate.
+   * @param startIndexParam startIndex
+   * @throws InstanceNotFoundException
+   *                       thrown out when the bet doesn't exist
+   */
+  final void onActivate(final int startIndexParam)
+                              throws InstanceNotFoundException {
+    this.startIndex = startIndexParam;
     betInfoBlock = betService.findBetsByUserId(userSession.getUserProfileId(),
         startIndex, BETS_PER_PAGE);
   }

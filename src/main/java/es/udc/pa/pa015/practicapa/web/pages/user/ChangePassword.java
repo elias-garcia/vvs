@@ -17,34 +17,51 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Cookies;
 
+/**
+ * Class of the changePassword page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.AUTHENTICATED_USERS)
 public class ChangePassword {
 
+  /** oldPassword. */
   @Property
   private String oldPassword;
 
+  /** newPassword. */
   @Property
   private String newPassword;
 
+  /** retypeNewPassword. */
   @Property
   private String retypeNewPassword;
 
+  /** userSession. */
   @SessionState(create = false)
   private UserSession userSession;
 
+  /** changePasswordForm. */
   @Component
   private Form changePasswordForm;
 
+  /** cookies. */
   @Inject
   private Cookies cookies;
 
+  /** Messages. */
   @Inject
   private Messages messages;
 
+  /** userService. */
   @Inject
   private UserService userService;
 
-  void onValidateFromChangePasswordForm() throws InstanceNotFoundException {
+  /**
+   * Validate the changePasswordForm.
+   * @throws InstanceNotFoundException
+   *                  Thrown out when the user doesn't exist
+   */
+  final void onValidateFromChangePasswordForm()
+                                          throws InstanceNotFoundException {
 
     if (!changePasswordForm.isValid()) {
       return;
@@ -65,7 +82,11 @@ public class ChangePassword {
 
   }
 
-  Object onSuccess() {
+  /**
+   * Method when the result is success.
+   * @return index class
+   */
+  final Object onSuccess() {
 
     CookiesManager.removeCookies(cookies);
     return Index.class;

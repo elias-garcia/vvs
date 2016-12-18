@@ -25,6 +25,7 @@ import es.udc.pa.pa015.practicapa.model.userprofile.UserProfile;
 @BatchSize(size = 10)
 public class BetInfo {
 
+  /** The bet id. */
 	private Long betId;
 	private Calendar betDate;
 	private double amount;
@@ -63,6 +64,10 @@ public class BetInfo {
 		this.option = option;
 	}
 
+  /**
+   * Get the bet id.
+   * @return bet id
+   */
 	@Id
 	@SequenceGenerator(// It only takes effect for
 			name = "BetInfoIdGenerator", // databases providing identifier
@@ -76,6 +81,10 @@ public class BetInfo {
 		this.betId = betId;
 	}
 
+  /**
+   * Get bet date.
+   * @return bet date
+   */
 	@Temporal(TemporalType.TIMESTAMP)
 	public Calendar getBetDate() {
 		return betDate;
@@ -85,6 +94,10 @@ public class BetInfo {
 		this.betDate = betDate;
 	}
 
+  /**
+   * Get bet amount.
+   * @return bet amount
+   */
 	public double getAmount() {
 		return amount;
 	}
@@ -93,6 +106,10 @@ public class BetInfo {
 		this.amount = amount;
 	}
 
+  /**
+   * Get bet user.
+   * @return bet user
+   */
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	public UserProfile getUser() {
@@ -103,6 +120,10 @@ public class BetInfo {
 		this.user = user;
 	}
 
+  /**
+   * Get bet option.
+   * @return bet option
+   */
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "optionId")
 	public TypeOption getOption() {

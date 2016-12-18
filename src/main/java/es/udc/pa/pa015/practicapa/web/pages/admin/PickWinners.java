@@ -25,55 +25,76 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Class of pickwinners page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.ADMIN_USER)
 public class PickWinners {
 
+  /** stringValueEncoder. */
   @Property
-  private final StringValueEncoder 
-                  stringValueEncoder = new StringValueEncoder();
+  private final
+            StringValueEncoder stringValueEncoder = new StringValueEncoder();
 
+  /** eventId. */
   @Property
   private Long eventId;
 
+  /** betTypeId. */
   @Property
   private Long betTypeId;
 
+  /** typeOptionModel. */
   @Property
   private String typeOptionsModel;
 
+  /** pickedWinners. */
   @Property
   private List<String> pickedWinners;
 
+  /** indicates if it is a showzone. */
   @Property
   private boolean showZone = false;
 
+  /** pickWinnersForm. */
   @Component
   private Form pickWinnersForm;
 
+  /** winnersChecklist. */
   @Component
   private Checklist winnersChecklist;
 
+  /** Messages. */
   @Inject
   private Messages messages;
 
+  /** Request. */
   @Inject
   private Request request;
 
+  /** pickedWinnersZone. */
   @InjectComponent
   private Zone pickedWinnersZone;
 
+  /** formZone. */
   @InjectComponent
   private Zone formZone;
 
+  /** AjaxResponseRenderer. */
   @Inject
   private AjaxResponseRenderer ajaxResponseRenderer;
 
+  /** eventService. */
   @Inject
-  EventService eventService;
+  private EventService eventService;
 
+  /** typeOptions. */
   private Set<TypeOption> typeOptions;
 
-  void onValidateFromPickWinnersForm() {
+  /**
+   * Method to validate the pickWinnersForm.
+   */
+  final void onValidateFromPickWinnersForm() {
     List<Long> optionsIds = new ArrayList<Long>();
 
     for (TypeOption tempOption : typeOptions) {
@@ -93,26 +114,41 @@ public class PickWinners {
     }
   }
 
-  void onSuccess() {
+  /**
+   * Method when the result is success.
+   */
+  final void onSuccess() {
     if (request.isXHR()) {
       showZone = true;
       ajaxResponseRenderer.addRender(formZone).addRender(pickedWinnersZone);
     }
   }
 
-  void onFailure() {
+  /**
+   * Method when the result is failure.
+   */
+  final void onFailure() {
     if (request.isXHR()) {
       ajaxResponseRenderer.addRender(formZone);
     }
   }
 
-  Object onPassivate() {
-    return new Object[] { eventId, betTypeId };
+  /**
+   * onPassivate.
+   * @return Object
+   */
+  final Object onPassivate() {
+    return new Object[] {eventId, betTypeId };
   }
 
-  void onActivate(Long eventId, Long betTypeId) {
-    this.eventId = eventId;
-    this.betTypeId = betTypeId;
+  /**
+   * onActivate.
+   * @param eventIdParam eventId
+   * @param betTypeIdParam typeId
+   */
+  final void onActivate(final Long eventIdParam, final Long betTypeIdParam) {
+    this.eventId = eventIdParam;
+    this.betTypeId = betTypeIdParam;
 
     try {
       EventInfo event = eventService.findEvent(eventId);

@@ -2,7 +2,10 @@ package es.udc.pa.pa015.practicapa.model.userservice.util;
 
 import java.util.Random;
 
-public class PasswordEncrypter {
+/**
+ * Password encrypter class.
+ */
+public final class PasswordEncrypter {
   /*
    * "jcrypt" only considers the first 8 characters of the clear text, and
    * generates an encrypted text that is always 13 characters in length. The
@@ -22,14 +25,24 @@ public class PasswordEncrypter {
    * cookie (see javax.servlet.http.Cookie).
    */
 
+  /** ascii code. */
   private static final int A_ASCII_CODE = 65;
+
+  /** ascii code. */
   private static final int Z_ASCII_CODE = 90;
+
+  /** number of letters. */
   private static final int NUMBER_OF_LETTERS = Z_ASCII_CODE - A_ASCII_CODE + 1;
 
+  /**Blank constructor. */
   private PasswordEncrypter() {
   }
 
-  private static final String generateRandomSalt() {
+  /**
+   * Method that general a random salt.
+   * @return string
+   */
+  private static String generateRandomSalt() {
 
     Random randomGenerator = new Random();
     byte[] saltAsByteArray = new byte[2];
@@ -51,7 +64,7 @@ public class PasswordEncrypter {
    *          The password to encrypt
    * @return The password encrypted
    */
-  public static final String crypt(String clearPassword) {
+  public static String crypt(final String clearPassword) {
 
     String salt = generateRandomSalt();
 
@@ -67,8 +80,8 @@ public class PasswordEncrypter {
    *          The encrypted password
    * @return boolean
    */
-  public static final boolean isClearPasswordCorrect(String clearPassword,
-      String encryptedPassword) {
+  public static boolean isClearPasswordCorrect(final String clearPassword,
+      final String encryptedPassword) {
 
     String salt = encryptedPassword.substring(0, 2);
     String encryptedClearPassword = jcrypt.crypt(salt, clearPassword);

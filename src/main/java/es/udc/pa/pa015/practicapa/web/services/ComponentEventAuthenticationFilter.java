@@ -12,42 +12,56 @@ import org.apache.tapestry5.services.PageRenderRequestParameters;
 
 import java.io.IOException;
 
+/**
+ * Component Event Authentication Filter.
+ */
 public class ComponentEventAuthenticationFilter implements
     ComponentEventRequestFilter {
 
+  /** application State Manager. */
   private ApplicationStateManager applicationStateManager;
+
+  /** component Source. */
   private ComponentSource componentSource;
+
+  /** MetaDataLocator. */
   private MetaDataLocator locator;
+
+  /** page Render Request Handler. */
   private PageRenderRequestHandler pageRenderRequestHandler;
 
   /**
    * Constructor of componentEventAuthenticationFilter.
-   * @param applicationStateManager
+   * @param applicationStateManagerParam
    *          AplicationStateManager
-   * @param componentSource
+   * @param componentSourceParam
    *          ComponentSource
-   * @param locator
+   * @param locatorParam
    *          MetaDataLocator
-   * @param pageRenderRequestHandler
+   * @param pageRenderRequestHandlerParam
    *          PageRenderRequestHandler
    */
   public ComponentEventAuthenticationFilter(
-      ApplicationStateManager applicationStateManager,
-      ComponentSource componentSource, MetaDataLocator locator,
-      PageRenderRequestHandler pageRenderRequestHandler) {
+      final ApplicationStateManager applicationStateManagerParam,
+      final ComponentSource componentSourceParam,
+      final MetaDataLocator locatorParam,
+      final PageRenderRequestHandler pageRenderRequestHandlerParam) {
 
-    this.applicationStateManager = applicationStateManager;
-    this.componentSource = componentSource;
-    this.locator = locator;
-    this.pageRenderRequestHandler = pageRenderRequestHandler;
+    this.applicationStateManager = applicationStateManagerParam;
+    this.componentSource = componentSourceParam;
+    this.locator = locatorParam;
+    this.pageRenderRequestHandler = pageRenderRequestHandlerParam;
 
   }
 
   /**
    * This method handle.
+   * @param parameters parameters
+   * @param handler ComponentEventRequestHandler
+   * @throws IOException ioException
    */
-  public void handle(ComponentEventRequestParameters parameters,
-      ComponentEventRequestHandler handler) throws IOException {
+  public final void handle(final ComponentEventRequestParameters parameters,
+      final ComponentEventRequestHandler handler) throws IOException {
 
     ComponentEventRequestParameters handlerParameters = parameters;
     String redirectPage = AuthenticationValidator.checkForPage(parameters

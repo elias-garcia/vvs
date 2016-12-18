@@ -20,7 +20,7 @@ public interface BetService {
    * @throws InstanceNotFoundException
    *           It thrown out when the userId or typeOptionId don't exist
    */
-  public BetInfo createBet(Long userId, Long typeOptionId, double amount)
+  BetInfo createBet(Long userId, Long typeOptionId, double amount)
       throws InstanceNotFoundException;
 
   /**
@@ -35,7 +35,7 @@ public interface BetService {
    * @throws InstanceNotFoundException
    *           It thrown out when the userId doesn't exist
    */
-  public BetInfoBlock findBetsByUserId(Long userId, int startindex, int count)
+  BetInfoBlock findBetsByUserId(Long userId, int startindex, int count)
       throws InstanceNotFoundException;
 
 }

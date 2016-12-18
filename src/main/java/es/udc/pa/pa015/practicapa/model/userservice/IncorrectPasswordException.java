@@ -1,16 +1,29 @@
 package es.udc.pa.pa015.practicapa.model.userservice;
 
+/**
+ * Exception that thrown out when the password isn't correct.
+ */
 @SuppressWarnings("serial")
 public class IncorrectPasswordException extends Exception {
 
+  /** LoginName. */
   private String loginName;
 
-  public IncorrectPasswordException(String loginName) {
-    super("Incorrect password exception => loginName = " + loginName);
-    this.loginName = loginName;
+  /**
+   * Exception constructor.
+   * @param loginNameParam
+   *            loginName
+   */
+  public IncorrectPasswordException(final String loginNameParam) {
+    super("Incorrect password exception => loginName = " + loginNameParam);
+    this.loginName = loginNameParam;
   }
 
-  public String getLoginName() {
+  /**
+   * Get loginName.
+   * @return loginName
+   */
+  public final String getLoginName() {
     return loginName;
   }
 

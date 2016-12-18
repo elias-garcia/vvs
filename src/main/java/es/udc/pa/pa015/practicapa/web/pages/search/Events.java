@@ -17,64 +17,112 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Class of events page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.ALL_USERS)
 public class Events {
 
+  /** Event_per_page. */
   private static final int EVENTS_PER_PAGE = 10;
 
+  /** userSession. */
   @Property
   @SessionState(create = false)
   private UserSession userSession;
 
+  /** keyWords. */
   private String keywords;
 
+  /** CategoryId. */
   private Long categoryId;
 
+  /** Number of first element in the list. */
   private int startIndex = 0;
 
+  /** eventInfo. */
   private EventInfo eventInfo;
 
+  /** eventInfoBlock. */
   private EventInfoBlock eventInfoBlock;
 
+  /** eventService. */
   @Inject
   private EventService eventService;
 
+  /** Locale. */
   @Inject
   private Locale locale;
 
-  public String getKeywords() {
+  /**
+   * Get keywords.
+   * @return keywords
+   */
+  public final String getKeywords() {
     return keywords;
   }
 
-  public void setKeywords(String keywords) {
-    this.keywords = keywords;
+  /**
+   * Set keywords.
+   * @param keywordsParam keywords
+   */
+  public final void setKeywords(final String keywordsParam) {
+    this.keywords = keywordsParam;
   }
 
-  public Long getCategoryId() {
+  /**
+   * Get category id.
+   * @return category id
+   */
+  public final Long getCategoryId() {
     return categoryId;
   }
 
-  public void setCategoryId(Long categoryId) {
-    this.categoryId = categoryId;
+  /**
+   * Set categoryId.
+   * @param categoryIdParam categoryId
+   */
+  public final void setCategoryId(final Long categoryIdParam) {
+    this.categoryId = categoryIdParam;
   }
 
-  public List<EventInfo> getEvents() {
+  /**
+   * Get events.
+   * @return list of eventInfo
+   */
+  public final List<EventInfo> getEvents() {
     return eventInfoBlock.getEvents();
   }
 
-  public EventInfo getEventInfo() {
+  /**
+   * Get event info.
+   * @return eventInfo
+   */
+  public final EventInfo getEventInfo() {
     return eventInfo;
   }
 
-  public void setEventInfo(EventInfo event) {
-    this.eventInfo = event;
+  /**
+   * Set event info.
+   * @param eventParam evenInfo
+   */
+  public final void setEventInfo(final EventInfo eventParam) {
+    this.eventInfo = eventParam;
   }
 
-  public DateFormat getDateFormat() {
+  /**
+   * Get dateFormat.
+   * @return dateFormat
+   */
+  public final DateFormat getDateFormat() {
     return DateFormat.getDateInstance(DateFormat.SHORT, locale);
   }
 
-  public DateFormat getTimeFormat() {
+  /**
+   * Get timeFormat.
+   * @return timeFormat
+   */
+  public final DateFormat getTimeFormat() {
     return DateFormat.getTimeInstance(DateFormat.SHORT, locale);
   }
 
@@ -82,10 +130,10 @@ public class Events {
    * This method get the previous link context.
    * @return Object
    */
-  public Object[] getPreviousLinkContext() {
+  public final Object[] getPreviousLinkContext() {
 
     if (startIndex - EVENTS_PER_PAGE >= 0) {
-      return new Object[] { keywords, categoryId, startIndex
+      return new Object[] {keywords, categoryId, startIndex
           - EVENTS_PER_PAGE };
     } else {
       return null;
@@ -96,25 +144,40 @@ public class Events {
    * This method get the next link.
    * @return Object
    */
-  public Object[] getNextLinkContext() {
+  public final Object[] getNextLinkContext() {
 
     if (eventInfoBlock.getExistMoreEvents()) {
-      return new Object[] { keywords, categoryId, startIndex
+      return new Object[] {keywords, categoryId, startIndex
           + EVENTS_PER_PAGE };
     } else {
       return null;
     }
   }
 
-  Object[] onPassivate() {
-    return new Object[] { keywords, categoryId, startIndex };
+  /**
+   * onPassivate.
+   * @return Object
+   */
+  final Object[] onPassivate() {
+    return new Object[] {keywords, categoryId, startIndex };
   }
 
-  void onActivate(String keywords, Long categoryId, int startIndex)
-      throws InstanceNotFoundException, StartIndexOrCountException {
-    this.keywords = keywords;
-    this.categoryId = categoryId;
-    this.startIndex = startIndex;
+  /**
+   * onActivate.
+   * @param keywordsParam keywords
+   * @param categoryIdParam category id
+   * @param startIndexParam first element of the list
+   * @throws InstanceNotFoundException
+   *                  thrown out when the category doesn't exist
+   * @throws StartIndexOrCountException
+   *                  thrown out when startindex or count are not corrects
+   */
+  final void onActivate(final String keywordsParam, final Long categoryIdParam,
+              final int startIndexParam) throws InstanceNotFoundException,
+              StartIndexOrCountException {
+    this.keywords = keywordsParam;
+    this.categoryId = categoryIdParam;
+    this.startIndex = startIndexParam;
 
     if (userSession == null || !userSession.getAdmin()) {
       eventInfoBlock = eventService.findEvents(keywords, categoryId, false,

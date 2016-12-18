@@ -13,28 +13,40 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
 
+/**
+ * Class of the findEvents page.
+ */
 @AuthenticationPolicy(AuthenticationPolicyType.ALL_USERS)
 public class FindEvents {
 
+  /** keyWords. */
   @Property
   private String keywords;
 
+  /** category id. */
   @Property
   private Long categoryId;
 
+  /** categories. */
   @Property
   private String categories;
 
+  /** findEventsForm. */
   @Component
   private Form findEventsForm;
 
+  /** eventService. */
   @Inject
   private EventService eventService;
 
+  /** events. */
   @InjectPage
   private Events events;
 
-  void onPrepareForRender() {
+  /**
+   * on Prepare for Render.
+   */
+  final void onPrepareForRender() {
     List<CategoryInfo> tempCategories = eventService.findAllCategories();
 
     categories = "-1=--- TODAS LAS CATEGORÍAS ---";
@@ -50,13 +62,20 @@ public class FindEvents {
     }
   }
 
-  void onValidateFromFindEventsForm() {
+  /**
+   * Method for validate findEventsForm.
+   */
+  final void onValidateFromFindEventsForm() {
     if (!findEventsForm.isValid()) {
       return;
     }
   }
 
-  Object onSuccess() {
+  /**
+   * Method when the result is success.
+   * @return events
+   */
+  final Object onSuccess() {
     events.setKeywords(keywords);
     events.setCategoryId(categoryId);
     return events;

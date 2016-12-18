@@ -5,12 +5,15 @@ package es.udc.pa.pa015.practicapa.model.userservice.util;
  * Young (eay@psych.uq.oz.au) of the UNIX crypt command.
  */
 public final class jcrypt {
+  /** Blank constructor. */
   private jcrypt() {
   }
 
+  /** iterations. */
   private static final int ITERATIONS = 16;
 
-  private static final int con_salt[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  /** con_salt. */
+  private static final int con_salt[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -23,10 +26,12 @@ public final class jcrypt {
       0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x00, 0x00, 0x00,
       0x00, 0x00, };
 
-  private static final boolean shifts2[] = { false, false, true, true, true,
+  /** shifts. */
+  private static final boolean shifts2[] = {false, false, true, true, true,
       true, true, true, false, true, true, true, true, true, true, false };
 
-  private static final int skb[][] = { {
+  /** skb. */
+  private static final int skb[][] = {{
       /* for C bits (numbered as per FIPS 46) 1 2 3 4 5 6 */
       0x00000000, 0x00000010, 0x20000000, 0x20000010, 0x00010000, 0x00010010,
       0x20010000, 0x20010010, 0x00000800, 0x00000810, 0x20000800, 0x20000810,
@@ -154,7 +159,8 @@ public final class jcrypt {
           0x04040822, 0x00002820, 0x04002820, 0x00042820, 0x04042820,
           0x00002822, 0x04002822, 0x00042822, 0x04042822, }, };
 
-  private static final int SPtrans[][] = { {
+  /** SPtrans. */
+  private static final int SPtrans[][] = {{
       /* nibble 0 */
       0x00820200, 0x00020000, 0x80800000, 0x80820200, 0x00800000, 0x80020200,
       0x80020000, 0x80800000, 0x80020200, 0x00820200, 0x00820000, 0x80000200,
@@ -276,19 +282,34 @@ public final class jcrypt {
           0x08200000, 0x00000020, 0x08208000, 0x00208020, 0x00000000,
           0x08000000, 0x08200020, 0x00008000, 0x00208020 } };
 
-  private static final int cov_2char[] = { 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33,
+  /** cov to char. */
+  private static final int cov_2char[] = {0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33,
       0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46,
       0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52,
       0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x61, 0x62, 0x63, 0x64,
       0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70,
       0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A };
 
-  private static final int byteToUnsigned(byte b) {
+  /**
+   * Byte to unsigned.
+   * @param b
+   *        byte
+   * @return int
+   */
+  private static int byteToUnsigned(byte b) {
     int value = (int) b;
 
     return (value >= 0 ? value : value + 256);
   }
 
+  /**
+   * Four bytes to int.
+   * @param b
+   *      byte
+   * @param offset
+   *      offset
+   * @return int
+   */
   private static int fourBytesToInt(byte b[], int offset) {
     int value;
 
@@ -300,6 +321,15 @@ public final class jcrypt {
     return (value);
   }
 
+  /**
+   * int to four bytes.
+   * @param iValue
+   *          int
+   * @param b
+   *          byte
+   * @param offset
+   *          int
+   */
   private static final void intToFourBytes(int iValue, byte b[], int offset) {
     b[offset++] = (byte) ((iValue) & 0xff);
     b[offset++] = (byte) ((iValue >>> 8) & 0xff);
@@ -307,6 +337,14 @@ public final class jcrypt {
     b[offset++] = (byte) ((iValue >>> 24) & 0xff);
   }
 
+  /**
+   * Perm_op.
+   * @param a int
+   * @param b int
+   * @param n int
+   * @param m int
+   * @param results int
+   */
   private static final void PERM_OP(int a, int b, int n, int m, int results[]) {
     int t;
 
@@ -318,6 +356,13 @@ public final class jcrypt {
     results[1] = b;
   }
 
+  /**
+   * HPerm_op.
+   * @param a int
+   * @param n int
+   * @param m int
+   * @return int
+   */
   private static final int HPERM_OP(int a, int n, int m) {
     int t;
 
@@ -327,6 +372,11 @@ public final class jcrypt {
     return (a);
   }
 
+  /**
+   * Des_Set_key.
+   * @param key byte
+   * @return int array
+   */
   private static int[] des_set_key(byte key[]) {
     int schedule[] = new int[ITERATIONS * 2];
 
@@ -392,6 +442,16 @@ public final class jcrypt {
     return (schedule);
   }
 
+  /**
+   * D_encrypt.
+   * @param L int
+   * @param R int
+   * @param S int
+   * @param E0 int
+   * @param E1 int
+   * @param s int
+   * @return int
+   */
   private static final int D_ENCRYPT(int L, int R, int S, int E0, int E1,
       int s[]) {
     int t;
@@ -413,6 +473,13 @@ public final class jcrypt {
     return (L);
   }
 
+  /**
+   * Body.
+   * @param schedule int array
+   * @param Eswap0 int
+   * @param Eswap1 int
+   * @return int array
+   */
   private static final int[] body(int schedule[], int Eswap0, int Eswap1) {
     int left = 0;
     int right = 0;
