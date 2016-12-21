@@ -47,6 +47,9 @@
 		<jettyMavenPlugin>8.1.15.v20140411</jettyMavenPlugin>
 		<pojo-modelutil.version>2.3.0</pojo-modelutil.version>
 
+		<!-- GraphWalker version -->
+		<graphwalker.version>3.4.2</graphwalker.version>
+		
 	</properties>
 
 	<!-- ========================================================== -->
@@ -113,13 +116,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
-		</dependency>
-		<!-- Mockito -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.10.19</version>
-			<scope>test</scope>
 		</dependency>
 		<!-- JUnit -->
 		<dependency>
@@ -190,25 +186,28 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
-        <!--  Selenium Tool -->
-         <dependency>
-             <groupId>org.seleniumhq.selenium</groupId>
-             <artifactId>selenium-java</artifactId>
-             <version>2.53.0</version>
-         </dependency>
-         <!--  TestNG -->
-         <dependency>
-			  <groupId>org.testng</groupId>
-			  <artifactId>testng</artifactId>
-			  <version>6.8</version>
-			  <scope>test</scope>
-		 </dependency>
-         <!-- QuickCheck -->
-        <dependency>
+        <!-- QuickCheck -->
+		<dependency>
             <groupId>net.java.quickcheck</groupId>
             <artifactId>quickcheck</artifactId>
             <version>0.6</version>
             <scope>test</scope>
+        </dependency>
+        <!-- GraphWalker -->
+        <dependency>
+            <groupId>org.graphwalker</groupId>
+            <artifactId>graphwalker-core</artifactId>
+            <version>${graphwalker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graphwalker</groupId>
+            <artifactId>graphwalker-java</artifactId>
+            <version>${graphwalker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graphwalker</groupId>
+            <artifactId>graphwalker-maven-plugin</artifactId>
+            <version>${graphwalker.version}</version>
         </dependency>
     </dependencies>
 
@@ -283,7 +282,23 @@
 						</execution>
 					</executions>
 				</plugin>
-
+				<!-- Pit Mutation Testing -->
+		        <plugin>
+				    <groupId>org.pitest</groupId>
+				    <artifactId>pitest-maven</artifactId>
+				    <version>1.1.11</version>
+				    <configuration>
+				        <targetClasses>
+				            <param>es.udc.pa.pa015.practicapa.model*</param>
+				        </targetClasses>
+				        <excludedClasses>
+							<param>es.udc.pa.pa015.practicapa.model.userservice*</param>
+						</excludedClasses>
+				        <targetTests>
+				            <param>es.udc.pa.pa015.practicapa.test*</param>
+				        </targetTests>
+				    </configuration>
+				</plugin>
 				<!-- Added to avoid problems with the maven plugin for eclipse -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -303,6 +318,27 @@
 									</pluginExecutionFilter>
 									<action>
 										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.graphwalker
+										</groupId>
+										<artifactId>
+											graphwalker-maven-plugin
+										</artifactId>
+										<versionRange>
+											[3.4.2,)
+										</versionRange>
+										<goals>
+											<goal>
+												generate-test-sources
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -450,7 +486,33 @@
 		       	<artifactId>maven-surefire-plugin</artifactId>
 		       	<version>2.19.1</version>        
 			</plugin>
-
+			
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+			
+			<plugin>
+                <groupId>org.graphwalker</groupId>
+                <artifactId>graphwalker-maven-plugin</artifactId>
+                <version>${graphwalker.version}</version>
+                <!-- Bind goals to the default lifecycle -->
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+		
         </plugins>
 
     </build>

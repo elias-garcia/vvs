@@ -1,6 +1,8 @@
 ﻿PR-UN-015
 
-	BetInfoDao - findBetsByUserId
+	BetInfoDao - testBetsByUserIdWithUserWithBets
+	
+	Método: findBetsByUserId
 	
 	Motivación: Comprobar que la función devuelve los bets de un user existente. 
 				Se prueba, además, que estos sean tantos como se indica por count.
@@ -20,7 +22,9 @@
 					
 PR-UN-016
 
-	BetInfoDao - findBetsByUserId
+	BetInfoDao - testBetsByUserIdWithUserNoWithBets
+	
+	Método: findBetsByUserId
 	
 	Motivación: Comprobar que la función devuelve una lista vacía para un user que no tiene bets.
 				
@@ -31,6 +35,26 @@ PR-UN-016
 	Salida: List vacía.
 	
 	Inicialización: Creamos dos user.
+	
+-------------------------------------------------------------------------------------------------
+
+PR-UN-059
+
+	BetInfoDao - testRemainingReturnedValues
+	
+	Método - find
+	
+	Motivación: Comprobar que los getters de amount y date no devuelven un valor negativo o nulo
+				respectivamente, con el fin de matar dos mutantes.
+				
+	Entradas: El id de la primera apuesta creada.
+			 
+	Salida: La primera apuesta creada.
+	
+	Inicialización: Creamos dos user, un typeOption y un event asignado a typeOption.
+			Necesitamos crear también una category y betType que iran asignados al event, así
+			mismo el betType va a asignado también al TypeOption.
+			Además creamos 2 Bets y se los asignamos al user con el typeOption.
 	
 -------------------------------------------------------------------------------------------------
 					
