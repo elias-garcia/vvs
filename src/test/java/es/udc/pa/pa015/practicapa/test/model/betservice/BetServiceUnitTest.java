@@ -10,6 +10,7 @@ import es.udc.pa.pa015.practicapa.model.betinfo.BetInfo;
 import es.udc.pa.pa015.practicapa.model.betinfo.BetInfoDao;
 import es.udc.pa.pa015.practicapa.model.betservice.BetInfoBlock;
 import es.udc.pa.pa015.practicapa.model.betservice.BetServiceImpl;
+import es.udc.pa.pa015.practicapa.model.betservice.NegativeAmountException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
 import es.udc.pa.pa015.practicapa.model.eventinfo.EventInfo;
@@ -95,7 +96,7 @@ public class BetServiceUnitTest {
    * PR-UN-032
    */
   @Test
-  public void createBet() throws InstanceNotFoundException {
+  public void createBet() throws InstanceNotFoundException, NegativeAmountException {
 
     initializeUserProfile();
     initializeCategoryInfo();
@@ -118,7 +119,7 @@ public class BetServiceUnitTest {
    */
   @SuppressWarnings("unchecked")
   @Test(expected = InstanceNotFoundException.class)
-  public void createBetNonExistingUser() throws InstanceNotFoundException {
+  public void createBetNonExistingUser() throws InstanceNotFoundException, NegativeAmountException {
 
     when(userProfileDaoMock.find(-1L)).thenThrow(
         InstanceNotFoundException.class);
@@ -133,7 +134,7 @@ public class BetServiceUnitTest {
   @SuppressWarnings("unchecked")
   @Test(expected = InstanceNotFoundException.class)
   public void createBetNonExistingTypeOption()
-      throws InstanceNotFoundException {
+      throws InstanceNotFoundException, NegativeAmountException {
 
     initializeUserProfile();
 

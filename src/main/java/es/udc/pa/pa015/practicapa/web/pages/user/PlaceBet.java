@@ -1,6 +1,7 @@
 package es.udc.pa.pa015.practicapa.web.pages.user;
 
 import es.udc.pa.pa015.practicapa.model.betservice.BetService;
+import es.udc.pa.pa015.practicapa.model.betservice.NegativeAmountException;
 import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicy;
 import es.udc.pa.pa015.practicapa.web.services.AuthenticationPolicyType;
 import es.udc.pa.pa015.practicapa.web.util.UserSession;
@@ -127,6 +128,7 @@ public class PlaceBet {
       betService.createBet(userSession.getUserProfileId(), typeOptionId,
           betAmount);
     } catch (InstanceNotFoundException e) {
+    } catch (NegativeAmountException e) {
     }
   }
 
