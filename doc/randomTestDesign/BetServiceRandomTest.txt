@@ -1,0 +1,45 @@
+PR-RANDOM-IT-001
+
+	Unidad: BetServiceImpl
+
+	Método: createBet
+
+		Motivación: Comprobar que la apuesta se crea correctamente con cualquier cantidad positiva de dinero.
+
+		Valores de entrada:
+			- userId: identificador de un usuario existente
+			- typeOptionId: identificador de una opción existente
+			- amount: cantidad positiva aleatoria de dinero
+
+		Valores de salida:
+			- BetInfo
+
+		Inicialización:
+			- UserProfile
+			- CategoryInfo
+			- EventInfo
+			- BetType
+			- TypeOption
+
+PR-RANDOM-IT-002
+
+	Unidad: BetServiceImpl
+
+	Método: createBet
+
+		Motivación: Comprobar que la apuesta lanza NegativeAmountException al crear una apuesta con cualquier cantidad negativa.
+
+		Valores de entrada:
+			- userId: identificador de un usuario existente
+			- typeOptionId: identificador de una opción existente
+			- amount: cantidad negativa aleatoria de dinero
+
+		Valores de salida:
+			- BetInfo
+
+		Inicialización:
+			- UserProfile
+			- CategoryInfo
+			- EventInfo
+			- BetType
+			- TypeOption
