@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import es.udc.pa.pa015.practicapa.model.betinfo.BetInfo;
 import es.udc.pa.pa015.practicapa.model.betservice.BetInfoBlock;
 import es.udc.pa.pa015.practicapa.model.betservice.BetService;
+import es.udc.pa.pa015.practicapa.model.betservice.NegativeAmountException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfo;
 import es.udc.pa.pa015.practicapa.model.categoryinfo.CategoryInfoDao;
@@ -97,7 +98,7 @@ public class BetServiceTest {
     option2 = new TypeOption(2.40, "Lionel Messi", type);
   }
 
-  private void initializeBets() throws InstanceNotFoundException {
+  private void initializeBets() throws InstanceNotFoundException, NegativeAmountException {
     bet = betService.createBet(user.getUserProfileId(), option1.getOptionId(),
         10);
     bet2 = betService.createBet(user.getUserProfileId(), option1.getOptionId(),
@@ -114,7 +115,7 @@ public class BetServiceTest {
   @Test
   public void testCreateBetAndFindByUserId() throws InstanceNotFoundException,
       DuplicateInstanceException, EventDateException, NullEventNameException,
-      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
 
     /* Setup */
     initializeUserProfile();
@@ -145,11 +146,40 @@ public class BetServiceTest {
    * PR-IT-002
    * 
    */
+  @Test(expected = NegativeAmountException.class)
+  public void testCreateBetWithNegativeAmount()
+      throws DuplicateInstanceException, InstanceNotFoundException,
+      EventDateException, NullEventNameException,
+      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
+
+    /* Setup */
+    initializeUserProfile();
+    initializeCategoryInfo();
+    initializeEventInfo();
+    initializeBetType();
+    initializeTypeOptions();
+
+    List<TypeOption> options = new ArrayList<TypeOption>();
+    options.add(option1);
+    options.add(option2);
+
+    eventService.addBetType(event.getEventId(), type, options);
+
+    /* Call */
+    betService.createBet(user.getUserProfileId(), option1
+        .getOptionId(), -10);
+  }
+  
+  /*
+   * 
+   * PR-IT-003
+   * 
+   */
   @Test(expected = InstanceNotFoundException.class)
   public void testCreateBetWithInvalidUserId()
       throws DuplicateInstanceException, InstanceNotFoundException,
       EventDateException, NullEventNameException,
-      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
 
     /* Setup */
     initializeCategoryInfo();
@@ -170,13 +200,13 @@ public class BetServiceTest {
 
   /*
    * 
-   * PR-IT-003
+   * PR-IT-004
    * 
    */
   @Test(expected = InstanceNotFoundException.class)
   public void testCreateBetWithInvalidOptionId()
       throws DuplicateInstanceException, InstanceNotFoundException,
-      EventDateException {
+      EventDateException, NegativeAmountException {
     /* Setup */
     initializeUserProfile();
 
@@ -186,13 +216,13 @@ public class BetServiceTest {
 
   /*
    * 
-   * PR-IT-004
+   * PR-IT-005
    * 
    */
   @Test
   public void testFindBetsByUserId() throws InstanceNotFoundException,
       DuplicateInstanceException, EventDateException, NullEventNameException,
-      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
     /* Setup */
     initializeUserProfile();
     initializeCategoryInfo();
@@ -226,13 +256,13 @@ public class BetServiceTest {
 
   /*
    * 
-   * PR-IT-005
+   * PR-IT-006
    * 
    */
   @Test
   public void testFindPartBetsByUserId() throws InstanceNotFoundException,
       DuplicateInstanceException, EventDateException, NullEventNameException,
-      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException {
+      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
 
     /* Setup */
     initializeUserProfile();
@@ -269,7 +299,7 @@ public class BetServiceTest {
 
   /*
    * 
-   * PR-IT-006
+   * PR-IT-007
    * 
    */
 

@@ -45,11 +45,16 @@ public class BetServiceImpl implements BetService {
    * @return The betInfo created
    * @throws InstanceNotFoundException
    *           It thrown out when the userId or typeOptionId don't exist
+   * @throws NegativeAmountException
+   *           It thrown out when the amount is negative
    */
   public final BetInfo createBet(final Long userId,
                                  final Long typeOptionId, final double amount)
-      throws InstanceNotFoundException {
-
+      throws InstanceNotFoundException, NegativeAmountException {
+    
+    if (amount < 0) {
+      throw new NegativeAmountException(amount);
+    }
     UserProfile currentUser = userProfileDao.find(userId);
     TypeOption currentOption = typeOptionDao.find(typeOptionId);
 

@@ -125,7 +125,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-020
+   * PR-IT-021
    */
   @Test
   public void testCreateAndFindEvent() throws InstanceNotFoundException,
@@ -146,7 +146,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-021
+   * PR-IT-022
    */
   @Test(expected = NullEventNameException.class)
   public void testCreateEventWithNullName() throws InstanceNotFoundException,
@@ -164,7 +164,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-022
+   * PR-IT-023
    */
   @Test(expected = EventDateException.class)
   public void testCreateEventWithNullDate() throws InstanceNotFoundException,
@@ -183,7 +183,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-023
+   * PR-IT-024
    */
   @Test(expected = EventDateException.class)
   public void testCreateEventWithPastDate() throws InstanceNotFoundException,
@@ -202,7 +202,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-024
+   * PR-IT-025
    */
   @Test(expected = InstanceNotFoundException.class)
   public void testCreateEventWithNonExistentCategoryInfoId()
@@ -226,7 +226,7 @@ public class EventServiceTest {
   /*************************************************************************/
 
   /**
-   * PR-IT-025
+   * PR-IT-026
    */
   @Test(expected = InstanceNotFoundException.class)
   public void testFindEventByNonExistentId() throws InstanceNotFoundException {
@@ -243,7 +243,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-026
+   * PR-IT-027
    */
   @Test
   public void testFindEventById() throws InstanceNotFoundException {
@@ -266,7 +266,7 @@ public class EventServiceTest {
   /*************************************************************************/
 
   /**
-   * PR-UN-027
+   * PR-UN-028
    */
   @Test
   public void findEventsFilteringWithStartIndexAndCount1()
@@ -294,7 +294,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-UN-028
+   * PR-UN-029
    */
   @Test
   public void findEventsFilteringWithStartIndexAndCount2()
@@ -322,7 +322,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-UN-029
+   * PR-UN-030
    */
   @Test(expected = StartIndexOrCountException.class)
   public void findEventsWithANegativeStartIdexOrCount()
@@ -355,7 +355,7 @@ public class EventServiceTest {
   /*************************************************************************/
 
   /**
-   * PR-IT-030
+   * PR-IT-031
    */
   @Test
   public void testAddBetType() throws InstanceNotFoundException,
@@ -390,7 +390,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-031
+   * PR-IT-032
    */
   @Test(expected = InstanceNotFoundException.class)
   public void testAddBetTypeWithNonExistentEnventInfoId()
@@ -415,7 +415,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-032
+   * PR-IT-033
    */
   @Test(expected = NoAssignedTypeOptionsException.class)
   public void testAddBetTypeWithEmptyTypeOptions()
@@ -439,7 +439,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-033
+   * PR-IT-034
    */
   @Test(expected = DuplicatedResultTypeOptionsException.class)
   public void testAddBetTypeWithDuplicatedResultInTypeOptions()
@@ -471,7 +471,7 @@ public class EventServiceTest {
   /*************************************************************************/
 
   /**
-   * PR-IT-034
+   * PR-IT-035
    */
   @Test(expected = InstanceNotFoundException.class)
   public void testPickWinnersWithNonExistentBetTypeId()
@@ -503,7 +503,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-035
+   * PR-IT-036
    */
   @Test
   public void testPickWinnersWithTypeOptionsNullList()
@@ -536,7 +536,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-036
+   * PR-IT-037
    */
   @Test
   public void testPickWinnersWithTypeOptionsEmptyList()
@@ -568,7 +568,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-037
+   * PR-IT-038
    */
   @Test(expected = InstanceNotFoundException.class)
   public void testPickWinnersWithNonExistentTypeOptions()
@@ -602,7 +602,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-038
+   * PR-IT-039
    */
   @Test(expected = TypeNotMultipleException.class)
   public void testPickWinnersTypeNotMultiple() throws InstanceNotFoundException,
@@ -632,7 +632,7 @@ public class EventServiceTest {
   }
 
   /**
-   * PR-IT-039
+   * PR-IT-040
    */
   @Test
   public void testPickWinners() throws InstanceNotFoundException,
@@ -675,7 +675,7 @@ public class EventServiceTest {
   /*************************************************************************/
 
   /**
-   * PR-IT-040
+   * PR-IT-041
    */
   @Test
   public void testFindAllCategories() throws InstanceNotFoundException {

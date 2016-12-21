@@ -22,8 +22,32 @@ PR-IT-001
 			- TypeOption
 
 ---------------------------------------------------------------------------------------------------------------
-
 PR-IT-002
+
+	Unidad: BetServiceImpl
+
+	Método: createBet
+
+		Motivación: Obtener excepción NegativeAmountException al crear una apuesta con una cantidad negativa.
+
+		Valores de entrada:
+			- userId: identificador de un usuario existente
+			- typeOptionId: identificador de una opción existente
+			- amount: cantidad negativa de dinero
+
+		Valores de salida:
+			- NegativeAmountException
+
+		Inicialización:
+			- UserProfile
+			- CategoryInfo
+			- EventInfo
+			- BetType
+			- TypeOption
+
+---------------------------------------------------------------------------------------------------------------
+
+PR-IT-003
 
 	Unidad: BetServiceImpl
 
@@ -44,7 +68,7 @@ PR-IT-002
 
 ---------------------------------------------------------------------------------------------------------------
 
-PR-IT-003
+PR-IT-004
 
 	Unidad: BetServiceImpl
 
@@ -65,7 +89,7 @@ PR-IT-003
 
 ---------------------------------------------------------------------------------------------------------------
 
-PR-IT-004
+PR-IT-005
 
 	Unidad: BetServiceImpl
 
@@ -93,7 +117,7 @@ PR-IT-004
 
 ---------------------------------------------------------------------------------------------------------------
 
-PR-IT-005
+PR-IT-006
 
 	Unidad: BetServiceImpl
 
@@ -121,7 +145,7 @@ PR-IT-005
 
 ---------------------------------------------------------------------------------------------------------------
 
-PR-IT-006
+PR-IT-007
 
 	Unidad: BetServiceImpl
 
