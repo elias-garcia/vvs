@@ -128,3 +128,30 @@ PR-UN-012
 	Inicialización:
 		-  CategoryInfo
 		-  4 EventInfo.
+		
+--------------------------------------------------------------
+
+PR-UN-058
+
+	Unidad: EventInfoDao
+
+	Método: findEvents
+
+	Motivación: Comprobar que se buscan adecuadamente los eventos insertados hasta el momento 
+	filtrados por unas keywords que contengan 2 palabras(strings separados por espacios), un
+	identificador de una categoria existente y en cualquier momento.
+
+	Valores de entrada:
+		- keywords: String que corresponda con el nombre de un evento ya almacenado en base de datos
+		- categoryId: Identificador de una categoria existente de un evento almacenado en base de datos
+		- eventsStarted: false
+		- startIndex: 0 
+		- count: 2
+
+	Valores de salida:
+		- 1 EventInfo con el nombre coincidente con las keywords y con la misma categoria que el identificador
+		de la categoria pasada por parametro.
+		
+	Inicialización:
+		-  CategoryInfo
+		-  4 EventInfo.
