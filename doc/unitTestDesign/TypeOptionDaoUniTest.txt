@@ -1,2 +1,24 @@
-Este DAO no tiene metodos propios, solo los que hereda del padre GenericDao.
+PR-UN-060
+
+	Unidad: TypeOptionDao
+
+	Método: find
+
+	Motivación: Probar que la entidad TypeOption devuelve la odd correcta con el fin de matar un mutante.
+
+	Valores de entrada:
+		- typeOptionId: identificador de un typeOption existente.
+
+	Valores de salida:
+		- TypeOption
+
+	Inicialización:
+		- UserProfile
+		- CategoryInfo
+		- EventInfo
+		- BetType
+		- TypeOption
+
+---------------------------------------------------------------------------------------------------------------
+
 Por falta de tiempo obviamos el testeo de los metodos del padre por lo tanto esta clase no tiene casos de prueba.

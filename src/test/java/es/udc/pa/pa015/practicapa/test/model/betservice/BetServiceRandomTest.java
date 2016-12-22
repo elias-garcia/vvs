@@ -2,12 +2,8 @@ package es.udc.pa.pa015.practicapa.test.model.betservice;
 
 import static es.udc.pa.pa015.practicapa.model.util.GlobalNames.SPRING_CONFIG_FILE;
 import static es.udc.pa.pa015.practicapa.test.util.GlobalNames.SPRING_CONFIG_TEST_FILE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import es.udc.pa.pa015.practicapa.model.betinfo.BetInfo;
-import es.udc.pa.pa015.practicapa.model.betservice.BetInfoBlock;
 import es.udc.pa.pa015.practicapa.model.betservice.BetService;
 import es.udc.pa.pa015.practicapa.model.betservice.NegativeAmountException;
 import es.udc.pa.pa015.practicapa.model.bettype.BetType;
@@ -29,6 +25,7 @@ import es.udc.pojo.modelutil.exceptions.InstanceNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,14 +34,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import net.java.quickcheck.Generator;
+import net.java.quickcheck.generator.PrimitiveGenerators;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { SPRING_CONFIG_FILE,
     SPRING_CONFIG_TEST_FILE })
 @Transactional
-public class BetServiceTest {
-
-  private final long NON_EXISTENT_USER_ID = -1;
-  private final long NON_EXISTENT_OPTION_ID = -1;
+public class BetServiceRandomTest {
 
   @Autowired
   private BetService betService;
@@ -97,22 +94,15 @@ public class BetServiceTest {
     option1 = new TypeOption(1.20, "Cristiano Ronaldo", type);
     option2 = new TypeOption(2.40, "Lionel Messi", type);
   }
-
-  private void initializeBets() throws InstanceNotFoundException, NegativeAmountException {
-    bet = betService.createBet(user.getUserProfileId(), option1.getOptionId(),
-        10);
-    bet2 = betService.createBet(user.getUserProfileId(), option1.getOptionId(),
-        10);
-    bet3 = betService.createBet(user.getUserProfileId(), option1.getOptionId(),
-        10);
-  }
+  
   /*
    * 
-   * PR-IT-001
+   * PR-RANDOM-IT-001
    * 
    */
 
   @Test
+  @Repeat(10)
   public void testCreateBetAndFindByUserId() throws InstanceNotFoundException,
       DuplicateInstanceException, EventDateException, NullEventNameException,
       NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
@@ -122,31 +112,29 @@ public class BetServiceTest {
     initializeCategoryInfo();
     initializeEventInfo();
     initializeBetType();
-    initializeTypeOptions();
 
+    option1 = new TypeOption(1.20, "Cristiano Ronaldo", type);
+    
     List<TypeOption> options = new ArrayList<TypeOption>();
     options.add(option1);
-    options.add(option2);
 
     eventService.addBetType(event.getEventId(), type, options);
 
+    /* Generator */
+    Generator<Double> generator = PrimitiveGenerators.doubles(0, Double.MAX_VALUE);
+    
     /* Call */
-    BetInfo bet = betService.createBet(user.getUserProfileId(), option1
-        .getOptionId(), 10);
-
-    BetInfoBlock finded = betService.findBetsByUserId(user.getUserProfileId(),
-        0, 10);
-
-    /* Assertion */
-    assertEquals(bet, finded.getBets().get(0));
+    betService.createBet(user.getUserProfileId(), option1
+        .getOptionId(), generator.next());
   }
-
+  
   /*
    * 
-   * PR-IT-002
+   * PR-RANDOM-IT-002
    * 
    */
   @Test(expected = NegativeAmountException.class)
+  @Repeat(10)
   public void testCreateBetWithNegativeAmount()
       throws DuplicateInstanceException, InstanceNotFoundException,
       EventDateException, NullEventNameException,
@@ -165,150 +153,12 @@ public class BetServiceTest {
 
     eventService.addBetType(event.getEventId(), type, options);
 
+    /* Generator */
+    Generator<Double> generator = PrimitiveGenerators.doubles(-Double.MAX_VALUE,0);
+    
     /* Call */
     betService.createBet(user.getUserProfileId(), option1
-        .getOptionId(), -10);
-  }
-  
-  /*
-   * 
-   * PR-IT-003
-   * 
-   */
-  @Test(expected = InstanceNotFoundException.class)
-  public void testCreateBetWithInvalidUserId()
-      throws DuplicateInstanceException, InstanceNotFoundException,
-      EventDateException, NullEventNameException,
-      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
-
-    /* Setup */
-    initializeCategoryInfo();
-    initializeEventInfo();
-    initializeBetType();
-
-    initializeTypeOptions();
-
-    List<TypeOption> options = new ArrayList<TypeOption>();
-    options.add(option1);
-    options.add(option2);
-
-    /* Call */
-    eventService.addBetType(event.getEventId(), type, options);
-
-    betService.createBet(NON_EXISTENT_USER_ID, option1.getOptionId(), 10);
-  }
-
-  /*
-   * 
-   * PR-IT-004
-   * 
-   */
-  @Test(expected = InstanceNotFoundException.class)
-  public void testCreateBetWithInvalidOptionId()
-      throws DuplicateInstanceException, InstanceNotFoundException,
-      EventDateException, NegativeAmountException {
-    /* Setup */
-    initializeUserProfile();
-
-    /* Call */
-    betService.createBet(user.getUserProfileId(), NON_EXISTENT_OPTION_ID, 10);
-  }
-
-  /*
-   * 
-   * PR-IT-005
-   * 
-   */
-  @Test
-  public void testFindBetsByUserId() throws InstanceNotFoundException,
-      DuplicateInstanceException, EventDateException, NullEventNameException,
-      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
-    /* Setup */
-    initializeUserProfile();
-    initializeCategoryInfo();
-    initializeEventInfo();
-    initializeBetType();
-    initializeTypeOptions();
-
-    List<TypeOption> options = new ArrayList<TypeOption>();
-    options.add(option1);
-    options.add(option2);
-
-    eventService.addBetType(event.getEventId(), type, options);
-
-    initializeBets();
-
-    List<BetInfo> bets = new ArrayList<BetInfo>();
-
-    bets.add(bet);
-    bets.add(bet2);
-    bets.add(bet3);
-
-    /* Call */
-    BetInfoBlock finded = betService.findBetsByUserId(user.getUserProfileId(),
-        0, 10);
-
-    /* Assertion */
-    assertEquals(bets, finded.getBets());
-    assertFalse(finded.isExistMoreBets());
-
-  }
-
-  /*
-   * 
-   * PR-IT-006
-   * 
-   */
-  @Test
-  public void testFindPartBetsByUserId() throws InstanceNotFoundException,
-      DuplicateInstanceException, EventDateException, NullEventNameException,
-      NoAssignedTypeOptionsException, DuplicatedResultTypeOptionsException, NegativeAmountException {
-
-    /* Setup */
-    initializeUserProfile();
-    initializeCategoryInfo();
-    initializeEventInfo();
-    initializeBetType();
-    initializeTypeOptions();
-
-    List<TypeOption> options = new ArrayList<TypeOption>();
-    options.add(option1);
-    options.add(option2);
-
-    eventService.addBetType(event.getEventId(), type, options);
-
-    initializeBets();
-
-    List<BetInfo> bets = new ArrayList<BetInfo>();
-
-    bets.add(bet);
-    bets.add(bet2);
-    bets.add(bet3);
-
-    /* Call */
-    BetInfoBlock betsBlock = betService.findBetsByUserId(user
-        .getUserProfileId(), 0, 2);
-
-    bets.remove(bet3);
-
-    /* Assertion */
-    assertEquals(bets, betsBlock.getBets());
-    assertTrue(betsBlock.isExistMoreBets());
-
-  }
-
-  /*
-   * 
-   * PR-IT-007
-   * 
-   */
-
-  @Test(expected = InstanceNotFoundException.class)
-  public void testFindBetsByNonExistentUserId()
-      throws InstanceNotFoundException {
-
-    /* Call */
-    betService.findBetsByUserId(NON_EXISTENT_USER_ID, 0, 10);
+        .getOptionId(), generator.next());
   }
 
 }

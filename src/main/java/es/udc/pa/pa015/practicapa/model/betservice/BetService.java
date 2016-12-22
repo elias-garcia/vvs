@@ -19,9 +19,11 @@ public interface BetService {
    * @return The betInfo created
    * @throws InstanceNotFoundException
    *           It thrown out when the userId or typeOptionId don't exist
+   * @throws NegativeAmountException
+   *           It thrown out when the amount is negative
    */
   BetInfo createBet(Long userId, Long typeOptionId, double amount)
-      throws InstanceNotFoundException;
+      throws InstanceNotFoundException, NegativeAmountException;
 
   /**
    * This method find bets by an user id.

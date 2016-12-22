@@ -135,7 +135,7 @@ public class EventInfoDaoUnitTest {
 	 * PR-UN-012
 	 */
 	@Test
-	public void testFindEventsFilteringWithStartInteAndCount() {
+	public void testFindEventsFilteringWithStartIndexAndCount() {
 		/* Setup */
 		initializeEventInfos();
 		persistentEventInfos.remove(3);
